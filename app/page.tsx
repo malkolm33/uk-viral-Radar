@@ -1,5 +1,44 @@
 const googleTrends = require("google-trends-api");
 
+async function getYouTubeData(keyword: string): Promise<{ videoCount: number; growth: number }> {
+  try {
+    const apiKey = process.env.YOUTUBE_API_KEY;
+    if (!apiKey) {
+      console.error("YouTube API key not found in environment variables");
+      return { videoCount: 0, growth: 0 };
+    }
+
+    // Son 7 günde yayınlanan videoları ara
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const recentUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(keyword)}&type=video&regionCode=GB&publishedAfter=${sevenDaysAgo}&maxResults=1&key=${apiKey}`;
+
+    const recentResponse = await fetch(recentUrl);
+    if (!recentResponse.ok) {
+      console.error("YouTube API request failed:", await recentResponse.text());
+      return { videoCount: 0, growth: 0 };
+    }
+    const recentData = await recentResponse.json();
+    const recentCount = recentData.pageInfo?.totalResults || 0;
+
+    // Önceki 7 günde yayınlanan videoları ara (karşılaştırma için)
+    const fourteenDaysAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString();
+    const previousUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(keyword)}&type=video&regionCode=GB&publishedAfter=${fourteenDaysAgo}&publishedBefore=${sevenDaysAgo}&maxResults=1&key=${apiKey}`;
+
+    const previousResponse = await fetch(previousUrl);
+    const previousData = previousResponse.ok ? await previousResponse.json() : { pageInfo: { totalResults: 0 } };
+    const previousCount = previousData.pageInfo?.totalResults || 0;
+
+    const growth =
+      previousCount === 0
+        ? recentCount > 0 ? 100 : 0
+        : Math.round(((recentCount - previousCount) / previousCount) * 100);
+
+    return { videoCount: recentCount, growth };
+  } catch (error) {
+    console.error(`Failed to fetch YouTube data (${keyword}):`, error);
+    return { videoCount: 0, growth: 0 };
+  }
+}
 async function getEbayCompetitionData(keyword: string): Promise<{ listingCount: number; avgPrice: number | null }> {
   try {
     const clientId = process.env.EBAY_CLIENT_ID;
@@ -296,11 +335,12 @@ export default async function Home() {
     },
   ];
 
-  const productsWithRealData = await Promise.all(
+    const productsWithRealData = await Promise.all(
     rawProducts.map(async (p) => {
       const searchData = await getSearchData(p.searchKeyword);
       const wikiGrowth = await getWikipediaViews(p.wikiTitle);
       const ebayData = await getEbayCompetitionData(p.searchKeyword);
+      const youtubeData = await getYouTubeData(p.searchKeyword);
 
       const realCompetitionPenalty =
         ebayData.listingCount > 5000 ? 25 :
@@ -311,7 +351,7 @@ export default async function Home() {
         socialGrowth: p.socialGrowth,
         searchGrowth: Math.max(0, searchData.growth),
         salesSignal: p.salesSignal,
-        adGrowth: p.adGrowth,
+        adGrowth: Math.max(0, youtubeData.growth),
         creatorGrowth: Math.max(0, wikiGrowth),
         competitionPenalty: realCompetitionPenalty,
       });
@@ -322,6 +362,8 @@ export default async function Home() {
         wikiGrowth,
         ebayListingCount: ebayData.listingCount,
         ebayAvgPrice: ebayData.avgPrice,
+        youtubeVideoCount: youtubeData.videoCount,
+        youtubeGrowth: youtubeData.growth,
         score,
       };
     })
@@ -426,6 +468,17 @@ export default async function Home() {
                         <span className="text-[#0F172A]">£{product.ebayAvgPrice.toFixed(2)}</span>
                       </div>
                     )}
+                                      <div className="flex justify-between">
+                      <span>YouTube videos (7d, live)</span>
+                      <span className="text-[#0F172A]">{product.youtubeVideoCount}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>YouTube growth</span>
+                      <span className={product.youtubeGrowth < 0 ? "text-[#DC2626]" : "text-[#16A34A]"}>
+                        {product.youtubeGrowth > 0 ? "+" : ""}
+                        {product.youtubeGrowth}%
+                      </span>
+                    </div>  
                     <div className="flex justify-between">
                       <span>Competition</span>
                       <span className="text-[#0F172A]">{product.competition}</span>
