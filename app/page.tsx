@@ -1,5 +1,65 @@
 const googleTrends = require("google-trends-api");
 
+async function getEbayCompetitionData(keyword: string): Promise<{ listingCount: number; avgPrice: number | null }> {
+  try {
+    const clientId = process.env.EBAY_CLIENT_ID;
+    const clientSecret = process.env.EBAY_CLIENT_SECRET;
+
+    if (!clientId || !clientSecret) {
+      console.error("eBay API keys not found in environment variables");
+      return { listingCount: 0, avgPrice: null };
+    }
+
+    const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
+       const tokenResponse = await fetch("https://api.ebay.com/identity/v1/oauth2/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: `Basic ${credentials}`,
+      },
+      body: "grant_type=client_credentials&scope=https://api.ebay.com/oauth/api_scope",
+    });
+
+    if (!tokenResponse.ok) {
+      console.error("Failed to get eBay access token:", await tokenResponse.text());
+      return { listingCount: 0, avgPrice: null };
+    }
+
+    const tokenData = await tokenResponse.json();
+    const accessToken = tokenData.access_token;
+
+        const searchResponse = await fetch(
+      `https://api.ebay.com/buy/browse/v1/item_summary/search?q=${encodeURIComponent(keyword)}&limit=20`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "X-EBAY-C-MARKETPLACE-ID": "EBAY_GB",
+        },
+      }
+    );
+
+    if (!searchResponse.ok) {
+      console.error("eBay search failed:", await searchResponse.text());
+      return { listingCount: 0, avgPrice: null };
+    }
+
+        const searchData = await searchResponse.json();
+    console.log(`eBay response for "${keyword}":`, JSON.stringify(searchData).slice(0, 500));
+    const items = searchData.itemSummaries || [];
+    const listingCount = searchData.total || items.length;
+
+    const prices = items
+      .map((item: any) => parseFloat(item.price?.value))
+      .filter((p: number) => !isNaN(p));
+    const avgPrice = prices.length > 0 ? prices.reduce((a: number, b: number) => a + b, 0) / prices.length : null;
+
+    return { listingCount, avgPrice };
+  } catch (error) {
+    console.error(`Failed to fetch eBay data (${keyword}):`, error);
+    return { listingCount: 0, avgPrice: null };
+  }
+}
+
 function UKFlag() {
   return (
     <svg viewBox="0 0 60 30" className="h-4 w-6 rounded-sm shadow-sm">
@@ -121,9 +181,8 @@ async function getSearchData(keyword: string): Promise<{ growth: number; points:
 
     if (!timelineData || timelineData.length === 0) return { growth: 0, points: [] };
 
-       const points = timelineData.map((d: any) => d.value[0]);
+    const points = timelineData.map((d: any) => d.value[0]);
     const firstValue = points[0];
-    // Bugünün verisi genelde eksik/sıfır gelir, bir önceki günü kullan
     const lastValue = points[points.length - 1] === 0 && points.length > 1
       ? points[points.length - 2]
       : points[points.length - 1];
@@ -241,19 +300,28 @@ export default async function Home() {
     rawProducts.map(async (p) => {
       const searchData = await getSearchData(p.searchKeyword);
       const wikiGrowth = await getWikipediaViews(p.wikiTitle);
+      const ebayData = await getEbayCompetitionData(p.searchKeyword);
+
+      const realCompetitionPenalty =
+        ebayData.listingCount > 5000 ? 25 :
+        ebayData.listingCount > 1000 ? 15 :
+        ebayData.listingCount > 100 ? 8 : 3;
+
       const score = calculateViralScore({
         socialGrowth: p.socialGrowth,
         searchGrowth: Math.max(0, searchData.growth),
         salesSignal: p.salesSignal,
         adGrowth: p.adGrowth,
         creatorGrowth: Math.max(0, wikiGrowth),
-        competitionPenalty: p.competitionPenalty,
+        competitionPenalty: realCompetitionPenalty,
       });
       return {
         ...p,
         searchGrowth: searchData.growth,
         searchPoints: searchData.points,
         wikiGrowth,
+        ebayListingCount: ebayData.listingCount,
+        ebayAvgPrice: ebayData.avgPrice,
         score,
       };
     })
@@ -295,7 +363,7 @@ export default async function Home() {
                 className="overflow-hidden rounded-lg border border-[#E4E7EC] bg-white"
               >
                 <div className="relative h-36 w-full bg-[#F1F5F9]">
-                                   <img
+                  <img
                     src={`https://picsum.photos/seed/${encodeURIComponent(product.imageQuery)}/400/300`}
                     alt={product.name}
                     className="h-full w-full object-cover"
@@ -348,6 +416,16 @@ export default async function Home() {
                         {product.wikiGrowth}%
                       </span>
                     </div>
+                    <div className="flex justify-between">
+                      <span>eBay listings (live)</span>
+                      <span className="text-[#0F172A]">{product.ebayListingCount}</span>
+                    </div>
+                    {product.ebayAvgPrice && (
+                      <div className="flex justify-between">
+                        <span>Avg. price</span>
+                        <span className="text-[#0F172A]">£{product.ebayAvgPrice.toFixed(2)}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between">
                       <span>Competition</span>
                       <span className="text-[#0F172A]">{product.competition}</span>
