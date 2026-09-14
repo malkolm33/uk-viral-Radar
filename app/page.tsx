@@ -333,14 +333,100 @@ export default async function Home() {
       creatorGrowth: 33,
       competitionPenalty: 18,
     },
+    {
+      name: "Neck Massager",
+      searchKeyword: "neck massager",
+      wikiTitle: "Massage",
+      imageQuery: "neck-massager-device",
+      competition: "MEDIUM",
+      socialGrowth: 72,
+      salesSignal: 60,
+      adGrowth: 50,
+      creatorGrowth: 40,
+      competitionPenalty: 14,
+    },
+    {
+      name: "Egg Cooker",
+      searchKeyword: "egg cooker",
+      wikiTitle: "Egg_boiler",
+      imageQuery: "electric-egg-cooker",
+      competition: "LOW",
+      socialGrowth: 58,
+      salesSignal: 48,
+      adGrowth: 40,
+      creatorGrowth: 30,
+      competitionPenalty: 7,
+    },
+    {
+      name: "Pet Hair Remover",
+      searchKeyword: "pet hair remover",
+      wikiTitle: "Lint_remover",
+      imageQuery: "pet-hair-remover-brush",
+      competition: "MEDIUM",
+      socialGrowth: 68,
+      salesSignal: 55,
+      adGrowth: 46,
+      creatorGrowth: 36,
+      competitionPenalty: 13,
+    },
+    {
+      name: "Portable Blender",
+      searchKeyword: "portable blender",
+      wikiTitle: "Blender",
+      imageQuery: "portable-mini-blender",
+      competition: "HIGH",
+      socialGrowth: 62,
+      salesSignal: 52,
+      adGrowth: 44,
+      creatorGrowth: 34,
+      competitionPenalty: 19,
+    },
+    {
+      name: "Desk Organizer",
+      searchKeyword: "desk organizer",
+      wikiTitle: "Desk_organizer",
+      imageQuery: "desk-organizer-tray",
+      competition: "LOW",
+      socialGrowth: 50,
+      salesSignal: 42,
+      adGrowth: 35,
+      creatorGrowth: 28,
+      competitionPenalty: 6,
+    },
+    {
+      name: "Resistance Bands",
+      searchKeyword: "resistance bands",
+      wikiTitle: "Resistance_band",
+      imageQuery: "resistance-bands-fitness",
+      competition: "HIGH",
+      socialGrowth: 75,
+      salesSignal: 62,
+      adGrowth: 54,
+      creatorGrowth: 44,
+      competitionPenalty: 22,
+    },
+    {
+      name: "Smart Water Bottle",
+      searchKeyword: "smart water bottle",
+      wikiTitle: "Water_bottle",
+      imageQuery: "smart-water-bottle-tracker",
+      competition: "MEDIUM",
+      socialGrowth: 66,
+      salesSignal: 54,
+      adGrowth: 46,
+      creatorGrowth: 37,
+      competitionPenalty: 16,
+    },
   ];
-
     const productsWithRealData = await Promise.all(
     rawProducts.map(async (p) => {
       const searchData = await getSearchData(p.searchKeyword);
       const wikiGrowth = await getWikipediaViews(p.wikiTitle);
       const ebayData = await getEbayCompetitionData(p.searchKeyword);
-      const youtubeData = await getYouTubeData(p.searchKeyword);
+            const productIndex = rawProducts.indexOf(p);
+      const youtubeData = productIndex < 1 
+        ? await getYouTubeData(p.searchKeyword) 
+        : { videoCount: 0, growth: 0 };
 
       const realCompetitionPenalty =
         ebayData.listingCount > 5000 ? 25 :
