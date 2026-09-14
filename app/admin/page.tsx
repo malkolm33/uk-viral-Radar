@@ -42,6 +42,34 @@ export default function AdminPage() {
   const supabase = createClient();
 
   async function loadProducts() {
+    
+async function getEtsyData(keyword: string): Promise<{ listingCount: number }> {
+  try {
+    const apiKey = process.env.ETSY_API_KEY;
+    if (!apiKey) {
+      console.error("Etsy API key not found");
+      return { listingCount: 0 };
+    }
+
+    const url = `https://api.etsy.com/v3/application/listings/active?keywords=${encodeURIComponent(keyword)}&limit=1`;
+    const response = await fetch(url, {
+      headers: { "x-api-key": apiKey },
+    });
+
+    if (!response.ok) {
+      console.error("Etsy API request failed:", await response.text());
+      return { listingCount: 0 };
+    }
+
+    const data = await response.json();
+    const listingCount = data.count || 0;
+
+    return { listingCount };
+  } catch (error) {
+    console.error(`Failed to fetch Etsy data (${keyword}):`, error);
+    return { listingCount: 0 };
+  }
+}
     const { data } = await supabase.from("products").select("*").order("id", { ascending: false });
     setProducts(data || []);
   }

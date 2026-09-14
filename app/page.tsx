@@ -4,17 +4,11 @@ import { createClient } from "./lib/supabase-server";
 async function getYouTubeData(keyword: string): Promise<{ videoCount: number; growth: number }> {
   try {
     const apiKey = process.env.YOUTUBE_API_KEY;
-    if (!apiKey) {
-      console.error("YouTube API key not found");
-      return { videoCount: 0, growth: 0 };
-    }
+    if (!apiKey) return { videoCount: 0, growth: 0 };
     const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
     const recentUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(keyword)}&type=video&regionCode=GB&publishedAfter=${sevenDaysAgo}&maxResults=1&key=${apiKey}`;
     const recentResponse = await fetch(recentUrl);
-    if (!recentResponse.ok) {
-      console.error("YouTube API request failed");
-      return { videoCount: 0, growth: 0 };
-    }
+    if (!recentResponse.ok) return { videoCount: 0, growth: 0 };
     const recentData = await recentResponse.json();
     const recentCount = recentData.pageInfo?.totalResults || 0;
     const fourteenDaysAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString();
@@ -33,27 +27,21 @@ async function getEbayCompetitionData(keyword: string): Promise<{ listingCount: 
   try {
     const clientId = process.env.EBAY_CLIENT_ID;
     const clientSecret = process.env.EBAY_CLIENT_SECRET;
-    if (!clientId || !clientSecret) {
-      return { listingCount: 0, avgPrice: null };
-    }
+    if (!clientId || !clientSecret) return { listingCount: 0, avgPrice: null };
     const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
     const tokenResponse = await fetch("https://api.ebay.com/identity/v1/oauth2/token", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded", Authorization: `Basic ${credentials}` },
       body: "grant_type=client_credentials&scope=https://api.ebay.com/oauth/api_scope",
     });
-    if (!tokenResponse.ok) {
-      return { listingCount: 0, avgPrice: null };
-    }
+    if (!tokenResponse.ok) return { listingCount: 0, avgPrice: null };
     const tokenData = await tokenResponse.json();
     const accessToken = tokenData.access_token;
     const searchResponse = await fetch(
       `https://api.ebay.com/buy/browse/v1/item_summary/search?q=${encodeURIComponent(keyword)}&limit=20`,
       { headers: { Authorization: `Bearer ${accessToken}`, "X-EBAY-C-MARKETPLACE-ID": "EBAY_GB" } }
     );
-    if (!searchResponse.ok) {
-      return { listingCount: 0, avgPrice: null };
-    }
+    if (!searchResponse.ok) return { listingCount: 0, avgPrice: null };
     const searchData = await searchResponse.json();
     const items = searchData.itemSummaries || [];
     const listingCount = searchData.total || items.length;
@@ -62,6 +50,20 @@ async function getEbayCompetitionData(keyword: string): Promise<{ listingCount: 
     return { listingCount, avgPrice };
   } catch (error) {
     return { listingCount: 0, avgPrice: null };
+  }
+}
+
+async function getEtsyData(keyword: string): Promise<{ listingCount: number }> {
+  try {
+    const apiKey = process.env.ETSY_API_KEY;
+    if (!apiKey) return { listingCount: 0 };
+    const url = `https://api.etsy.com/v3/application/listings/active?keywords=${encodeURIComponent(keyword)}&limit=1`;
+    const response = await fetch(url, { headers: { "x-api-key": apiKey } });
+    if (!response.ok) return { listingCount: 0 };
+    const data = await response.json();
+    return { listingCount: data.count || 0 };
+  } catch (error) {
+    return { listingCount: 0 };
   }
 }
 
@@ -152,13 +154,15 @@ async function getSearchData(keyword: string): Promise<{ growth: number; points:
     return { growth: 0, points: [] };
   }
 }
+
 export default async function Home() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   const isLoggedIn = !!user;
+
   const { data: dbProducts } = await supabase.from("products").select("*");
-  
-      const rawProducts = (dbProducts || []).map((p: any) => ({
+
+  const rawProducts = (dbProducts || []).map((p: any) => ({
     name: p.name,
     searchKeyword: p.search_keyword,
     wikiTitle: p.wiki_title,
@@ -172,10 +176,11 @@ export default async function Home() {
   }));
 
   const productsWithRealData = await Promise.all(
-    rawProducts.map(async (p, idx) => {
+    rawProducts.map(async (p: any, idx: number) => {
       const searchData = await getSearchData(p.searchKeyword);
       const wikiGrowth = await getWikipediaViews(p.wikiTitle);
       const ebayData = await getEbayCompetitionData(p.searchKeyword);
+      const etsyData = await getEtsyData(p.searchKeyword);
       const youtubeData = idx < 1 ? await getYouTubeData(p.searchKeyword) : { videoCount: 0, growth: 0 };
       const realCompetitionPenalty = ebayData.listingCount > 5000 ? 25 : ebayData.listingCount > 1000 ? 15 : ebayData.listingCount > 100 ? 8 : 3;
       const score = calculateViralScore({
@@ -186,11 +191,22 @@ export default async function Home() {
         creatorGrowth: Math.max(0, wikiGrowth),
         competitionPenalty: realCompetitionPenalty,
       });
-      return { ...p, searchGrowth: searchData.growth, searchPoints: searchData.points, wikiGrowth, ebayListingCount: ebayData.listingCount, ebayAvgPrice: ebayData.avgPrice, youtubeVideoCount: youtubeData.videoCount, youtubeGrowth: youtubeData.growth, score };
+      return {
+        ...p,
+        searchGrowth: searchData.growth,
+        searchPoints: searchData.points,
+        wikiGrowth,
+        ebayListingCount: ebayData.listingCount,
+        ebayAvgPrice: ebayData.avgPrice,
+        etsyListingCount: etsyData.listingCount,
+        youtubeVideoCount: youtubeData.videoCount,
+        youtubeGrowth: youtubeData.growth,
+        score,
+      };
     })
   );
 
-  const products = productsWithRealData.sort((a, b) => b.score - a.score);
+  const products = productsWithRealData.sort((a: any, b: any) => b.score - a.score);
   const lastUpdated = new Date().toLocaleString("en-GB", { timeZone: "Europe/London", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
 
   return (
@@ -198,8 +214,8 @@ export default async function Home() {
       <div className="mx-auto max-w-6xl">
         <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <div>
-         <h1 className="text-3xl font-bold tracking-tight text-[#0F172A]">UK Viral Product Radar</h1>
-            <p className="mt-1 text-sm text-[#64748B]">Ranked by Viral Score, using live Google Trends, Wikipedia, eBay and YouTube data</p>
+            <h1 className="text-2xl font-semibold text-[#0F172A]">UK Viral Product Radar</h1>
+            <p className="mt-1 text-sm text-[#64748B]">Ranked by Viral Score, using live Google Trends, Wikipedia, eBay, Etsy and YouTube data</p>
           </div>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5 rounded-full border border-[#E4E7EC] bg-white px-3 py-1.5 text-xs text-[#64748B]">
@@ -218,7 +234,7 @@ export default async function Home() {
         </header>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product, i) => {
+          {products.map((product: any, i: number) => {
             const status = getStatusLabel(product.score);
             const isLocked = !isLoggedIn && i >= 3;
             const barColor = product.score >= 60 ? "#16A34A" : product.score >= 40 ? "#D97706" : "#DC2626";
@@ -269,6 +285,10 @@ export default async function Home() {
                         <span className="text-[#0F172A]">£{product.ebayAvgPrice.toFixed(2)}</span>
                       </div>
                     )}
+                    <div className="flex justify-between">
+                      <span>Etsy listings (live)</span>
+                      <span className="text-[#0F172A]">{product.etsyListingCount}</span>
+                    </div>
                     <div className="flex justify-between">
                       <span>YouTube videos (7d, live)</span>
                       <span className="text-[#0F172A]">{product.youtubeVideoCount}</span>
