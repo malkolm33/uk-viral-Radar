@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
 
 		const orderData = await orderResponse.json();
 		const approveLink = orderData.links?.find((link: any) => link.rel === "approve");
-
+        const orderId = orderData.id;
 		return NextResponse.json({ url: approveLink?.href });
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : String(error);
