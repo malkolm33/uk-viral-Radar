@@ -6,11 +6,12 @@ import { useRouter } from "next/navigation";
 
 export default function LogoutPage() {
   const router = useRouter();
-  const supabase = createClient();
+  
 
   useEffect(() => {
     async function doLogout() {
-      await supabase.auth.signOut();
+            const supabase = createClient();
+            await supabase.auth.signOut();
       router.push("/");
       router.refresh();
     }
