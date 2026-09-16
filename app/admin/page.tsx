@@ -30,9 +30,9 @@ export default function AdminPage() {
 		competition: "MEDIUM", social_growth: 50, sales_signal: 50,
 		ad_growth: 50, creator_growth: 50, competition_penalty: 10,
 	});
-const [supabase] = useState(() => createClient());
 
 	async function loadProducts() {
+		const supabase = createClient();
 		const { data } = await supabase.from("products").select("*").order("id", { ascending: false });
 		setProducts(data || []);
 	}
@@ -48,6 +48,7 @@ const [supabase] = useState(() => createClient());
 	async function handleAddProduct(e: React.FormEvent) {
 		e.preventDefault();
 		setLoading(true); setMessage("");
+		const supabase = createClient();
 		const { error } = await supabase.from("products").insert([form]);
 		if (error) setMessage("Error: " + error.message);
 		else {
@@ -60,6 +61,7 @@ const [supabase] = useState(() => createClient());
 
 	async function handleDelete(id: number) {
 		if (!confirm("Delete this product?")) return;
+		const supabase = createClient();
 		await supabase.from("products").delete().eq("id", id);
 		loadProducts();
 	}
