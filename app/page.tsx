@@ -36,6 +36,38 @@ const proFeatures = [
   "New products added as they start trending",
 ];
 
+const faqs = [
+  {
+    question: "How does the Viral Score work?",
+    answer:
+      "Each product gets a single 0-100 score built from live search growth, social and creator momentum, and a competition penalty from current marketplace listings - so you can compare opportunities at a glance instead of checking five different tools.",
+  },
+  {
+    question: "Which data sources do you use?",
+    answer:
+      "Google Trends and Wikipedia for demand and interest growth, eBay and Etsy for live UK listing counts and pricing, and YouTube for recent video coverage - all combined automatically into the Viral Score.",
+  },
+  {
+    question: "Can I cancel anytime?",
+    answer:
+      "Yes. Pro is a monthly subscription with no lock-in - cancel whenever you like and you won't be charged again.",
+  },
+  {
+    question: "Do you support PayPal?",
+    answer: "Yes. You can subscribe with either PayPal or a card via Stripe - whichever you prefer.",
+  },
+  {
+    question: "How often is data updated?",
+    answer:
+      "Rankings refresh daily, pulling fresh Google Trends, Wikipedia, eBay, Etsy and YouTube data each time so the list reflects what's trending right now.",
+  },
+  {
+    question: "Is this only for UK sellers?",
+    answer:
+      "The radar is tuned for the UK market - GBP pricing, UK marketplace data and UK-relevant trends - which makes it most useful for sellers targeting UK customers.",
+  },
+];
+
 export default function LandingPage() {
   return (
     <main className="min-h-screen bg-[#F7F8FA]">
@@ -53,6 +85,18 @@ export default function LandingPage() {
               className="hidden text-sm text-[#64748B] hover:text-[#0F172A] sm:inline"
             >
               Live rankings
+            </Link>
+            <Link
+              href="#faq"
+              className="hidden text-sm text-[#64748B] hover:text-[#0F172A] sm:inline"
+            >
+              FAQ
+            </Link>
+            <Link
+              href="/contact"
+              className="hidden text-sm text-[#64748B] hover:text-[#0F172A] sm:inline"
+            >
+              Contact
             </Link>
             <Link
               href="/login"
@@ -177,10 +221,40 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+
+        {/* FAQ */}
+        <section id="faq" className="scroll-mt-20 py-16">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-2xl font-bold tracking-tight text-[#0F172A] sm:text-3xl">
+              Frequently asked questions
+            </h2>
+            <p className="mt-3 text-sm text-[#64748B] sm:text-base">
+              Can&apos;t find what you&apos;re looking for? <Link href="/contact" className="font-medium text-[#16A34A] underline">Get in touch</Link>.
+            </p>
+          </div>
+          <div className="mx-auto mt-10 max-w-3xl divide-y divide-[#E4E7EC] rounded-lg border border-[#E4E7EC] bg-white">
+            {faqs.map((faq) => (
+              <details key={faq.question} className="group p-5">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-semibold text-[#0F172A]">
+                  {faq.question}
+                  <span className="shrink-0 text-[#64748B] transition-transform group-open:rotate-45">+</span>
+                </summary>
+                <p className="mt-3 text-sm leading-relaxed text-[#64748B]">{faq.answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
       </div>
 
       <footer className="border-t border-[#E4E7EC]">
-        <div className="mx-auto max-w-6xl px-6 py-8 sm:px-10">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-6 py-8 sm:px-10">
+          <nav className="flex flex-wrap items-center justify-center gap-4 text-xs text-[#64748B]">
+            <Link href="/dashboard" className="hover:text-[#0F172A]">Live rankings</Link>
+            <Link href="#faq" className="hover:text-[#0F172A]">FAQ</Link>
+            <Link href="/contact" className="hover:text-[#0F172A]">Contact</Link>
+            <Link href="/privacy" className="hover:text-[#0F172A]">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-[#0F172A]">Terms of Service</Link>
+          </nav>
           <p className="text-center text-xs text-[#64748B]">
             © {new Date().getFullYear()} UK Viral Radar. All rights reserved.
           </p>
