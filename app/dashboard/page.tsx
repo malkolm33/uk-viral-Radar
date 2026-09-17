@@ -28,33 +28,42 @@ async function getYouTubeData(keyword: string): Promise<{ videoCount: number; gr
   }
 }
 
-async function getEbayCompetitionData(keyword: string): Promise<{ listingCount: number; avgPrice: number | null }> {
+// eBay image URLs usually end in a size segment like /s-l225.jpg or /s-l500.jpg.
+// Swapping it for a larger size (s-l1600) gives a noticeably sharper image for the same listing.
+function upgradeEbayImageResolution(url: string | null): string | null {
+  if (!url) return null;
+  return url.replace(/\/s-l\d+\./, "/s-l1600.");
+}
+
+async function getEbayCompetitionData(keyword: string): Promise<{ listingCount: number; avgPrice: number | null; imageUrl: string | null }> {
   try {
     const clientId = process.env.EBAY_CLIENT_ID;
     const clientSecret = process.env.EBAY_CLIENT_SECRET;
-    if (!clientId || !clientSecret) return { listingCount: 0, avgPrice: null };
+    if (!clientId || !clientSecret) return { listingCount: 0, avgPrice: null, imageUrl: null };
     const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
     const tokenResponse = await fetch("https://api.ebay.com/identity/v1/oauth2/token", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded", Authorization: `Basic ${credentials}` },
       body: "grant_type=client_credentials&scope=https://api.ebay.com/oauth/api_scope",
     });
-    if (!tokenResponse.ok) return { listingCount: 0, avgPrice: null };
+    if (!tokenResponse.ok) return { listingCount: 0, avgPrice: null, imageUrl: null };
     const tokenData = await tokenResponse.json();
     const accessToken = tokenData.access_token;
     const searchResponse = await fetch(
       `https://api.ebay.com/buy/browse/v1/item_summary/search?q=${encodeURIComponent(keyword)}&limit=20`,
       { headers: { Authorization: `Bearer ${accessToken}`, "X-EBAY-C-MARKETPLACE-ID": "EBAY_GB" } }
     );
-    if (!searchResponse.ok) return { listingCount: 0, avgPrice: null };
+    if (!searchResponse.ok) return { listingCount: 0, avgPrice: null, imageUrl: null };
     const searchData = await searchResponse.json();
     const items = searchData.itemSummaries || [];
     const listingCount = searchData.total || items.length;
     const prices = items.map((item: any) => parseFloat(item.price?.value)).filter((p: number) => !isNaN(p));
     const avgPrice = prices.length > 0 ? prices.reduce((a: number, b: number) => a + b, 0) / prices.length : null;
-    return { listingCount, avgPrice };
+    const rawImageUrl = items[0]?.image?.imageUrl || items[0]?.thumbnailImages?.[0]?.imageUrl || null;
+    const imageUrl = upgradeEbayImageResolution(rawImageUrl);
+    return { listingCount, avgPrice, imageUrl };
   } catch (error) {
-    return { listingCount: 0, avgPrice: null };
+    return { listingCount: 0, avgPrice: null, imageUrl: null };
   }
 }
 
@@ -161,6 +170,7 @@ export default async function DashboardPage() {
         wikiGrowth,
         ebayListingCount: ebayData.listingCount,
         ebayAvgPrice: ebayData.avgPrice,
+        ebayImageUrl: ebayData.imageUrl,
         etsyListingCount: etsyData.listingCount,
         youtubeVideoCount: youtubeData.videoCount,
         youtubeGrowth: youtubeData.growth,

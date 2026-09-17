@@ -47,6 +47,33 @@ function getStatusLabel(score: number) {
   return { label: "Weak", color: "text-gray-500" };
 }
 
+function ProductImage({ src, fallbackSrc, alt }: { src: string; fallbackSrc: string; alt: string }) {
+  const [currentSrc, setCurrentSrc] = useState(src);
+  const [loaded, setLoaded] = useState(false);
+
+  return (
+    <>
+      {!loaded && <div className="absolute inset-0 animate-pulse bg-[#E4E7EC]" />}
+      <img
+        src={currentSrc}
+        alt={alt}
+        className={`h-full w-full object-contain p-3 transition-opacity duration-300 ${
+          loaded ? "opacity-100" : "opacity-0"
+        }`}
+        onLoad={() => setLoaded(true)}
+        onError={() => {
+          if (currentSrc !== fallbackSrc) {
+            setCurrentSrc(fallbackSrc);
+            setLoaded(false);
+          } else {
+            setLoaded(true);
+          }
+        }}
+      />
+    </>
+  );
+}
+
 export default function ProductGrid({ products, isLoggedIn }: { products: any[]; isLoggedIn: boolean }) {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
@@ -86,7 +113,12 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
                 </div>
               )}
               <div className="relative h-36 w-full bg-[#F1F5F9]">
-                <img src={`https://picsum.photos/seed/${encodeURIComponent(product.imageQuery)}/400/300`} alt={product.name} className="h-full w-full object-cover" />
+                <ProductImage
+                  key={product.ebayImageUrl || product.imageQuery}
+                  src={product.ebayImageUrl || `https://picsum.photos/seed/${encodeURIComponent(product.imageQuery)}/400/300`}
+                  fallbackSrc={`https://picsum.photos/seed/${encodeURIComponent(product.imageQuery)}/400/300`}
+                  alt={product.name}
+                />
                 <div className="absolute right-2 top-2 flex items-center gap-1 rounded-full bg-white/90 px-2 py-1 shadow-sm">
                   <UKFlag />
                   <span className="text-[10px] font-medium text-[#0F172A]">UK</span>
