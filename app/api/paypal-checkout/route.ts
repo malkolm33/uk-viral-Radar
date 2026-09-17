@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
 		const accessToken = await getAccessToken();
 
-		const returnUrl = `${request.nextUrl.origin}/?payment=success`;
+		const returnUrl = `${request.nextUrl.origin}/dashboard?payment=success`;
 		console.log("[paypal-checkout] return_url set to:", returnUrl);
 
 		const orderResponse = await fetch(`${PAYPAL_API}/v2/checkout/orders`, {
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
 				],
 				application_context: {
 					return_url: returnUrl,
-					cancel_url: `${request.nextUrl.origin}/?payment=cancelled`,
+					cancel_url: `${request.nextUrl.origin}/dashboard?payment=cancelled`,
 				},
 			}),
 		});

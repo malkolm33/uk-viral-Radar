@@ -16,8 +16,8 @@ export async function POST(request: NextRequest) {
         },
       ],
       customer_email: email,
-      success_url: `${request.nextUrl.origin}/?payment=success`,
-      cancel_url: `${request.nextUrl.origin}/?payment=cancelled`,
+      success_url: `${request.nextUrl.origin}/dashboard?payment=success`,
+      cancel_url: `${request.nextUrl.origin}/dashboard?payment=cancelled`,
     });
 
     return NextResponse.json({ url: session.url });
