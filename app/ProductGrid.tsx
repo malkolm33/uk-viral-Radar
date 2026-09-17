@@ -4,6 +4,39 @@ import { useState } from "react";
 
 const CATEGORIES = ["All", "Home", "Electronics", "Fitness", "Beauty", "Kitchen"];
 
+const CATEGORY_CONTENT: Record<string, { title: string; text: string; image: string }> = {
+  All: {
+    title: "UK Trending Products, Updated Daily",
+    text: "UK Viral Radar combines five live data sources - Google Trends, Wikipedia, eBay, Etsy and YouTube - into a single Viral Score, updated every day. Instead of manually checking search volume, marketplace listings and social buzz across separate tools, you get one ranked list built specifically for the UK market. Every signal here reflects real UK demand: UK search interest, UK eBay listings and pricing, and UK-relevant video coverage - not global trends that may not translate to British buyers. Whether you're sourcing for a dropshipping store or looking for the next product to add to your range, this daily-updated radar gives you an early, UK-specific signal before a product becomes obvious to everyone else.",
+    image: "https://picsum.photos/seed/uk-viral-radar-trending/600/400",
+  },
+  Home: {
+    title: "Home & Living Products Trending in the UK",
+    text: "Home and living products are among the steadiest categories on UK Viral Radar, and a lot of that demand comes from renters and students who need to decorate and organise without making permanent changes to a property they don't own. Adhesive shelving, removable wallpaper, tension rods and command-style hooks let people personalise a flat or student room while staying deposit-safe - a real concern for the UK's large renting population. TikTok's #TikTokMadeMeBuyIt trend has been a major driver here, turning clever, low-cost home fixes into viral must-haves almost overnight. Products that solve a small everyday annoyance, install in minutes and leave no marks tend to perform especially well, and they often show up first as fast-growing search terms before marketplace listings catch up.",
+    image: "https://picsum.photos/seed/uk-home-living-category/600/400",
+  },
+  Electronics: {
+    title: "Trending Electronics & Tech Accessories in the UK",
+    text: "Electronics and tech accessories remain one of the most consistently in-demand categories for UK shoppers, from smart home devices to phone accessories and wireless earbuds. What makes this category especially interesting for dropshippers is how quickly a product with a genuine \"wow factor\" - something visually impressive or clever enough to demonstrate in a short video - can spread across TikTok and drive a sudden spike in UK search interest and marketplace listings. These spikes often show up in Google Trends and YouTube data days or weeks before a product becomes mainstream, which is exactly the kind of early signal this radar is built to catch. Watch for consistent search growth alongside rising eBay competition - that combination usually means a trend is just getting started.",
+    image: "https://picsum.photos/seed/uk-electronics-category/600/400",
+  },
+  Fitness: {
+    title: "Home Fitness Gear for UK Flats and Small Spaces",
+    text: "Fitness products behave differently in the UK than in markets with larger homes: compact, space-saving gear consistently outperforms bulky equipment. Resistance bands, foldable yoga mats and adjustable dumbbells suit the UK's smaller flats and houses, and unlike seasonal fitness spikes tied to New Year's resolutions, demand for these compact essentials tends to hold steady across the year rather than crashing after January. That makes home fitness a category worth tracking continuously rather than only at the start of the year. Look for products that fold flat, stack easily or serve more than one purpose - they tend to have broader appeal to UK buyers working out in limited space, and they show up repeatedly across our eBay and Etsy listing data.",
+    image: "https://picsum.photos/seed/uk-fitness-category/600/400",
+  },
+  Beauty: {
+    title: "Clean Beauty and Skincare Trends in the UK",
+    text: "The UK beauty and skincare market has been growing strongly, with industry estimates putting annual growth above 5% - and two trends are driving much of that momentum. The first is \"clean beauty\": UK shoppers are increasingly checking ingredient lists and favouring simpler, more transparent formulations. The second is \"dupe culture\" - the search for affordable alternatives to expensive, prestige skincare and makeup brands that deliver similar results at a fraction of the price. Products that tap into either trend, especially ones with visible before-and-after results, tend to build momentum quickly through search interest and video coverage before wider competition catches on. Keep an eye on rising Wikipedia and search growth here - beauty trends often move fast.",
+    image: "https://picsum.photos/seed/uk-beauty-category/600/400",
+  },
+  Kitchen: {
+    title: "Smart Kitchen Gadgets Driving UK Sales",
+    text: "Rising energy costs in the UK have pushed many households toward kitchen gadgets that promise to save money as well as time, and air fryers are the clearest example - they cook faster and use a fraction of the energy of a traditional oven, which has kept demand strong well beyond the initial hype cycle. The same logic extends to other practical kitchen gadgets: multi-use tools, small efficient appliances and gadgets that solve a specific everyday annoyance tend to perform well with UK buyers who are increasingly price- and energy-conscious. These products often show steadier, less volatile search growth compared to more impulse-driven categories, making them a reliable one to track for consistent, lower-risk trending opportunities.",
+    image: "https://picsum.photos/seed/uk-kitchen-category/600/400",
+  },
+};
+
 function UKFlag() {
   return (
     <svg viewBox="0 0 60 30" className="h-4 w-6 rounded-sm shadow-sm">
@@ -80,6 +113,8 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
   const filteredProducts =
     selectedCategory === "All" ? products : products.filter((p) => p.category === selectedCategory);
 
+  const categoryContent = CATEGORY_CONTENT[selectedCategory] || CATEGORY_CONTENT.All;
+
   return (
     <>
       <div className="mb-6 flex flex-wrap gap-2">
@@ -97,6 +132,19 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
             {cat}
           </button>
         ))}
+      </div>
+
+      <div className="mb-6 flex flex-col gap-5 rounded-lg border border-[#E4E7EC] bg-[#F7F8FA] p-5 sm:flex-row sm:items-center sm:p-6">
+        <img
+          key={categoryContent.image}
+          src={categoryContent.image}
+          alt={categoryContent.title}
+          className="h-40 w-full shrink-0 rounded-lg object-cover shadow-sm sm:h-32 sm:w-48"
+        />
+        <div>
+          <h2 className="text-lg font-semibold text-[#0F172A]">{categoryContent.title}</h2>
+          <p className="mt-2 text-sm leading-relaxed text-[#64748B]">{categoryContent.text}</p>
+        </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
