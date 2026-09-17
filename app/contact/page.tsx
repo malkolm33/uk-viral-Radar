@@ -13,6 +13,21 @@ export const metadata: Metadata = {
   },
 };
 
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "UK Viral Radar",
+  url: "https://ukviralradar.com",
+};
+
 export default function ContactPage() {
-  return <ContactForm />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      <ContactForm />
+    </>
+  );
 }

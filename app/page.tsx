@@ -13,6 +13,21 @@ export const metadata: Metadata = {
   },
 };
 
+const softwareApplicationSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "UK Viral Radar",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  description:
+    "Track trending products in the UK market with live data from Google Trends, Wikipedia, eBay, Etsy and YouTube. Built for UK dropshippers and e-commerce sellers.",
+  offers: {
+    "@type": "Offer",
+    price: "9.99",
+    priceCurrency: "GBP",
+  },
+};
+
 const dataSources = [
   {
     name: "Google Trends",
@@ -84,6 +99,10 @@ const faqs = [
 export default function LandingPage() {
   return (
     <main className="min-h-screen bg-[#F7F8FA]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationSchema) }}
+      />
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <header className="flex flex-wrap items-center justify-between gap-3 py-6">
           <Link href="/" className="flex items-center gap-2">
