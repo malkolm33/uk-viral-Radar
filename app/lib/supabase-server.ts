@@ -18,7 +18,7 @@ export async function createClient() {
               cookieStore.set(name, value, options)
             );
           } catch {
-            // Server Component'ten çağrılırsa bu satır çalışmayabilir, sorun değil
+            // May not run when called from a Server Component - that's fine
           }
         },
       },

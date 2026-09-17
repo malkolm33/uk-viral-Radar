@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
 
   if (!keyword) {
     return NextResponse.json(
-      { error: "query parametresi gerekli, örnek: /api/trends?query=ice+maker" },
+      { error: "query parameter is required, e.g.: /api/trends?query=ice+maker" },
       { status: 400 }
     );
   }
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     return NextResponse.json(
-      { error: "Google Trends verisi alınamadı", details: String(error) },
+      { error: "Failed to fetch Google Trends data", details: String(error) },
       { status: 500 }
     );
   }
