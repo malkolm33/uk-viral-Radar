@@ -118,14 +118,16 @@ export default function LandingPage() {
           <div className="mx-auto max-w-3xl text-center">
             <div className="mb-5 inline-flex items-center gap-1.5 rounded-full border border-[#E4E7EC] bg-white px-3 py-1 text-xs font-medium text-[#64748B]">
               <span className="h-1.5 w-1.5 rounded-full bg-[#16A34A]" />
-              Built for UK dropshippers and e-commerce sellers
+              Built exclusively for UK dropshippers and e-commerce sellers
             </div>
             <h1 className="text-4xl font-bold tracking-tight text-[#0F172A] sm:text-5xl">
-              Spot trending products <span className="text-[#16A34A]">before your competitors do</span>
+              The trend radar built <span className="text-[#16A34A]">just for the UK market</span>
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-base text-[#64748B] sm:text-lg">
-              We combine live Google Trends, Wikipedia, eBay, Etsy and YouTube data into a single
-              Viral Score, so you find winning UK products while they&apos;re still cheap to source.
+              Most trend tools are US-first and treat the UK as an afterthought. We&apos;re not - every
+              signal is UK data: Google Trends, Wikipedia, eBay, Etsy and YouTube, combined into a
+              single Viral Score, so you find winning UK products before your global-focused
+              competitors even notice them.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <Link
@@ -219,6 +221,29 @@ export default function LandingPage() {
                 Get Started
               </Link>
             </div>
+          </div>
+
+          <div className="mx-auto mt-8 max-w-3xl rounded-lg border border-[#16A34A]/30 bg-[#16A34A]/5 p-6 sm:p-8">
+            <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-center sm:gap-12">
+              <div className="text-center">
+                <p className="text-xs font-medium uppercase tracking-wide text-[#64748B]">Other tools</p>
+                <p className="mt-2 text-2xl font-bold text-[#64748B] line-through decoration-2">
+                  $19.90-$89.99<span className="text-sm font-medium">/mo</span>
+                </p>
+              </div>
+              <div className="text-2xl text-[#16A34A]">→</div>
+              <div className="text-center">
+                <p className="text-xs font-semibold uppercase tracking-wide text-[#16A34A]">UK Viral Radar</p>
+                <p className="mt-2 text-3xl font-bold text-[#0F172A]">
+                  £9.99<span className="text-base font-medium text-[#64748B]">/mo</span>
+                </p>
+              </div>
+            </div>
+            <p className="mx-auto mt-6 max-w-xl text-center text-sm text-[#64748B]">
+              Most trend-spotting tools charge $19.90-$89.99/mo for broad, global data most UK sellers
+              never use. We focus on the UK market only, so you get sharper signals for a fraction of
+              the price.
+            </p>
           </div>
         </section>
 
