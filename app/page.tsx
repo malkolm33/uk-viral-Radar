@@ -2,6 +2,7 @@ const googleTrends = require("google-trends-api");
 import { createClient } from "./lib/supabase-server";
 import UpgradeButton from "./UpgradeButton";
 import PayPalButton from "./PayPalButton";
+import PayPalCaptureHandler from "./PayPalCaptureHandler";
 
 async function getYouTubeData(keyword: string): Promise<{ videoCount: number; growth: number }> {
   try {
@@ -213,6 +214,7 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-[#F7F8FA] px-6 py-10 sm:px-10">
+      <PayPalCaptureHandler />
       <div className="mx-auto max-w-6xl">
         <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -228,7 +230,7 @@ export default async function Home() {
               <div className="flex items-center gap-2 text-xs text-[#64748B]">
                 <span className="hidden sm:inline">{user!.email}</span>
                 <UpgradeButton email={user!.email!} />
-                <PayPalButton />
+                <PayPalButton email={user!.email!} />
                 <a href="/logout" className="rounded-full border border-[#E4E7EC] bg-white px-3 py-1.5 font-medium text-[#0F172A]">Log out</a>
               </div>
             ) : (

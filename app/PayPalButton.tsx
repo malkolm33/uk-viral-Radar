@@ -1,9 +1,11 @@
 "use client";
 
-export default function PayPalButton() {
+export default function PayPalButton({ email }: { email: string }) {
 	async function handlePayPalCheckout() {
 		const res = await fetch("/api/paypal-checkout", {
 			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ email }),
 		});
 		const data = await res.json();
 		if (data.url) window.location.href = data.url;
