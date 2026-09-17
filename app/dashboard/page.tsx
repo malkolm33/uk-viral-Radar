@@ -5,6 +5,19 @@ import PayPalButton from "../PayPalButton";
 import PayPalCaptureHandler from "../PayPalCaptureHandler";
 import ProductGrid from "../ProductGrid";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Live Rankings - UK Viral Radar",
+  description:
+    "Live ranked list of trending UK products, scored using real-time Google Trends, Wikipedia, eBay, Etsy and YouTube data.",
+  openGraph: {
+    title: "Live Rankings - UK Viral Radar",
+    description:
+      "Live ranked list of trending UK products, scored using real-time Google Trends, Wikipedia, eBay, Etsy and YouTube data.",
+    type: "website",
+  },
+};
 
 async function getYouTubeData(keyword: string): Promise<{ videoCount: number; growth: number }> {
   try {
