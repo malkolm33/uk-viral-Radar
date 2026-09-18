@@ -147,6 +147,15 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
         </div>
       </div>
 
+      <div className="mb-6 flex items-start gap-2 rounded-md border border-[#E4E7EC] bg-white px-4 py-3 text-xs leading-relaxed text-[#64748B]">
+        <span className="shrink-0">💡</span>
+        <p>
+          <span className="font-semibold text-[#0F172A]">How to read the Viral Score:</span>{" "}
+          It combines 5 live signals (search trends, Wikipedia interest, eBay/Etsy competition, YouTube activity) into one score.{" "}
+          <span className="font-medium text-[#0F172A]">Early Winner</span> and <span className="font-medium text-[#0F172A]">Strong</span> scores suggest low competition with rising demand — worth investigating first.
+        </p>
+      </div>
+
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {filteredProducts.map((product: any, i: number) => {
           const status = getStatusLabel(product.score);
@@ -205,6 +214,12 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
                     <span>eBay listings (live)</span>
                     <span className="text-[#0F172A]">{product.ebayListingCount}</span>
                   </div>
+                  {product.ebayUniqueSellerCount > 0 && (
+                    <div className="flex justify-between">
+                      <span>Unique sellers</span>
+                      <span className="text-[#0F172A]">{product.ebayUniqueSellerCount}</span>
+                    </div>
+                  )}
                   {product.ebayAvgPrice && (
                     <div className="flex justify-between">
                       <span>Avg. price</span>
