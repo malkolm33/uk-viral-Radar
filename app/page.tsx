@@ -125,6 +125,12 @@ export default function LandingPage() {
               Blog
             </Link>
             <Link
+              href="/compare"
+              className="hidden text-sm text-[#64748B] hover:text-[#0F172A] sm:inline"
+            >
+              Compare
+            </Link>
+            <Link
               href="#faq"
               className="hidden text-sm text-[#64748B] hover:text-[#0F172A] sm:inline"
             >
@@ -313,6 +319,7 @@ export default function LandingPage() {
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-6 py-8 sm:px-10">
           <nav className="flex flex-wrap items-center justify-center gap-4 text-xs text-[#64748B]">
             <Link href="/dashboard" className="hover:text-[#0F172A]">Live rankings</Link>
+            <Link href="/compare" className="hover:text-[#0F172A]">Compare</Link>
             <Link href="#faq" className="hover:text-[#0F172A]">FAQ</Link>
             <Link href="/contact" className="hover:text-[#0F172A]">Contact</Link>
             <Link href="/privacy" className="hover:text-[#0F172A]">Privacy Policy</Link>
