@@ -43,7 +43,7 @@ export default async function BlogPostPage({
     notFound();
   }
 
-  const paragraphs = post.content.split(/\n\n+/);
+  const blocks = post.content.split(/\n\n+/);
 
   return (
     <main className="min-h-screen bg-[#F7F8FA] px-6 py-12 sm:px-10">
@@ -71,11 +71,23 @@ export default async function BlogPostPage({
           </p>
 
           <div className="mt-8 space-y-4 text-sm leading-relaxed">
-            {paragraphs.map((paragraph, i) => (
-              <p key={i} className="text-[#64748B]">
-                {paragraph}
-              </p>
-            ))}
+            {blocks.map((block, i) => {
+              if (block.startsWith("## ")) {
+                return (
+                  <h2
+                    key={i}
+                    className="!mt-8 text-base font-semibold text-[#0F172A] sm:text-lg"
+                  >
+                    {block.slice(3)}
+                  </h2>
+                );
+              }
+              return (
+                <p key={i} className="text-[#64748B]">
+                  {block}
+                </p>
+              );
+            })}
           </div>
         </div>
 
