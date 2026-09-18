@@ -82,6 +82,37 @@ That's also where having visibility into both marketplaces at once helps. UK Vir
     status: "published",
     publishDate: "2026-09-17",
   },
+  {
+    title: "Winter Dropshipping: What Sells Best in the UK During Cold Months",
+    slug: "winter-dropshipping-uk-trends",
+    excerpt:
+      "As temperatures drop, UK shopping habits shift. Here's what UK dropshippers should focus on during the colder months.",
+    content: `As the UK moves into autumn and winter, buyer behaviour shifts in ways that create a fairly predictable seasonal window for certain product categories. Sellers who plan sourcing a few weeks ahead of these shifts - rather than reacting once a category is already trending - tend to catch demand earlier and face less listing competition.
+
+## Portable and Personal Heating
+
+Rising energy bills have made UK shoppers increasingly cautious about heating a whole home when only one or two rooms are in regular use, and that's driven steady demand for personal and portable heating solutions - small space heaters, heated blankets, heated insoles and USB-powered hand warmers all fall into this category. What makes these products particularly attractive for dropshippers is that they solve a cost problem as much as a comfort one, which tends to widen the audience beyond just people who feel the cold easily.
+
+## Cold-Weather Clothing Accessories
+
+Rather than full winter coats, which are heavy, expensive to ship and highly size-dependent, the stronger dropshipping opportunity tends to sit in accessories: thermal gloves, neck warmers, heated socks, and thick beanie hats. These are lightweight, size-flexible, and easy to bundle or upsell alongside other winter items, which makes them a lower-risk entry point into the cold-weather category.
+
+## Home Comfort Products
+
+Beyond direct heating, a broader category of home comfort products sees a reliable uplift once the clocks change: draught excluders, thermal curtains, weighted blankets, and cosy loungewear. These products benefit from the same energy-cost mindset driving personal heating demand, framed around making a home feel warmer without turning the heating up, which resonates strongly with UK households right now.
+
+## Christmas and Holiday Season Gifting
+
+From late November onward, search interest and marketplace activity shift heavily toward gifting - and products that photograph well, ship quickly, and suit a specific gift-giving occasion (stocking fillers, secret Santa, last-minute gifts) tend to outperform generic listings. This window is short and highly competitive, so the sellers who do best are usually the ones already testing and refining a small gifting range before the season peaks, rather than starting from scratch in December.
+
+## Planning Ahead of the Season
+
+The common thread across all four categories is that UK winter demand is driven as much by cost-consciousness as by cold weather itself - products that frame themselves around saving money while staying comfortable tend to have the broadest appeal. Tracking search growth and marketplace listing counts for these categories now, before the season is in full swing, is exactly the kind of early signal that makes the difference between sourcing ahead of the competition and catching a trend after it has already peaked.`,
+    date: "2026-09-21",
+    category: "Trends",
+    status: "scheduled",
+    publishDate: "2026-09-21",
+  },
 ];
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
