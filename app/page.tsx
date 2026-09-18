@@ -119,6 +119,12 @@ export default function LandingPage() {
               Live rankings
             </Link>
             <Link
+              href="/blog"
+              className="hidden text-sm text-[#64748B] hover:text-[#0F172A] sm:inline"
+            >
+              Blog
+            </Link>
+            <Link
               href="#faq"
               className="hidden text-sm text-[#64748B] hover:text-[#0F172A] sm:inline"
             >
