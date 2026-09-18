@@ -1,11 +1,18 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { blogPosts, getPostBySlug } from "../../lib/blog-posts";
+import { blogPosts, getPostBySlug, isPostVisible } from "../../lib/blog-posts";
 
+// Only pre-render posts that aren't pure drafts. A "scheduled" post whose
+// date hasn't arrived yet still gets a page here, but the component below
+// hides it with notFound() until isPostVisible() says it's due.
 export function generateStaticParams() {
-  return blogPosts.map((post) => ({ slug: post.slug }));
+  return blogPosts.filter((post) => post.status !== "draft").map((post) => ({ slug: post.slug }));
 }
+
+// Re-checks whether a scheduled post has gone live at most once an hour,
+// instead of only ever picking up the change on a fresh deploy.
+export const revalidate = 3600;
 
 export async function generateMetadata({
   params,
@@ -15,7 +22,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = getPostBySlug(slug);
 
-  if (!post) {
+  if (!post || !isPostVisible(post)) {
     return { title: "Post Not Found - UK Viral Radar" };
   }
 
@@ -39,7 +46,7 @@ export default async function BlogPostPage({
   const { slug } = await params;
   const post = getPostBySlug(slug);
 
-  if (!post) {
+  if (!post || !isPostVisible(post)) {
     notFound();
   }
 

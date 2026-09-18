@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { blogPosts } from "./lib/blog-posts";
+import { getVisiblePosts } from "./lib/blog-posts";
 
 // TODO: replace with your real production domain once it's live,
 // either by setting NEXT_PUBLIC_SITE_URL or editing the fallback below.
@@ -22,7 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority,
   }));
 
-  const blogEntries: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+  const blogEntries: MetadataRoute.Sitemap = getVisiblePosts().map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(post.date),
     changeFrequency: "monthly",

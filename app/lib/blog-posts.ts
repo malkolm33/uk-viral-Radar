@@ -1,3 +1,5 @@
+export type BlogPostStatus = "draft" | "scheduled" | "published";
+
 export type BlogPost = {
   title: string;
   slug: string;
@@ -6,8 +8,13 @@ export type BlogPost = {
   // Swapping this file for a CMS-backed fetch later shouldn't require
   // changing app/blog/page.tsx or app/blog/[slug]/page.tsx.
   content: string;
-  date: string; // ISO date, e.g. "2026-09-18"
+  date: string; // ISO date, e.g. "2026-09-18" - the date shown to readers on the post
   category: string;
+  // "draft": never shown on the site.
+  // "scheduled": hidden until publishDate is today or in the past, then shown automatically.
+  // "published": always shown.
+  status: BlogPostStatus;
+  publishDate: string; // ISO date, e.g. "2026-09-18" - when a "scheduled" post should go live
 };
 
 export const blogPosts: BlogPost[] = [
@@ -39,6 +46,8 @@ Kitchen gadgets that make food prep faster or more satisfying to watch - think a
 Perhaps the biggest shift in UK e-commerce over the past few years is that trends now often move at the category level rather than the single-product level. A short-form video doesn't just sell one item - it can lift search interest and marketplace activity across an entire type of product for weeks. This is exactly why watching live signals across Google Trends, Wikipedia, eBay, Etsy and YouTube matters more than watching any single platform in isolation: by the time a product trend is obvious everywhere at once, the early window has usually already closed.`,
     date: "2026-09-18",
     category: "Trends",
+    status: "published",
+    publishDate: "2026-09-18",
   },
   {
     title: "eBay UK vs Etsy UK: Where Should You Sell?",
@@ -70,6 +79,8 @@ In practice, the decision usually comes down to the product rather than a blanke
 That's also where having visibility into both marketplaces at once helps. UK Viral Radar tracks eBay and Etsy listings side by side alongside broader trend signals, so instead of guessing, you can see which platform currently has less competition for a given product before deciding where to put your listing effort.`,
     date: "2026-09-17",
     category: "Selling Tips",
+    status: "published",
+    publishDate: "2026-09-17",
   },
 ];
 
@@ -79,4 +90,20 @@ export function getPostBySlug(slug: string): BlogPost | undefined {
 
 export function getAllSlugs(): string[] {
   return blogPosts.map((post) => post.slug);
+}
+
+// A "scheduled" post becomes visible on its own once publishDate has arrived,
+// even before the daily GitHub Action flips its status to "published" - this
+// is the runtime safety net described in README-BLOG.md.
+export function isPostVisible(post: BlogPost): boolean {
+  if (post.status === "published") return true;
+  if (post.status === "scheduled") {
+    const todayIso = new Date().toISOString().slice(0, 10);
+    return post.publishDate <= todayIso;
+  }
+  return false;
+}
+
+export function getVisiblePosts(): BlogPost[] {
+  return blogPosts.filter(isPostVisible);
 }

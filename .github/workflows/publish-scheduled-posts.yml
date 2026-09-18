@@ -1,0 +1,43 @@
+﻿name: Publish Scheduled Blog Posts
+
+on:
+  schedule:
+    # Runs at 07:00 UTC every day, which is 08:00 UK time in winter (GMT)
+    # and 07:00 UK time in summer (BST) - GitHub Actions cron always runs in
+    # UTC and doesn't adjust for UK daylight saving. This never affects which
+    # DAY a post goes live, since publishDate is compared as a calendar date,
+    # not a time of day.
+    - cron: "0 7 * * *"
+  # Lets you trigger this manually from the Actions tab in GitHub, useful for
+  # testing without waiting for the schedule.
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Publish due scheduled posts
+        run: node .github/scripts/publish-scheduled-posts.mjs
+
+      - name: Commit and push if anything changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- app/lib/blog-posts.ts; then
+            echo "No scheduled posts were due today - nothing to commit."
+          else
+            git add app/lib/blog-posts.ts
+            git commit -m "Auto-publish scheduled blog post(s)"
+            git push
+          fi

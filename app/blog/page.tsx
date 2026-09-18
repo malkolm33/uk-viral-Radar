@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { blogPosts } from "../lib/blog-posts";
+import { getVisiblePosts } from "../lib/blog-posts";
 
 export const metadata: Metadata = {
   title: "Blog - UK Viral Radar",
@@ -14,8 +14,12 @@ export const metadata: Metadata = {
   },
 };
 
+// Re-checks which scheduled posts have gone live at most once an hour,
+// instead of only ever picking up new posts on a fresh deploy.
+export const revalidate = 3600;
+
 export default function BlogPage() {
-  const sortedPosts = [...blogPosts].sort(
+  const sortedPosts = [...getVisiblePosts()].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 
