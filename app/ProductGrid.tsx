@@ -236,6 +236,18 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
                     <span>eBay listings (live)</span>
                     <span className="text-[#0F172A]">{product.ebayListingCount}</span>
                   </div>
+                  {product.searchKeyword && (
+                    <div className="flex justify-end">
+                      <a
+                        href={`https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=GB&q=${encodeURIComponent(product.searchKeyword)}&media_type=all`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] text-[#2563EB] underline decoration-[#2563EB]/40 underline-offset-2 hover:text-[#0F172A] hover:decoration-[#0F172A]/40"
+                      >
+                        Check Facebook ads for this product →
+                      </a>
+                    </div>
+                  )}
                   {product.ebayUniqueSellerCount > 0 && (
                     <div className="flex justify-between">
                       <span>Unique sellers</span>
