@@ -24,6 +24,9 @@ export const metadata: Metadata = {
       "Track trending products in the UK market with live data from Google Trends, Wikipedia, eBay, Etsy and YouTube. Built for UK dropshippers and e-commerce sellers.",
     type: "website",
   },
+  verification: {
+    google: "dG0ZjeP9GtTs6kcRRkusXf1dFkofhSzaxGDEvEve-Z0",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
