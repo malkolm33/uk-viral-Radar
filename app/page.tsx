@@ -51,6 +51,84 @@ const dataSources = [
   },
 ];
 
+// Small, original icons for the "How it works" row - each uses the associated
+// brand's real color palette to be instantly recognisable, without reproducing
+// any brand's actual logo or wordmark.
+function GoogleTrendsIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 18l5-5" stroke="#4285F4" strokeWidth="2.2" strokeLinecap="round" />
+      <path d="M7 13l5 2" stroke="#EA4335" strokeWidth="2.2" strokeLinecap="round" />
+      <path d="M12 15l5-8" stroke="#FBBC05" strokeWidth="2.2" strokeLinecap="round" />
+      <path d="M17 7l5-3" stroke="#34A853" strokeWidth="2.2" strokeLinecap="round" />
+      <path d="M19.4 3.4l2.6.6-.6 2.6" stroke="#34A853" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="2" cy="18" r="1.3" fill="#4285F4" />
+      <circle cx="7" cy="13" r="1.3" fill="#EA4335" />
+      <circle cx="12" cy="15" r="1.3" fill="#FBBC05" />
+      <circle cx="17" cy="7" r="1.3" fill="#34A853" />
+    </svg>
+  );
+}
+
+function WikipediaIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M3 5.5c1.6-.7 3.4-1 5-.9 1.6.1 3.1.6 4 1.4.9-.8 2.4-1.3 4-1.4 1.6-.1 3.4.2 5 .9v13c-1.6-.7-3.4-1-5-.9-1.6.1-3.1.6-4 1.4-.9-.8-2.4-1.3-4-1.4-1.6-.1-3.4.2-5 .9v-13z"
+        stroke="#334155"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      <path d="M12 6v13" stroke="#334155" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function EbayIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M3 6a1 1 0 011-1h8l8 6.5-8 6.5H4a1 1 0 01-1-1V6z"
+        stroke="#334155"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+      />
+      <circle cx="7.2" cy="9.4" r="1.15" fill="#E53238" />
+      <circle cx="10.6" cy="9.4" r="1.15" fill="#0064D2" />
+      <circle cx="7.2" cy="13" r="1.15" fill="#F5AF02" />
+      <circle cx="10.6" cy="13" r="1.15" fill="#86B817" />
+    </svg>
+  );
+}
+
+function EtsyIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M12 20.3S4.5 15.7 4.5 10.1C4.5 6.9 6.9 4.5 9.7 4.5c1.6 0 2.9.8 3.8 2 .9-1.2 2.2-2 3.8-2 2.8 0 5.2 2.4 5.2 5.6 0 5.6-7.5 10.2-7.5 10.2H12z"
+        fill="#F45800"
+      />
+    </svg>
+  );
+}
+
+function YouTubeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9.5 7.5v9l8-4.5-8-4.5z" fill="white" />
+    </svg>
+  );
+}
+
+const DATA_SOURCE_VISUALS: Record<string, { Icon: () => React.JSX.Element; bg: string }> = {
+  "Google Trends": { Icon: GoogleTrendsIcon, bg: "#F7F8FA" },
+  Wikipedia: { Icon: WikipediaIcon, bg: "#F7F8FA" },
+  eBay: { Icon: EbayIcon, bg: "#F7F8FA" },
+  Etsy: { Icon: EtsyIcon, bg: "#FDF0E7" },
+  YouTube: { Icon: YouTubeIcon, bg: "#FF0000" },
+};
+
 const freeFeatures = [
   "Top 3 trending products, updated live",
   "Viral Score for each product",
@@ -250,18 +328,25 @@ export default function LandingPage() {
             </p>
           </div>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            {dataSources.map((source) => (
-              <div
-                key={source.name}
-                className="rounded-lg border border-[#E4E7EC] bg-white p-5"
-              >
-                <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-md bg-[#F7F8FA] text-sm font-semibold text-[#16A34A]">
-                  {source.name.charAt(0)}
+            {dataSources.map((source) => {
+              const visual = DATA_SOURCE_VISUALS[source.name];
+              const Icon = visual.Icon;
+              return (
+                <div
+                  key={source.name}
+                  className="rounded-lg border border-[#E4E7EC] bg-white p-5"
+                >
+                  <div
+                    className="mb-3 flex h-12 w-12 items-center justify-center rounded-full shadow-sm"
+                    style={{ backgroundColor: visual.bg }}
+                  >
+                    <Icon />
+                  </div>
+                  <h3 className="text-sm font-semibold text-[#0F172A]">{source.name}</h3>
+                  <p className="mt-1.5 text-xs leading-relaxed text-[#64748B]">{source.description}</p>
                 </div>
-                <h3 className="text-sm font-semibold text-[#0F172A]">{source.name}</h3>
-                <p className="mt-1.5 text-xs leading-relaxed text-[#64748B]">{source.description}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 
