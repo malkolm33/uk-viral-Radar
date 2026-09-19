@@ -19,6 +19,10 @@ export const metadata: Metadata = {
   },
 };
 
+// How long a cached row from the daily update-product-data.yml job is
+// trusted before this page falls back to live API calls for that product.
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
 async function getYouTubeData(keyword: string): Promise<{ videoCount: number; growth: number }> {
   try {
     const apiKey = process.env.YOUTUBE_API_KEY;
@@ -48,25 +52,25 @@ function upgradeEbayImageResolution(url: string | null): string | null {
   return url.replace(/\/s-l\d+\./, "/s-l1600.");
 }
 
-async function getEbayCompetitionData(keyword: string): Promise<{ listingCount: number; avgPrice: number | null; imageUrl: string | null }> {
+async function getEbayCompetitionData(keyword: string): Promise<{ listingCount: number; avgPrice: number | null; imageUrl: string | null; uniqueSellerCount: number }> {
   try {
     const clientId = process.env.EBAY_CLIENT_ID;
     const clientSecret = process.env.EBAY_CLIENT_SECRET;
-    if (!clientId || !clientSecret) return { listingCount: 0, avgPrice: null, imageUrl: null };
+    if (!clientId || !clientSecret) return { listingCount: 0, avgPrice: null, imageUrl: null, uniqueSellerCount: 0 };
     const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
     const tokenResponse = await fetch("https://api.ebay.com/identity/v1/oauth2/token", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded", Authorization: `Basic ${credentials}` },
       body: "grant_type=client_credentials&scope=https://api.ebay.com/oauth/api_scope",
     });
-    if (!tokenResponse.ok) return { listingCount: 0, avgPrice: null, imageUrl: null };
+    if (!tokenResponse.ok) return { listingCount: 0, avgPrice: null, imageUrl: null, uniqueSellerCount: 0 };
     const tokenData = await tokenResponse.json();
     const accessToken = tokenData.access_token;
     const searchResponse = await fetch(
       `https://api.ebay.com/buy/browse/v1/item_summary/search?q=${encodeURIComponent(keyword)}&limit=20`,
       { headers: { Authorization: `Bearer ${accessToken}`, "X-EBAY-C-MARKETPLACE-ID": "EBAY_GB" } }
     );
-    if (!searchResponse.ok) return { listingCount: 0, avgPrice: null, imageUrl: null };
+    if (!searchResponse.ok) return { listingCount: 0, avgPrice: null, imageUrl: null, uniqueSellerCount: 0 };
     const searchData = await searchResponse.json();
     const items = searchData.itemSummaries || [];
     const listingCount = searchData.total || items.length;
@@ -74,9 +78,14 @@ async function getEbayCompetitionData(keyword: string): Promise<{ listingCount: 
     const avgPrice = prices.length > 0 ? prices.reduce((a: number, b: number) => a + b, 0) / prices.length : null;
     const rawImageUrl = items[0]?.image?.imageUrl || items[0]?.thumbnailImages?.[0]?.imageUrl || null;
     const imageUrl = upgradeEbayImageResolution(rawImageUrl);
-    return { listingCount, avgPrice, imageUrl };
+    // Browse API item summaries don't include a sold-quantity field, so we use
+    // the number of distinct sellers among the sampled listings as a proxy
+    // for how spread out (vs. dominated by one seller) the competition is.
+    const sellerUsernames = items.map((item: any) => item.seller?.username).filter((name: unknown): name is string => Boolean(name));
+    const uniqueSellerCount = new Set(sellerUsernames).size;
+    return { listingCount, avgPrice, imageUrl, uniqueSellerCount };
   } catch (error) {
-    return { listingCount: 0, avgPrice: null, imageUrl: null };
+    return { listingCount: 0, avgPrice: null, imageUrl: null, uniqueSellerCount: 0 };
   }
 }
 
@@ -146,44 +155,75 @@ export default async function DashboardPage() {
 
   const { data: dbProducts } = await supabase.from("products").select("*");
 
-  const rawProducts = (dbProducts || []).map((p: any) => ({
-    name: p.name,
-    searchKeyword: p.search_keyword,
-    wikiTitle: p.wiki_title,
-    imageQuery: p.image_query,
-    category: p.category,
-    competition: p.competition,
-    socialGrowth: p.social_growth,
-    salesSignal: p.sales_signal,
-    adGrowth: p.ad_growth,
-    creatorGrowth: p.creator_growth,
-    competitionPenalty: p.competition_penalty,
-  }));
-
   const productsWithRealData = await Promise.all(
-    rawProducts.map(async (p: any, idx: number) => {
-      const searchData = await getSearchData(p.searchKeyword);
-      const wikiGrowth = await getWikipediaViews(p.wikiTitle);
-      const ebayData = await getEbayCompetitionData(p.searchKeyword);
-      const etsyData = await getEtsyData(p.searchKeyword);
-      const youtubeData = idx < 1 ? await getYouTubeData(p.searchKeyword) : { videoCount: 0, growth: 0 };
+    (dbProducts || []).map(async (p: any, idx: number) => {
+      const base = {
+        name: p.name,
+        searchKeyword: p.search_keyword,
+        wikiTitle: p.wiki_title,
+        imageQuery: p.image_query,
+        category: p.category,
+        competition: p.competition,
+        socialGrowth: p.social_growth,
+        salesSignal: p.sales_signal,
+        adGrowth: p.ad_growth,
+        creatorGrowth: p.creator_growth,
+        competitionPenalty: p.competition_penalty,
+      };
+
+      // .github/workflows/update-product-data.yml refreshes every product
+      // once a day and writes the result into these columns. As long as
+      // that cache is under 24h old, read it directly instead of hitting
+      // Google Trends, Wikipedia, eBay, Etsy and YouTube on every single
+      // page view - those calls used to run live for every visitor, which
+      // was slow and burned through the free API quotas (YouTube's daily
+      // unit limit especially).
+      const isFresh =
+        p.last_updated && Date.now() - new Date(p.last_updated).getTime() < ONE_DAY_MS;
+
+      if (isFresh) {
+        return {
+          ...base,
+          searchGrowth: p.search_growth ?? 0,
+          searchPoints: [] as number[],
+          wikiGrowth: p.wiki_growth ?? 0,
+          ebayListingCount: p.ebay_listing_count ?? 0,
+          ebayAvgPrice: p.ebay_avg_price ?? null,
+          ebayImageUrl: null,
+          ebayUniqueSellerCount: 0,
+          etsyListingCount: p.etsy_listing_count ?? 0,
+          youtubeVideoCount: p.youtube_video_count ?? 0,
+          youtubeGrowth: p.youtube_growth ?? 0,
+          score: p.viral_score ?? 0,
+        };
+      }
+
+      // No cache yet, or it's more than 24h old (the daily job hasn't run
+      // yet, or missed a run) - fall back to the original live lookups so
+      // the dashboard still works correctly either way.
+      const searchData = await getSearchData(base.searchKeyword);
+      const wikiGrowth = await getWikipediaViews(base.wikiTitle);
+      const ebayData = await getEbayCompetitionData(base.searchKeyword);
+      const etsyData = await getEtsyData(base.searchKeyword);
+      const youtubeData = idx < 1 ? await getYouTubeData(base.searchKeyword) : { videoCount: 0, growth: 0 };
       const realCompetitionPenalty = ebayData.listingCount > 5000 ? 25 : ebayData.listingCount > 1000 ? 15 : ebayData.listingCount > 100 ? 8 : 3;
       const score = calculateViralScore({
-        socialGrowth: p.socialGrowth,
+        socialGrowth: base.socialGrowth,
         searchGrowth: Math.max(0, searchData.growth),
-        salesSignal: p.salesSignal,
+        salesSignal: base.salesSignal,
         adGrowth: Math.max(0, youtubeData.growth),
         creatorGrowth: Math.max(0, wikiGrowth),
         competitionPenalty: realCompetitionPenalty,
       });
       return {
-        ...p,
+        ...base,
         searchGrowth: searchData.growth,
         searchPoints: searchData.points,
         wikiGrowth,
         ebayListingCount: ebayData.listingCount,
         ebayAvgPrice: ebayData.avgPrice,
         ebayImageUrl: ebayData.imageUrl,
+        ebayUniqueSellerCount: ebayData.uniqueSellerCount,
         etsyListingCount: etsyData.listingCount,
         youtubeVideoCount: youtubeData.videoCount,
         youtubeGrowth: youtubeData.growth,
