@@ -175,6 +175,12 @@ export default function LandingPage() {
               Compare
             </Link>
             <Link
+              href="/tools/profit-calculator"
+              className="hidden text-sm text-[#64748B] hover:text-[#0F172A] sm:inline"
+            >
+              Free Tools
+            </Link>
+            <Link
               href="#faq"
               className="hidden text-sm text-[#64748B] hover:text-[#0F172A] sm:inline"
             >
@@ -364,6 +370,7 @@ export default function LandingPage() {
           <nav className="flex flex-wrap items-center justify-center gap-4 text-xs text-[#64748B]">
             <Link href="/dashboard" className="hover:text-[#0F172A]">Live rankings</Link>
             <Link href="/compare" className="hover:text-[#0F172A]">Compare</Link>
+            <Link href="/tools/profit-calculator" className="hover:text-[#0F172A]">Free Tools</Link>
             <Link href="#faq" className="hover:text-[#0F172A]">FAQ</Link>
             <Link href="/contact" className="hover:text-[#0F172A]">Contact</Link>
             <Link href="/privacy" className="hover:text-[#0F172A]">Privacy Policy</Link>
