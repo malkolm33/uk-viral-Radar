@@ -129,6 +129,56 @@ const DATA_SOURCE_VISUALS: Record<string, { Icon: () => React.JSX.Element; bg: s
   YouTube: { Icon: YouTubeIcon, bg: "#FF0000" },
 };
 
+// Static, illustrative preview of the dashboard for the hero section - not
+// connected to any live data, just a lightweight mockup so visitors can see
+// what the product looks like before signing up.
+const heroPreviewProducts = [
+  { rank: 1, name: "Portable Ice Maker", score: 87, label: "Early Winner", color: "#16A34A" },
+  { rank: 2, name: "LED Strip Lights", score: 76, label: "Strong", color: "#16A34A" },
+  { rank: 3, name: "Collagen Face Serum", score: 52, label: "Watching", color: "#D97706" },
+];
+
+function DashboardPreview() {
+  return (
+    <div className="overflow-hidden rounded-xl border border-[#E4E7EC] bg-white shadow-xl">
+      <div className="flex items-center gap-2 border-b border-[#E4E7EC] bg-[#F7F8FA] px-4 py-3">
+        <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" />
+        <span className="h-2.5 w-2.5 rounded-full bg-[#FFBD2E]" />
+        <span className="h-2.5 w-2.5 rounded-full bg-[#28C840]" />
+        <div className="ml-2 flex-1 truncate rounded-full border border-[#E4E7EC] bg-white px-3 py-1 text-[11px] text-[#64748B]">
+          ukviralradar.com/dashboard
+        </div>
+      </div>
+      <div className="space-y-2.5 bg-[#F7F8FA] p-4">
+        {heroPreviewProducts.map((product) => (
+          <div
+            key={product.rank}
+            className="flex items-center justify-between gap-3 rounded-lg border border-[#E4E7EC] bg-white p-3"
+          >
+            <div className="flex min-w-0 items-center gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#F1F5F9] text-xs font-semibold text-[#64748B]">
+                #{product.rank}
+              </div>
+              <div className="min-w-0">
+                <p className="truncate text-xs font-semibold text-[#0F172A]">{product.name}</p>
+                <p className="text-[10px] text-[#64748B]">
+                  Score: <span className="font-semibold" style={{ color: product.color }}>{product.score}</span>/100
+                </p>
+              </div>
+            </div>
+            <span
+              className="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium"
+              style={{ color: product.color, backgroundColor: `${product.color}1A` }}
+            >
+              {product.label}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 const freeFeatures = [
   "Top 3 trending products, updated live",
   "Viral Score for each product",
@@ -287,35 +337,40 @@ export default function LandingPage() {
 
         {/* Hero */}
         <section className="py-16 sm:py-24">
-          <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-5 inline-flex items-center gap-1.5 rounded-full border border-[#E4E7EC] bg-white px-3 py-1 text-xs font-medium text-[#64748B]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#16A34A]" />
-              Built exclusively for UK dropshippers and e-commerce sellers
+          <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-10">
+            <div className="mx-auto max-w-3xl text-center lg:mx-0 lg:max-w-none lg:text-left">
+              <div className="mb-5 inline-flex items-center gap-1.5 rounded-full border border-[#E4E7EC] bg-white px-3 py-1 text-xs font-medium text-[#64748B]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#16A34A]" />
+                Built exclusively for UK dropshippers and e-commerce sellers
+              </div>
+              <h1 className="text-4xl font-bold tracking-tight text-[#0F172A] sm:text-5xl">
+                The trend radar built <span className="text-[#16A34A]">just for the UK market</span>
+              </h1>
+              <p className="mx-auto mt-5 max-w-xl text-base text-[#64748B] sm:text-lg lg:mx-0">
+                Most trend tools are US-first and treat the UK as an afterthought. We&apos;re not - every
+                signal is UK data: Google Trends, Wikipedia, eBay, Etsy and YouTube, combined into a
+                single Viral Score, so you find winning UK products before your global-focused
+                competitors even notice them.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+                <Link
+                  href="/login"
+                  className="rounded-full bg-[#16A34A] px-6 py-3 text-sm font-semibold text-white"
+                >
+                  Get Started
+                </Link>
+                <Link
+                  href="/dashboard"
+                  className="rounded-full border border-[#E4E7EC] bg-white px-6 py-3 text-sm font-semibold text-[#0F172A]"
+                >
+                  View live rankings
+                </Link>
+              </div>
+              <p className="mt-4 text-xs text-[#64748B]">Free preview available - no credit card required</p>
             </div>
-            <h1 className="text-4xl font-bold tracking-tight text-[#0F172A] sm:text-5xl">
-              The trend radar built <span className="text-[#16A34A]">just for the UK market</span>
-            </h1>
-            <p className="mx-auto mt-5 max-w-xl text-base text-[#64748B] sm:text-lg">
-              Most trend tools are US-first and treat the UK as an afterthought. We&apos;re not - every
-              signal is UK data: Google Trends, Wikipedia, eBay, Etsy and YouTube, combined into a
-              single Viral Score, so you find winning UK products before your global-focused
-              competitors even notice them.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <Link
-                href="/login"
-                className="rounded-full bg-[#16A34A] px-6 py-3 text-sm font-semibold text-white"
-              >
-                Get Started
-              </Link>
-              <Link
-                href="/dashboard"
-                className="rounded-full border border-[#E4E7EC] bg-white px-6 py-3 text-sm font-semibold text-[#0F172A]"
-              >
-                View live rankings
-              </Link>
+            <div className="mx-auto w-full max-w-md lg:max-w-none">
+              <DashboardPreview />
             </div>
-            <p className="mt-4 text-xs text-[#64748B]">Free preview available - no credit card required</p>
           </div>
         </section>
 
