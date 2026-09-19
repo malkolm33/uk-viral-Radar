@@ -12,7 +12,7 @@ const CATEGORY_CONTENT: Record<string, { title: string; text: string; image: str
   },
   Home: {
     title: "Home & Living Products Trending in the UK",
-    text: "Home and living products are among the steadiest categories on UK Viral Radar, and a lot of that demand comes from renters and students who need to decorate and organise without making permanent changes to a property they don't own. Adhesive shelving, removable wallpaper, tension rods and command-style hooks let people personalise a flat or student room while staying deposit-safe - a real concern for the UK's large renting population. TikTok's #TikTokMadeMeBuyIt trend has been a major driver here, turning clever, low-cost home fixes into viral must-haves almost overnight. Products that solve a small everyday annoyance, install in minutes and leave no marks tend to perform especially well, and they often show up first as fast-growing search terms before marketplace listings catch up.",
+    text: "Home and living products are among the steadiest categories on UK Viral Radar, and a lot of that demand comes from renters and students who need to decorate and organise without making permanent changes to a property they don't own. Adhesive shelving, removable wallpaper, tension rods and command-style hooks let people personalise a flat or student room while staying deposit-safe - a real concern for the UK's large renting population. TikTok's #TikTokMadeMeBuyIt trend has been a major driver here, turning clever, low-cost home fixes into viral must-haves almost overnight. Products that solve a small everyday annoyance, install in minutes and leave no marks tend to perform especially well, and they often show up first as fast-growing search terms before marketplace listings catch up. Pinterest often surfaces these trends 30-90 days before they peak on Google - worth checking directly on product cards below.",
     image: "https://picsum.photos/seed/uk-home-living-category/600/400",
   },
   Electronics: {
@@ -27,15 +27,23 @@ const CATEGORY_CONTENT: Record<string, { title: string; text: string; image: str
   },
   Beauty: {
     title: "Clean Beauty and Skincare Trends in the UK",
-    text: "The UK beauty and skincare market has been growing strongly, with industry estimates putting annual growth above 5% - and two trends are driving much of that momentum. The first is \"clean beauty\": UK shoppers are increasingly checking ingredient lists and favouring simpler, more transparent formulations. The second is \"dupe culture\" - the search for affordable alternatives to expensive, prestige skincare and makeup brands that deliver similar results at a fraction of the price. Products that tap into either trend, especially ones with visible before-and-after results, tend to build momentum quickly through search interest and video coverage before wider competition catches on. Keep an eye on rising Wikipedia and search growth here - beauty trends often move fast.",
+    text: "The UK beauty and skincare market has been growing strongly, with industry estimates putting annual growth above 5% - and two trends are driving much of that momentum. The first is \"clean beauty\": UK shoppers are increasingly checking ingredient lists and favouring simpler, more transparent formulations. The second is \"dupe culture\" - the search for affordable alternatives to expensive, prestige skincare and makeup brands that deliver similar results at a fraction of the price. Products that tap into either trend, especially ones with visible before-and-after results, tend to build momentum quickly through search interest and video coverage before wider competition catches on. Keep an eye on rising Wikipedia and search growth here - beauty trends often move fast. Pinterest often surfaces these trends 30-90 days before they peak on Google - worth checking directly on product cards below.",
     image: "https://picsum.photos/seed/uk-beauty-category/600/400",
   },
   Kitchen: {
     title: "Smart Kitchen Gadgets Driving UK Sales",
-    text: "Rising energy costs in the UK have pushed many households toward kitchen gadgets that promise to save money as well as time, and air fryers are the clearest example - they cook faster and use a fraction of the energy of a traditional oven, which has kept demand strong well beyond the initial hype cycle. The same logic extends to other practical kitchen gadgets: multi-use tools, small efficient appliances and gadgets that solve a specific everyday annoyance tend to perform well with UK buyers who are increasingly price- and energy-conscious. These products often show steadier, less volatile search growth compared to more impulse-driven categories, making them a reliable one to track for consistent, lower-risk trending opportunities.",
+    text: "Rising energy costs in the UK have pushed many households toward kitchen gadgets that promise to save money as well as time, and air fryers are the clearest example - they cook faster and use a fraction of the energy of a traditional oven, which has kept demand strong well beyond the initial hype cycle. The same logic extends to other practical kitchen gadgets: multi-use tools, small efficient appliances and gadgets that solve a specific everyday annoyance tend to perform well with UK buyers who are increasingly price- and energy-conscious. These products often show steadier, less volatile search growth compared to more impulse-driven categories, making them a reliable one to track for consistent, lower-risk trending opportunities. Pinterest often surfaces these trends 30-90 days before they peak on Google - worth checking directly on product cards below.",
     image: "https://picsum.photos/seed/uk-kitchen-category/600/400",
   },
 };
+
+function PinterestIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="#E60023" className="h-3 w-3 shrink-0" aria-hidden="true">
+      <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.885 2.741.097.118.112.222.083.343-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.211 0-2.363-.63-2.751-1.379l-.748 2.858c-.271 1.043-1.002 2.35-1.492 3.146 1.124.345 2.317.535 3.554.535 6.62 0 11.99-5.366 11.99-11.988C23.983 5.367 18.617 0 12.017 0z" />
+    </svg>
+  );
+}
 
 function UKFlag() {
   return (
@@ -266,9 +274,12 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
                         href={`https://trends.pinterest.com/?q=${encodeURIComponent(product.searchKeyword)}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-[11px] text-[#2563EB] underline decoration-[#2563EB]/40 underline-offset-2 hover:text-[#0F172A] hover:decoration-[#0F172A]/40"
+                        className="group inline-flex items-center gap-1 text-[11px] text-[#2563EB] hover:text-[#0F172A]"
                       >
-                        Check Pinterest Trends →
+                        <PinterestIcon />
+                        <span className="underline decoration-[#2563EB]/40 underline-offset-2 group-hover:decoration-[#0F172A]/40">
+                          Check Pinterest Trends →
+                        </span>
                       </a>
                     </div>
                   )}
