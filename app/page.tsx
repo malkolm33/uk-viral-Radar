@@ -377,9 +377,9 @@ export default function LandingPage() {
                 View live rankings
               </Link>
             </div>
-            <div className="relative rounded-lg border border-[#16A34A] bg-white p-8">
-              <div className="absolute -top-3 right-6 rounded-full bg-[#16A34A] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
-                Pro
+            <div className="relative z-10 rounded-lg border-2 border-[#16A34A] bg-white p-8 shadow-xl sm:scale-105">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#16A34A] px-4 py-1 text-[11px] font-semibold uppercase tracking-wide text-white shadow-sm">
+                Most Popular
               </div>
               <h3 className="text-sm font-semibold text-[#64748B]">Pro</h3>
               <p className="mt-2 text-3xl font-bold text-[#0F172A]">
