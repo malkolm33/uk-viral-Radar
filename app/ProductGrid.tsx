@@ -80,6 +80,23 @@ function getStatusLabel(score: number) {
   return { label: "Weak", color: "text-gray-500" };
 }
 
+// Velocity is the average of the three growth signals (search, YouTube, Wikipedia) -
+// it answers "how fast is this accelerating right now", separately from the Viral
+// Score, which answers "how good does this product look overall".
+function getVelocity(searchGrowth: number, youtubeGrowth: number, wikiGrowth: number) {
+  const averageGrowth = (searchGrowth + youtubeGrowth + wikiGrowth) / 3;
+  if (averageGrowth > 50) {
+    return { label: "Accelerating", emoji: "🚀", color: "#16A34A", averageGrowth };
+  }
+  if (averageGrowth >= 15) {
+    return { label: "Rising", emoji: "📈", color: "#2563EB", averageGrowth };
+  }
+  if (averageGrowth >= 0) {
+    return { label: "Stable", emoji: "➡️", color: "#64748B", averageGrowth };
+  }
+  return { label: "Cooling", emoji: "📉", color: "#D97706", averageGrowth };
+}
+
 function ProductImage({ src, fallbackSrc, alt }: { src: string; fallbackSrc: string; alt: string }) {
   const [currentSrc, setCurrentSrc] = useState(src);
   const [loaded, setLoaded] = useState(false);
@@ -152,13 +169,15 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
         <p>
           <span className="font-semibold text-[#0F172A]">How to read the Viral Score:</span>{" "}
           It combines 5 live signals (search trends, Wikipedia interest, eBay/Etsy competition, YouTube activity) into one score.{" "}
-          <span className="font-medium text-[#0F172A]">Early Winner</span> and <span className="font-medium text-[#0F172A]">Strong</span> scores suggest low competition with rising demand — worth investigating first.
+          <span className="font-medium text-[#0F172A]">Early Winner</span> and <span className="font-medium text-[#0F172A]">Strong</span> scores suggest low competition with rising demand — worth investigating first.{" "}
+          The second badge next to it is <span className="font-medium text-[#0F172A]">Velocity</span> — the average growth across search, YouTube and Wikipedia, showing how fast momentum is building right now: 🚀 Accelerating, 📈 Rising, ➡️ Stable, or 📉 Cooling.
         </p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {filteredProducts.map((product: any, i: number) => {
           const status = getStatusLabel(product.score);
+          const velocity = getVelocity(product.searchGrowth || 0, product.youtubeGrowth || 0, product.wikiGrowth || 0);
           const isLocked = !isLoggedIn && i >= 3;
           const barColor = product.score >= 60 ? "#16A34A" : product.score >= 40 ? "#D97706" : "#DC2626";
           return (
@@ -196,7 +215,10 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
                     <span className="text-xl font-bold" style={{ color: barColor }}>{product.score}</span>
                     <span className="text-xs text-[#64748B]"> /100</span>
                   </div>
-                  <span className="rounded-full px-2 py-0.5 text-xs font-medium" style={{ color: barColor, backgroundColor: `${barColor}1A` }}>{status.label}</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="rounded-full px-2 py-0.5 text-xs font-medium" style={{ color: barColor, backgroundColor: `${barColor}1A` }}>{status.label}</span>
+                    <span className="rounded-full px-2 py-0.5 text-xs font-medium" style={{ color: velocity.color, backgroundColor: `${velocity.color}1A` }}>{velocity.emoji} {velocity.label}</span>
+                  </div>
                 </div>
                 <div className="mt-3">
                   <Sparkline points={product.searchPoints} color={barColor} />
