@@ -113,6 +113,37 @@ The common thread across all four categories is that UK winter demand is driven 
     status: "scheduled",
     publishDate: "2026-09-21",
   },
+  {
+    title: "Autumn and Winter Dropshipping: What's Actually Selling in the UK Right Now",
+    slug: "autumn-winter-uk-dropshipping-2026",
+    excerpt:
+      "As UK energy prices stay high and evenings get darker, buying habits shift fast. Here's what's genuinely moving right now - not just another generic trending list.",
+    content: `Energy prices in the UK haven't dropped the way anyone hoped, and that's quietly reshaping how people spend at home this autumn. The old winter playbook - chunky coats, novelty gifts, generic "cosy" products - still works, but it's not where the real movement is right now. The bigger shift is behavioural: people are heating themselves, not their houses. That's not a marketing angle I'm inventing - it's just what happens when a full central heating cycle costs what it costs this year. If you're sourcing for the next few months, that one sentence should shape most of your picks.
+
+## Warming the Room You're Actually In
+
+Electric blankets are still the obvious pick, and they're selling for a reason - a decent one runs maybe 3p an hour, versus heating a whole room for the evening. Heated insoles solve a real problem for anyone standing at a desk or in a cold kitchen, and they land for around £8-15 while selling comfortably above that. Warm-toned LED strip lighting - not the RGB gaming kind, the soft amber 2700K stuff - has quietly become a winter staple too, because a warmly lit room feels warmer even before the thermostat moves. None of these are exciting products. They're just useful, and useful sells hard in a cost-of-living winter.
+
+## Heated Clothing Accessories Are the Sleeper Category
+
+This is where I'd actually put effort right now. Thermal base layers, touchscreen gloves, and ear warmers share three things that make them genuinely easy to dropship: no real sizing headaches since most are one-size or stretch-fit, almost no returns because of it, and they're light - a pair of gloves ships for pennies compared to a coat. You're not fighting size-exchange emails or eating return shipping on a £40 jacket. A pair of decent touchscreen gloves lands around £6-9 and sells for £15-20 without much friction.
+
+## The Battery Warning Nobody Mentions
+
+Here's the part that catches people out. Anything with a lithium battery - heated gloves, heated insoles with a battery pack, USB hand warmers - counts as "dangerous goods" for shipping purposes. That's not a scare phrase, it's a real customs and carrier category. It means fewer courier options will accept it without extra paperwork (a UN38.3 test summary from your supplier, ideally), some air routes reject it outright, and delivery windows can stretch by a week or two compared to a normal parcel. Ask your supplier for that UN38.3 document before you commit stock, and build the longer shipping time into what you tell customers. A surprised customer waiting two extra weeks leaves a bad review; a warned one usually doesn't.
+
+## January Is When Everyone Else Gives Up
+
+Puzzles, resistance bands, home workout kit, reading lamps, weighted blankets - the whole "staying in and getting through winter" category actually peaks in January, not December. Most sellers chase the Christmas gift rush and then quietly stop paying attention right when New Year's resolutions and dark 5pm evenings are driving genuine demand. A weighted blanket, sourced around £15-20 and sold for £35-50, doesn't need a gift-wrap moment to sell - it needs someone stuck indoors in January looking for something to do, or something about themselves to fix. That gap, right when competitors have moved on to the next thing, is worth sourcing into on purpose.
+
+## Before You Put Money Into Any of This
+
+Order samples and place your first real stock order now, not in November. Most of this needs 6-8 weeks lead time if you're sourcing from overseas, and that window closes fast once a category starts trending publicly. Before committing budget to any single product here, it's worth checking actual demand rather than assuming the category story holds for your specific item - on UK Viral Radar, the Home and Kitchen categories are exactly where this kind of thing tends to show up first, so a quick look at search growth and listing counts before you order is a cheap way to avoid guessing wrong.`,
+    date: "2026-09-23",
+    category: "Trends",
+    status: "scheduled",
+    publishDate: "2026-09-23",
+  },
 ];
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
