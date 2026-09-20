@@ -48,22 +48,31 @@ export default function BlogPage() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="block rounded-lg border border-[#E4E7EC] bg-white p-6 transition-colors hover:border-[#16A34A]"
+              className="block overflow-hidden rounded-lg border border-[#E4E7EC] bg-white transition-colors hover:border-[#16A34A]"
             >
-              <span className="rounded-full bg-[#F7F8FA] px-2 py-0.5 text-[10px] font-medium text-[#64748B]">
-                {post.category}
-              </span>
-              <h2 className="mt-3 text-lg font-semibold text-[#0F172A]">{post.title}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-[#64748B]">{post.excerpt}</p>
-              <div className="mt-4 flex items-center justify-between text-xs text-[#64748B]">
-                <span>
-                  {new Date(post.date).toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })}
+              {post.imageUrl && (
+                <img
+                  src={post.imageUrl}
+                  alt={post.title}
+                  className="aspect-video w-full object-cover"
+                />
+              )}
+              <div className="p-6">
+                <span className="rounded-full bg-[#F7F8FA] px-2 py-0.5 text-[10px] font-medium text-[#64748B]">
+                  {post.category}
                 </span>
-                <span className="font-medium text-[#16A34A]">Read more &rarr;</span>
+                <h2 className="mt-3 text-lg font-semibold text-[#0F172A]">{post.title}</h2>
+                <p className="mt-2 text-sm leading-relaxed text-[#64748B]">{post.excerpt}</p>
+                <div className="mt-4 flex items-center justify-between text-xs text-[#64748B]">
+                  <span>
+                    {new Date(post.date).toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </span>
+                  <span className="font-medium text-[#16A34A]">Read more &rarr;</span>
+                </div>
               </div>
             </Link>
           ))}

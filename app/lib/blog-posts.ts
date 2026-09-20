@@ -10,6 +10,11 @@ export type BlogPost = {
   content: string;
   date: string; // ISO date, e.g. "2026-09-18" - the date shown to readers on the post
   category: string;
+  // Featured image for the blog card, the post header and social share
+  // previews (Open Graph). Optional so older/future posts without one still
+  // render fine - app/blog/page.tsx and app/blog/[slug]/page.tsx both guard
+  // on this being present before rendering an <img>.
+  imageUrl?: string;
   // "draft": never shown on the site.
   // "scheduled": hidden until publishDate is today or in the past, then shown automatically.
   // "published": always shown.
@@ -48,6 +53,7 @@ Perhaps the biggest shift in UK e-commerce over the past few years is that trend
     category: "Trends",
     status: "published",
     publishDate: "2026-09-18",
+    imageUrl: "https://loremflickr.com/1200/630/ecommerce,shopping",
   },
   {
     title: "eBay UK vs Etsy UK: Where Should You Sell?",
@@ -81,6 +87,7 @@ That's also where having visibility into both marketplaces at once helps. UK Vir
     category: "Selling Tips",
     status: "published",
     publishDate: "2026-09-17",
+    imageUrl: "https://loremflickr.com/1200/630/marketplace,ecommerce",
   },
   {
     title: "Winter Dropshipping: What Sells Best in the UK During Cold Months",
@@ -112,6 +119,7 @@ The common thread across all four categories is that UK winter demand is driven 
     category: "Trends",
     status: "scheduled",
     publishDate: "2026-09-21",
+    imageUrl: "https://loremflickr.com/1200/630/winter,shopping",
   },
   {
     title: "Autumn and Winter Dropshipping: What's Actually Selling in the UK Right Now",
@@ -143,6 +151,7 @@ Order samples and place your first real stock order now, not in November. Most o
     category: "Trends",
     status: "scheduled",
     publishDate: "2026-09-23",
+    imageUrl: "https://loremflickr.com/1200/630/winter,cozy,home",
   },
 ];
 

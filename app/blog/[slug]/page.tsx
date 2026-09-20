@@ -34,6 +34,13 @@ export async function generateMetadata({
       title,
       description: post.excerpt,
       type: "article",
+      images: post.imageUrl ? [post.imageUrl] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: post.excerpt,
+      images: post.imageUrl ? [post.imageUrl] : undefined,
     },
   };
 }
@@ -69,7 +76,16 @@ export default async function BlogPostPage({
           <h1 className="mt-3 text-2xl font-bold tracking-tight text-[#0F172A] sm:text-3xl">
             {post.title}
           </h1>
-          <p className="mt-2 text-sm text-[#64748B]">
+
+          {post.imageUrl && (
+            <img
+              src={post.imageUrl}
+              alt={post.title}
+              className="mt-6 aspect-video w-full rounded-lg object-cover"
+            />
+          )}
+
+          <p className="mt-4 text-sm text-[#64748B]">
             {new Date(post.date).toLocaleDateString("en-GB", {
               day: "2-digit",
               month: "long",
