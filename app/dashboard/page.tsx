@@ -238,13 +238,24 @@ export default async function DashboardPage() {
   // Today's rule-based "Daily Insight", written once a day by
   // .github/scripts/update-product-data.mjs into the daily_insights table.
   // Same UTC-calendar-date convention that script uses, so this looks up
-  // the exact row it wrote today.
+  // the exact row it wrote today. Uses limit(1) instead of maybeSingle() so
+  // an unexpected duplicate row for the same date can't make this throw -
+  // and the error is logged instead of silently swallowed, so a real
+  // problem (e.g. Row Level Security blocking the read) shows up in the
+  // Vercel function logs instead of just quietly not rendering anything.
   const todayIso = new Date().toISOString().slice(0, 10);
-  const { data: dailyInsight } = await supabase
+  const { data: dailyInsightRows, error: dailyInsightError } = await supabase
     .from("daily_insights")
     .select("insight_text")
     .eq("date", todayIso)
-    .maybeSingle();
+    .order("created_at", { ascending: false })
+    .limit(1);
+
+  if (dailyInsightError) {
+    console.error("Failed to load today's Daily Insight:", dailyInsightError.message);
+  }
+
+  const dailyInsight = dailyInsightRows?.[0] ?? null;
 
   return (
     <main className="min-h-screen bg-[#F7F8FA] px-6 py-10 sm:px-10">
