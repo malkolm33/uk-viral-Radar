@@ -178,7 +178,7 @@ async function getSearchData(keyword) {
 async function main() {
   const { data: products, error } = await supabase
     .from("products")
-    .select("id, name, search_keyword, wiki_title, social_growth, sales_signal");
+    .select("id, name, search_keyword, wiki_title, social_growth, sales_signal, viral_score");
 
   if (error) {
     console.error("Failed to load products from Supabase:", error.message);
@@ -230,6 +230,23 @@ async function main() {
         competitionPenalty: realCompetitionPenalty,
       });
 
+      // Trend detection: most viral products naturally fade within a few
+      // weeks, so we keep yesterday's score around (previous_viral_score)
+      // and compare it to today's. A drop of more than 15 points flags the
+      // product as "declining" so the admin page can warn it might be worth
+      // replacing. A brand-new product with no prior score yet (viral_score
+      // is null before its first run) has nothing to compare against, so it
+      // starts out "stable" rather than being judged on a single data point.
+      const previousScore = product.viral_score ?? null;
+      const trendStatus =
+        previousScore === null
+          ? "stable"
+          : score - previousScore < -15
+            ? "declining"
+            : score > previousScore
+              ? "rising"
+              : "stable";
+
       const { error: updateError } = await supabase
         .from("products")
         .update({
@@ -241,6 +258,8 @@ async function main() {
           youtube_video_count: youtubeData.videoCount,
           youtube_growth: youtubeData.growth,
           viral_score: score,
+          previous_viral_score: previousScore,
+          trend_status: trendStatus,
           last_updated: new Date().toISOString(),
         })
         .eq("id", product.id);
@@ -251,7 +270,13 @@ async function main() {
       }
 
       updatedCount += 1;
-      console.log(`Updated "${product.name}" - score ${score}`);
+      console.log(`Updated "${product.name}" - score ${score} (${trendStatus})`);
+
+      if (trendStatus === "declining") {
+        console.warn(
+          `Declining: "${product.name}" dropped from ${previousScore} to ${score} (-${previousScore - score} points).`
+        );
+      }
 
       if (!topProduct || score > topProduct.score) {
         topProduct = {
