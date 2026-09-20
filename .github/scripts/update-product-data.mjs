@@ -2,7 +2,9 @@
 // every product in the Supabase "products" table and writes the results
 // into the cached columns: search_growth, wiki_growth, ebay_listing_count,
 // ebay_avg_price, etsy_listing_count, youtube_video_count, youtube_growth,
-// viral_score and last_updated.
+// viral_score and last_updated. It then writes a simple, rule-based "Daily
+// Insight" sentence for the day's top product into the "daily_insights"
+// table (see writeDailyInsight below) - no AI, just if/else.
 //
 // This runs once a day via .github/workflows/update-product-data.yml instead
 // of app/dashboard/page.tsx calling all five APIs live on every page view.
@@ -189,6 +191,11 @@ async function main() {
   }
 
   let updatedCount = 0;
+  // Tracks the highest-scoring product seen this run, so we can build a
+  // simple, rule-based "Daily Insight" sentence once every product has been
+  // updated - no AI involved, just if/else over the same signals already
+  // computed above.
+  let topProduct = null;
 
   for (let idx = 0; idx < products.length; idx += 1) {
     const product = products[idx];
@@ -245,6 +252,16 @@ async function main() {
 
       updatedCount += 1;
       console.log(`Updated "${product.name}" - score ${score}`);
+
+      if (!topProduct || score > topProduct.score) {
+        topProduct = {
+          name: product.name,
+          score,
+          searchGrowth: searchData.growth,
+          youtubeGrowth: youtubeData.growth,
+          wikiGrowth,
+        };
+      }
     } catch (err) {
       console.error(`Unexpected error updating "${product.name}":`, err);
     }
@@ -256,6 +273,47 @@ async function main() {
   }
 
   console.log(`Done. Updated ${updatedCount}/${products.length} product(s).`);
+
+  await writeDailyInsight(topProduct);
+}
+
+// Builds a simple, rule-based "Daily Insight" sentence from today's
+// highest-scoring product - no AI, just if/else over the search/YouTube/
+// Wikipedia growth signals already computed above - and saves it to the
+// "daily_insights" table (one row per calendar day, upserted by date).
+async function writeDailyInsight(topProduct) {
+  if (!topProduct) {
+    console.log("No product data available - skipping today's Daily Insight.");
+    return;
+  }
+
+  const { name, score, searchGrowth, youtubeGrowth, wikiGrowth } = topProduct;
+
+  const hasRisingSupportSignal = youtubeGrowth > 0 || wikiGrowth > 0;
+
+  const insightText =
+    searchGrowth > 0 && hasRisingSupportSignal
+      ? `Today's standout is ${name} - search interest is up ${searchGrowth}%, backed by rising YouTube/Wikipedia activity. Viral Score: ${score}/100.`
+      : `No standout risers today - keep an eye on ${name}, currently the highest-scoring product at ${score}/100.`;
+
+  // UTC calendar date, same convention publish-scheduled-posts.mjs uses -
+  // avoids timezone edge cases between UK time and the UTC clock this
+  // workflow runs on.
+  const todayIso = new Date().toISOString().slice(0, 10);
+
+  const { error } = await supabase
+    .from("daily_insights")
+    .upsert(
+      { date: todayIso, insight_text: insightText, top_product_name: name },
+      { onConflict: "date" }
+    );
+
+  if (error) {
+    console.error("Failed to save today's Daily Insight:", error.message);
+    return;
+  }
+
+  console.log(`Daily Insight (${todayIso}): ${insightText}`);
 }
 
 main();
