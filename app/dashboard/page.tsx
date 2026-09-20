@@ -235,6 +235,17 @@ export default async function DashboardPage() {
   const products = productsWithRealData.sort((a: any, b: any) => b.score - a.score);
   const lastUpdated = new Date().toLocaleString("en-GB", { timeZone: "Europe/London", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
 
+  // Today's rule-based "Daily Insight", written once a day by
+  // .github/scripts/update-product-data.mjs into the daily_insights table.
+  // Same UTC-calendar-date convention that script uses, so this looks up
+  // the exact row it wrote today.
+  const todayIso = new Date().toISOString().slice(0, 10);
+  const { data: dailyInsight } = await supabase
+    .from("daily_insights")
+    .select("insight_text")
+    .eq("date", todayIso)
+    .maybeSingle();
+
   return (
     <main className="min-h-screen bg-[#F7F8FA] px-6 py-10 sm:px-10">
       <PayPalCaptureHandler />
@@ -261,6 +272,16 @@ export default async function DashboardPage() {
             )}
           </div>
         </header>
+
+        {dailyInsight?.insight_text && (
+          <div className="mb-6 flex items-start gap-3 rounded-lg border border-[#16A34A]/30 bg-[#16A34A]/5 p-4 sm:p-5">
+            <span className="mt-0.5 shrink-0 text-lg">💡</span>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#16A34A]">Daily Insight</p>
+              <p className="mt-1 text-sm leading-relaxed text-[#0F172A]">{dailyInsight.insight_text}</p>
+            </div>
+          </div>
+        )}
 
         <ProductGrid products={products} isLoggedIn={isLoggedIn} />
       </div>
