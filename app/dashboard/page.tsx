@@ -189,7 +189,7 @@ export default async function DashboardPage() {
           wikiGrowth: p.wiki_growth ?? 0,
           ebayListingCount: p.ebay_listing_count ?? 0,
           ebayAvgPrice: p.ebay_avg_price ?? null,
-          ebayImageUrl: null,
+          ebayImageUrl: p.ebay_image_url ?? null,
           ebayUniqueSellerCount: 0,
           etsyListingCount: p.etsy_listing_count ?? 0,
           youtubeVideoCount: p.youtube_video_count ?? 0,
