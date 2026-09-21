@@ -45,6 +45,14 @@ function PinterestIcon() {
   );
 }
 
+function TikTokIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="#000000" className="h-3 w-3 shrink-0" aria-hidden="true">
+      <path d="M16.6 5.82c-1.005-.985-1.57-2.326-1.57-3.82h-3.14v13.87c0 1.548-1.26 2.808-2.81 2.808a2.81 2.81 0 0 1-2.81-2.81c0-1.548 1.26-2.807 2.81-2.807.31 0 .604.05.884.14V9.9a6.02 6.02 0 0 0-.884-.066 5.95 5.95 0 0 0-5.95 5.95A5.95 5.95 0 0 0 9.08 21.73a5.95 5.95 0 0 0 5.95-5.95V9.03a8.29 8.29 0 0 0 4.85 1.55V7.44c-1.14 0-2.19-.34-3.28-1.62z" />
+    </svg>
+  );
+}
+
 function UKFlag() {
   return (
     <svg viewBox="0 0 60 30" className="h-4 w-6 rounded-sm shadow-sm">
