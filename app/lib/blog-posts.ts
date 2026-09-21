@@ -117,7 +117,7 @@ From late November onward, search interest and marketplace activity shift heavil
 The common thread across all four categories is that UK winter demand is driven as much by cost-consciousness as by cold weather itself - products that frame themselves around saving money while staying comfortable tend to have the broadest appeal. Tracking search growth and marketplace listing counts for these categories now, before the season is in full swing, is exactly the kind of early signal that makes the difference between sourcing ahead of the competition and catching a trend after it has already peaked.`,
     date: "2026-09-21",
     category: "Trends",
-    status: "scheduled",
+    status: "published",
     publishDate: "2026-09-21",
     imageUrl: "https://loremflickr.com/1200/630/winter,shopping/all",
   },
