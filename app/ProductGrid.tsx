@@ -253,7 +253,7 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
                     <span className="text-[#0F172A]">{product.ebayListingCount}</span>
                   </div>
                   {product.searchKeyword && (
-                    <div className="flex justify-end">
+                    <div className="flex flex-col items-end">
                       <a
                         href={`https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=GB&q=${encodeURIComponent(product.searchKeyword)}&media_type=all`}
                         target="_blank"
@@ -262,6 +262,9 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
                       >
                         Check Facebook ads for this product →
                       </a>
+                      <p className="text-right text-[10px] italic text-[#94A3B8]">
+                        Tip: Look for ads running 14+ days with high engagement - that signals real demand.
+                      </p>
                     </div>
                   )}
                   {product.searchKeyword && (
