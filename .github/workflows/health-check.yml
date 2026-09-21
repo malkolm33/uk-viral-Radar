@@ -1,0 +1,30 @@
+name: Health Check
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check live pages
+        run: |
+          BASE="https://ukviralradar.com"
+          PAGES="/ /dashboard /blog /compare /login /contact /privacy /terms /tools/profit-calculator"
+          FAILED=0
+
+          # Deploy'un bitmesi için biraz bekle (gerekirse süreyi değiştir)
+          sleep 60
+
+          for p in $PAGES; do
+            code=$(curl -s -o /dev/null -L --max-time 30 --retry 2 --retry-delay 5 -w "%{http_code}" "$BASE$p")
+            if [ "$code" = "200" ]; then
+              echo "OK   $code $p"
+            else
+              echo "::error::FAIL $code $p"
+              FAILED=1
+            fi
+          done
+
+          exit $FAILED
