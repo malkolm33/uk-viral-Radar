@@ -53,7 +53,7 @@ Perhaps the biggest shift in UK e-commerce over the past few years is that trend
     category: "Trends",
     status: "published",
     publishDate: "2026-09-18",
-    imageUrl: "https://loremflickr.com/1200/630/home,lifestyle,trending/all?lock=777",
+    imageUrl: "https://picsum.photos/seed/uk-trends-lifestyle-2026/1200/630",
   },
   {
     title: "eBay UK vs Etsy UK: Where Should You Sell?",
