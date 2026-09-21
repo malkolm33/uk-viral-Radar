@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createAdminClient } from "../../lib/supabase-admin";
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,10 +9,10 @@ export async function POST(request: NextRequest) {
       const email = body.resource?.payer?.email_address;
 
       if (email) {
-        const supabaseAdmin = createClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-        );
+        // Service role key: this is a server-to-server call from PayPal's
+        // servers with no logged-in user session, so the anon key would be
+        // rejected by the "profiles" table's Row Level Security policies.
+        const supabaseAdmin = createAdminClient();
 
         await supabaseAdmin
           .from("profiles")

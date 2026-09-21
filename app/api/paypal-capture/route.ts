@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createAdminClient } from "../../lib/supabase-admin";
 
 const PAYPAL_API = "https://api-m.paypal.com";
 
@@ -84,10 +84,12 @@ export async function POST(request: NextRequest) {
 
 		if (captureData.status === "COMPLETED" && email) {
 			console.log("[paypal-capture] upserting profiles row for", email);
-			const supabaseAdmin = createClient(
-				process.env.NEXT_PUBLIC_SUPABASE_URL!,
-				process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-			);
+			// Uses the service role key (bypasses Row Level Security) because
+			// this is a server-to-server write with no logged-in user session
+			// attached - the "profiles" table's RLS policies only allow a
+			// user to read/write their OWN row via their own auth session, so
+			// the anon key would be rejected here once RLS is enabled.
+			const supabaseAdmin = createAdminClient();
 
 			const { data: upsertData, error: upsertError } = await supabaseAdmin
 				.from("profiles")
