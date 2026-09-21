@@ -53,7 +53,7 @@ Perhaps the biggest shift in UK e-commerce over the past few years is that trend
     category: "Trends",
     status: "published",
     publishDate: "2026-09-18",
-    imageUrl: "https://loremflickr.com/1200/630/ecommerce,shopping",
+    imageUrl: "https://loremflickr.com/1200/630/home,lifestyle,trending/all",
   },
   {
     title: "eBay UK vs Etsy UK: Where Should You Sell?",
@@ -87,7 +87,7 @@ That's also where having visibility into both marketplaces at once helps. UK Vir
     category: "Selling Tips",
     status: "published",
     publishDate: "2026-09-17",
-    imageUrl: "https://loremflickr.com/1200/630/marketplace,ecommerce",
+    imageUrl: "https://loremflickr.com/1200/630/marketplace,ecommerce/all",
   },
   {
     title: "Winter Dropshipping: What Sells Best in the UK During Cold Months",
@@ -119,7 +119,7 @@ The common thread across all four categories is that UK winter demand is driven 
     category: "Trends",
     status: "scheduled",
     publishDate: "2026-09-21",
-    imageUrl: "https://loremflickr.com/1200/630/winter,shopping",
+    imageUrl: "https://loremflickr.com/1200/630/winter,shopping/all",
   },
   {
     title: "Autumn and Winter Dropshipping: What's Actually Selling in the UK Right Now",
@@ -151,7 +151,7 @@ Order samples and place your first real stock order now, not in November. Most o
     category: "Trends",
     status: "scheduled",
     publishDate: "2026-09-23",
-    imageUrl: "https://loremflickr.com/1200/630/winter,cozy,home",
+    imageUrl: "https://loremflickr.com/1200/630/winter,cozy,home/all",
   },
 ];
 
@@ -177,4 +177,20 @@ export function isPostVisible(post: BlogPost): boolean {
 
 export function getVisiblePosts(): BlogPost[] {
   return blogPosts.filter(isPostVisible);
+}
+
+// Standard "X min read" estimate - average adult reading speed is roughly
+// 200 words per minute. Rounded up so a short post never reads as "0 min".
+export function getReadingTimeMinutes(post: BlogPost): number {
+  const wordCount = post.content.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(wordCount / 200));
+}
+
+// Other visible posts in the same category, for the "Related posts" section
+// at the bottom of a post - newest first, current post excluded.
+export function getRelatedPosts(post: BlogPost, limit = 2): BlogPost[] {
+  return getVisiblePosts()
+    .filter((p) => p.slug !== post.slug && p.category === post.category)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, limit);
 }
