@@ -291,6 +291,21 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
                       </a>
                     </div>
                   )}
+                  {product.searchKeyword && (
+                    <div className="flex justify-end">
+                      <a
+                        href={`https://ads.tiktok.com/business/creativecenter/inspiration/topads/pc/en?region=GB&keyword=${encodeURIComponent(product.searchKeyword)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group inline-flex items-center gap-1 text-[11px] text-[#2563EB] hover:text-[#0F172A]"
+                      >
+                        <TikTokIcon />
+                        <span className="underline decoration-[#2563EB]/40 underline-offset-2 group-hover:decoration-[#0F172A]/40">
+                          Check TikTok Creative Center →
+                        </span>
+                      </a>
+                    </div>
+                  )}
                   {product.ebayUniqueSellerCount > 0 && (
                     <div className="flex justify-between">
                       <span>Unique sellers</span>
