@@ -149,7 +149,7 @@ Puzzles, resistance bands, home workout kit, reading lamps, weighted blankets - 
 Order samples and place your first real stock order now, not in November. Most of this needs 6-8 weeks lead time if you're sourcing from overseas, and that window closes fast once a category starts trending publicly. Before committing budget to any single product here, it's worth checking actual demand rather than assuming the category story holds for your specific item - on UK Viral Radar, the Home and Kitchen categories are exactly where this kind of thing tends to show up first, so a quick look at search growth and listing counts before you order is a cheap way to avoid guessing wrong.`,
     date: "2026-09-23",
     category: "Trends",
-    status: "scheduled",
+    status: "published",
     publishDate: "2026-09-23",
     imageUrl: "https://loremflickr.com/1200/630/winter,cozy,home/all",
   },
