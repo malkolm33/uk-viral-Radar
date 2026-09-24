@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 import { useEffect, useState } from "react";
 import { createClient } from "../lib/supabase-client";
 
-const ADMIN_PASSWORD = "radar2026";
+
 
 const CATEGORIES = ["Home", "Electronics", "Fitness", "Beauty", "Kitchen"];
 
@@ -43,11 +43,16 @@ export default function AdminPage() {
 
 	useEffect(() => { if (authenticated) loadProducts(); }, [authenticated]);
 
-	function handlePasswordSubmit(e: React.FormEvent) {
-		e.preventDefault();
-		if (passwordInput === ADMIN_PASSWORD) setAuthenticated(true);
-		else setMessage("Wrong password");
-	}
+	async function handlePasswordSubmit(e: React.FormEvent) {
+                e.preventDefault();
+                const res = await fetch("/api/admin/verify", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ password: passwordInput }),
+                });
+                if (res.ok) setAuthenticated(true);
+                else setMessage("Wrong password");
+        }
 
 	async function handleAddProduct(e: React.FormEvent) {
 		e.preventDefault();

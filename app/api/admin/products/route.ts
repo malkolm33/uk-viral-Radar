@@ -9,7 +9,7 @@ import { createAdminClient } from "../../../lib/supabase-admin";
 // enabled with no public insert/update/delete policy. This check just keeps
 // this endpoint from being trivially discoverable/callable by anyone who
 // doesn't already know the admin panel exists.
-const ADMIN_PASSWORD = "radar2026";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
