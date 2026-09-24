@@ -309,9 +309,9 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
                       </a>
                     </div>
                   )}
-                  {product.searchKeyword && (
+                  {product.searchKeyword && (   
                     <div className="flex justify-end">
-                      
+                      <a
                         href={`https://www.aliexpress.com/wholesale?SearchText=${encodeURIComponent(product.searchKeyword)}`}
                         target="_blank"
                         rel="noopener noreferrer"
