@@ -53,7 +53,7 @@ Perhaps the biggest shift in UK e-commerce over the past few years is that trend
     category: "Trends",
     status: "published",
     publishDate: "2026-09-18",
-    imageUrl: "https://picsum.photos/seed/uk-trends-lifestyle-2026/1200/630",
+    imageUrl: "https://images.unsplash.com/photo-1649073005971-37babef31983?w=1200&h=630&fit=crop&q=80&auto=format",
   },
   {
     title: "eBay UK vs Etsy UK: Where Should You Sell?",
@@ -87,7 +87,7 @@ That's also where having visibility into both marketplaces at once helps. UK Vir
     category: "Selling Tips",
     status: "published",
     publishDate: "2026-09-17",
-    imageUrl: "https://loremflickr.com/1200/630/marketplace,ecommerce/all",
+    imageUrl: "https://images.unsplash.com/photo-1449247666642-264389f5f5b1?w=1200&h=630&fit=crop&q=80&auto=format",
   },
   {
     title: "Winter Dropshipping: What Sells Best in the UK During Cold Months",
@@ -119,7 +119,7 @@ The common thread across all four categories is that UK winter demand is driven 
     category: "Trends",
     status: "published",
     publishDate: "2026-09-21",
-    imageUrl: "https://loremflickr.com/1200/630/winter,shopping/all",
+    imageUrl: "https://images.unsplash.com/photo-1607626856747-14da3dec6188?w=1200&h=630&fit=crop&q=80&auto=format",
   },
   {
     title: "Autumn and Winter Dropshipping: What's Actually Selling in the UK Right Now",
@@ -151,7 +151,7 @@ Order samples and place your first real stock order now, not in November. Most o
     category: "Trends",
     status: "published",
     publishDate: "2026-09-23",
-    imageUrl: "https://loremflickr.com/1200/630/winter,cozy,home/all",
+    imageUrl: "https://images.unsplash.com/photo-1750814019023-4e43037f5075?w=1200&h=630&fit=crop&q=80&auto=format", 
   },
 ];
 
