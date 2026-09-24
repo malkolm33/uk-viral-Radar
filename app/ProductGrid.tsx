@@ -321,10 +321,16 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
                       </a>
                     </div>
                   )}
-                  {product.ebayUniqueSellerCount > 0 && (
-
-                    <div className="flex justify-between">
-                      <span>Unique sellers</span>
+                                    {product.ebayUniqueSellerCount > 0 && (
+                    <div className="flex items-center justify-between">
+                      <span className="flex items-center gap-1.5">
+                        Unique sellers
+                        {product.ebayUniqueSellerCount >= 15 && (
+                          <span className="rounded-full bg-[#DC2626]/10 px-1.5 py-0.5 text-[10px] font-medium text-[#DC2626]">
+                            ⚠️ Saturated
+                          </span>
+                        )}
+                      </span>
                       <span className="text-[#0F172A]">{product.ebayUniqueSellerCount}</span>
                     </div>
                   )}
