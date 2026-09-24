@@ -530,6 +530,7 @@ export default function LandingPage() {
               </a>
             ))}
           </div>
+          <StatusIndicator />
           <p className="text-center text-xs text-[#64748B]">
             © {new Date().getFullYear()} UK Viral Radar. All rights reserved.
           </p>
