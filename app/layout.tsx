@@ -54,6 +54,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             gtag('config', '${GA_MEASUREMENT_ID}');
           `}
         </Script>
+        <Script
+          src="https://code.tidio.co/s9ea9yis0lcohg4taqwnav4clhqd1wyw.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
