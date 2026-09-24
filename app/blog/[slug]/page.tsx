@@ -1,7 +1,13 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { blogPosts, getPostBySlug, isPostVisible } from "../../lib/blog-posts";
+import {
+  blogPosts,
+  getPostBySlug,
+  isPostVisible,
+  getReadingTimeMinutes,
+  getRelatedPosts,
+} from "../../lib/blog-posts";
 
 // Only pre-render posts that aren't pure drafts. A "scheduled" post whose
 // date hasn't arrived yet still gets a page here, but the component below
@@ -58,6 +64,8 @@ export default async function BlogPostPage({
   }
 
   const blocks = post.content.split(/\n\n+/);
+  const readingTime = getReadingTimeMinutes(post);
+  const relatedPosts = getRelatedPosts(post);
 
   return (
     <main className="min-h-screen bg-[#F7F8FA] px-6 py-12 sm:px-10">
@@ -81,7 +89,7 @@ export default async function BlogPostPage({
             <img
               src={post.imageUrl}
               alt={post.title}
-              className="mt-6 aspect-video w-full rounded-lg object-cover"
+              className="mt-6 h-64 w-full rounded-lg object-cover sm:h-80 md:h-[400px]"
             />
           )}
 
@@ -91,9 +99,11 @@ export default async function BlogPostPage({
               month: "long",
               year: "numeric",
             })}
+            {" · "}
+            {readingTime} min read
           </p>
 
-          <div className="mt-8 space-y-4 text-sm leading-relaxed">
+          <div className="mt-8 space-y-6 text-sm leading-relaxed">
             {blocks.map((block, i) => {
               if (block.startsWith("## ")) {
                 return (
@@ -113,6 +123,32 @@ export default async function BlogPostPage({
             })}
           </div>
         </div>
+
+        {relatedPosts.length > 0 && (
+          <div className="mt-6 rounded-lg border border-[#E4E7EC] bg-white p-6 sm:p-8">
+            <h2 className="text-sm font-semibold text-[#0F172A]">Related posts</h2>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              {relatedPosts.map((related) => (
+                <Link
+                  key={related.slug}
+                  href={`/blog/${related.slug}`}
+                  className="block overflow-hidden rounded-lg border border-[#E4E7EC] transition-colors hover:border-[#16A34A]"
+                >
+                  {related.imageUrl && (
+                    <img
+                      src={related.imageUrl}
+                      alt={related.title}
+                      className="aspect-video w-full object-cover"
+                    />
+                  )}
+                  <div className="p-4">
+                    <p className="text-sm font-medium text-[#0F172A]">{related.title}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         <p className="mt-6 text-center text-xs text-[#64748B]">
           <Link href="/blog" className="hover:text-[#0F172A]">
