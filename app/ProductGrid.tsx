@@ -305,11 +305,24 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
                         <TikTokIcon />
                         <span className="underline decoration-[#2563EB]/40 underline-offset-2 group-hover:decoration-[#0F172A]/40">
                           Check TikTok Creative Center →
-                        </span>
+                                                </span>
+                      </a>
+                    </div>
+                  )}
+                  {product.searchKeyword && (
+                    <div className="flex justify-end">
+                      
+                        href={`https://www.aliexpress.com/wholesale?SearchText=${encodeURIComponent(product.searchKeyword)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] text-[#2563EB] underline decoration-[#2563EB]/40 underline-offset-2 hover:text-[#0F172A] hover:decoration-[#0F172A]/40"
+                      >
+                        Find suppliers on AliExpress →
                       </a>
                     </div>
                   )}
                   {product.ebayUniqueSellerCount > 0 && (
+
                     <div className="flex justify-between">
                       <span>Unique sellers</span>
                       <span className="text-[#0F172A]">{product.ebayUniqueSellerCount}</span>
