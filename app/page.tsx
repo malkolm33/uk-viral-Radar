@@ -1,6 +1,6 @@
 import Link from "next/link";
 import StatusIndicator from "./StatusIndicator";
-const WHATSAPP_NUMBER = ""; // TODO: add your number with country code, no spaces, e.g. 447911123456
+const WHATSAPP_NUMBER = "447807868447"; // TODO: add your number with country code, no spaces, e.g. 447911123456
 import VideoSection from "./VideoSection";
 import Testimonials from "./Testimonials";
 import type { Metadata } from "next";
