@@ -190,7 +190,7 @@ export default async function DashboardPage() {
           ebayListingCount: p.ebay_listing_count ?? 0,
           ebayAvgPrice: p.ebay_avg_price ?? null,
           ebayImageUrl: p.ebay_image_url ?? null,
-          ebayUniqueSellerCount: 0,
+          ebayUniqueSellerCount: p.ebay_unique_seller_count ?? 0,
           etsyListingCount: p.etsy_listing_count ?? 0,
           youtubeVideoCount: p.youtube_video_count ?? 0,
           youtubeGrowth: p.youtube_growth ?? 0,
