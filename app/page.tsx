@@ -1,5 +1,7 @@
 import Link from "next/link";
 import StatusIndicator from "./StatusIndicator";
+import VideoSection from "./VideoSection";
+import Testimonials from "./Testimonials";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -375,6 +377,10 @@ export default function LandingPage() {
           </div>
         </section>
 
+        <VideoSection />
+        <Testimonials />
+
+        {/* Pricing */}
         {/* How it works */}
         <section className="py-16">
           <div className="mx-auto max-w-2xl text-center">
