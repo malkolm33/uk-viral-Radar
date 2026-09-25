@@ -1,5 +1,6 @@
 import Link from "next/link";
 import StatusIndicator from "./StatusIndicator";
+const WHATSAPP_NUMBER = ""; // TODO: add your number with country code, no spaces, e.g. 447911123456
 import VideoSection from "./VideoSection";
 import Testimonials from "./Testimonials";
 import type { Metadata } from "next";
@@ -536,6 +537,20 @@ export default function LandingPage() {
                 <SocialIcon path={social.path} />
               </a>
             ))}
+            {WHATSAPP_NUMBER && (
+              <a
+                href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20I%20have%20a%20question%20about%20UK%20Viral%20Radar`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WhatsApp"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-[#E4E7EC] text-[#25D366] transition-colors hover:border-[#25D366]"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4" aria-hidden="true">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.29.173-1.413-.074-.124-.272-.198-.57-.347Z" />
+                  <path d="M12.001 2C6.478 2 2 6.478 2 12c0 1.821.487 3.53 1.338 5.002L2 22l5.13-1.325A9.947 9.947 0 0 0 12.001 22C17.523 22 22 17.522 22 12S17.523 2 12.001 2Zm0 18.182a8.134 8.134 0 0 1-4.148-1.133l-.297-.176-3.048.787.813-2.969-.193-.305a8.16 8.16 0 0 1-1.25-4.386c0-4.508 3.667-8.175 8.176-8.175 4.508 0 8.175 3.667 8.175 8.175 0 4.509-3.667 8.182-8.176 8.182Z" />
+                </svg>
+              </a>
+            )}
           </div>
           <StatusIndicator />
           <p className="text-center text-xs text-[#64748B]">
