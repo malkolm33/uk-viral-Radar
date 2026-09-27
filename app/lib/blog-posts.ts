@@ -153,6 +153,40 @@ Order samples and place your first real stock order now, not in November. Most o
     publishDate: "2026-09-23",
     imageUrl: "https://images.unsplash.com/photo-1750814019023-4e43037f5075?w=1200&h=630&fit=crop&q=80&auto=format", 
   },
+  {
+    title: "How to Find Products That Actually Sell (Without Guessing)",
+    slug: "how-to-find-profitable-products-to-sell-online",
+    excerpt:
+      "A practical look at how sellers actually spot profitable dropshipping products in 2026, instead of copying whatever's trending on someone else's feed.",
+    content: `Most people picking dropshipping products in 2026 are still doing it backwards. They open TikTok, see something get half a million likes, and assume that's the signal. By the time a product is viral enough for you to notice it casually scrolling, a few thousand other sellers have already noticed it too - and the margin has usually gone with them.
+
+Real product research isn't about spotting the loudest thing online. It's slower and less exciting than that: checking what's actually selling on the marketplaces where people buy, not just where they scroll, and being honest with yourself about whether you're early or six months late.
+
+## Stop Competing on Price Alone
+
+The obvious trap right now is picking cheap, generic items and trying to out-price Temu, SHEIN or Amazon's own basics. You won't win that fight. Those platforms manufacture and ship at a scale no dropshipper can match, and any product that competes purely on being inexpensive gets its margin crushed within weeks of catching on. The sellers still making decent money on profitable dropshipping products in 2026 have mostly stopped trying to be the cheapest option and started looking for products where price isn't the main conversation - because they solve a specific problem, or because they're personal enough that a buyer isn't comparing five listings side by side.
+
+## Etsy Is Quietly Telling You What's Working
+
+If you want a free, fairly reliable read on trending products in the UK, Etsy's own search trends are worth checking before you spend a penny on ads. Personalized gifts, wedding and event items, home decor, and digital downloads have been among the fastest-growing search categories there this year, and it's not hard to see why - a digital download on Etsy has close to zero fulfilment cost, and a personalized item is inherently harder to price-compare than a generic one. The lesson generalises past Etsy too: products that can be made to feel specific to the buyer, rather than interchangeable with ten other listings, tend to hold their margin longer and stay genuinely low competition products to sell, at least for a while.
+
+## Get Specific With Your Keywords
+
+This is where a lot of product research goes wrong - people search "personalized jewellery," conclude the whole space is saturated, and move on. The real opportunity is usually one layer down. A long-tail search like "personalized birthstone bracelet for mum" converts at a completely different rate than the broad term, and it's far less competitive because most sellers never bother going that specific. The same logic holds whether you're browsing eBay listings, checking Pinterest search suggestions, or figuring out how to find dropshipping niches from scratch - the long-tail version of a search almost always tells you more about buyer intent than the broad one does, and it takes about thirty extra seconds to type.
+
+## A Niche Worth a Closer Look
+
+One category that's been quietly outperforming expectations is premium pet wellness products - orthopedic pet beds, GPS trackers, joint supplements, that sort of thing. Sellers in this space have reported margins in the 35-65% range, which is unusually high for physical products, mostly because pet owners treat these as health purchases rather than impulse buys and shop accordingly, the same way they would for their own supplements. It won't stay under-the-radar forever, but it's a decent example of what a genuinely winning product actually looks like right now: not hidden, just overlooked because it's less exciting to talk about than the latest gadget.
+
+Amazon's own Best Sellers page works the same way, and it's easy to forget it's sitting there for free. Sellers already use it every day to see what's actually moving units in a category, not what an algorithm decided to push into someone's feed for a few days. Cross-referencing that against Etsy search trends and eBay listing counts gives you a rough picture of demand versus competition without paying for a single tool.
+
+None of this replaces checking the actual numbers before you commit stock or ad spend to something. UK Viral Radar pulls live search trend and eBay/Etsy competition data into a single score, which is exactly the kind of grunt work good product research requires - just done automatically instead of by hand.`,
+    date: "2026-09-30",
+    category: "Trends",
+    status: "scheduled",
+    publishDate: "2026-09-30",
+    imageUrl: "https://picsum.photos/seed/profitable-products-research-2026/1200/630",
+  },
 ];
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
