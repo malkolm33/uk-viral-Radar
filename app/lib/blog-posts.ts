@@ -183,7 +183,7 @@ Amazon's own Best Sellers page works the same way, and it's easy to forget it's 
 None of this replaces checking the actual numbers before you commit stock or ad spend to something. UK Viral Radar pulls live search trend and eBay/Etsy competition data into a single score, which is exactly the kind of grunt work good product research requires - just done automatically instead of by hand.`,
     date: "2026-09-30",
     category: "Trends",
-    status: "scheduled",
+    status: "published",
     publishDate: "2026-09-30",
     imageUrl: "https://picsum.photos/seed/profitable-products-research-2026/1200/630",
   },
