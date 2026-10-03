@@ -187,6 +187,52 @@ None of this replaces checking the actual numbers before you commit stock or ad 
     publishDate: "2026-09-30",
     imageUrl: "https://picsum.photos/seed/profitable-products-research-2026/1200/630",
   },
+  {
+    title: "How to Spot Viral and Best-Selling Products in the UK Market",
+    slug: "how-to-spot-viral-best-selling-products-uk",
+    excerpt:
+      "A practical look at the free signals UK sellers actually check before committing to a product - ad activity, TikTok Shop momentum, search trends and marketplace competition.",
+    content: `Spotting a winning product isn't luck. It's pattern recognition - you're watching the same handful of signals every serious UK seller checks before committing stock or ad spend. None of these signals mean much on their own. Stacked together, they tell you whether you've found one of the real best selling products UK buyers actually want, or just another product someone's pushing hard on ads this week.
+
+## Ad Activity Signals
+
+If a product has been running ads for 14+ days, that's not nothing. Sellers don't keep paying for ads that lose money - they pull them within days if the numbers don't work. So when you see a product still running, with comments like "where do I buy this" or "link please," you're looking at real demand, not a guess.
+
+**Facebook Ad Library** is the free way to check this. No login, no account needed. Search a keyword or a competitor's page and see every active ad, how long it's been running, and what people are saying in the comments. It's one of the few places where you can watch other sellers test a product for you, for free, before you spend a penny of your own budget.
+
+## TikTok Shop Momentum
+
+TikTok Shop GMV and live creator activity tell you what's actually moving right now in the UK - not what was trending three months ago on a blog post. This is where find trending products TikTok Shop UK research gets interesting, because the platform rewards speed. A product can go from nobody's heard of it to everywhere in under two weeks, then fade almost as fast once every seller piles in.
+
+**TikTok's own Creative Center** is free and legitimate - filter by Top Products and set the region to UK. You'll see what's actually selling through the platform right now, not what an algorithm thinks you'll click on.
+
+## Search and Seasonal Signals
+
+**Google Trends** for the UK region is still one of the most underused free tools out there. The key is telling the difference between a real trend and a one-off spike - a product that's been climbing steadily for six weeks is a very different bet than one that spiked for three days because of a single viral video.
+
+Check by UK region too. London, Manchester, Scotland - interest doesn't always spread evenly, and a product that's genuinely trending in one region can look flat in national averages. If you're selling to a specific area, or testing regional ads before going nationwide, regional data tells you more than the headline number ever will.
+
+## Marketplace Competition Signals
+
+Here's where a lot of UK dropshipping viral products research falls apart. A product shows up trending in every signal you check - ads, TikTok, search - and you get excited. Then you check eBay or Etsy and find 50+ sellers already listing it.
+
+That's saturation, and it kills margins fast. Live listing counts and unique seller counts on eBay and Etsy matter because they tell you whether you're early or whether you've just found what everyone else found last week. A trending product with low competition is the actual target. A trending product with heavy competition is a race to the bottom on price, and that race rarely ends well for anyone who joined late.
+
+## The UK Buyer Checklist
+
+Before you commit to a product, run it through these three checks:
+
+- **Visual and demonstrable** - it should solve a problem in under 30 seconds on video. If you can't show why someone needs it quickly, it's a harder sell no matter how useful it actually is.
+- **Impulse-buy price range** - £15 to £40 is the "easy yes" bracket for most UK buyers. Below that and margins get thin; above it and you're asking for more consideration than an impulse buy usually gets.
+- **Fast UK delivery** - buyers here expect their order quickly. Factor in where you're actually fulfilling from, because a two-week wait kills conversion no matter how good the product is.
+
+Checking all of this by hand means five or six browser tabs open at once - Ad Library, TikTok Creative Center, Google Trends, eBay, Etsy, maybe Pinterest too. UK Viral Radar pulls several of these free signals together in one place: live Google Trends and eBay/Etsy competition data on every product, plus direct links to Facebook Ad Library, TikTok Creative Center and Pinterest Trends, so you're not checking five different sites by hand every time you want to size up a product.`,
+    date: "2026-10-06",
+    category: "Trends",
+    status: "scheduled",
+    publishDate: "2026-10-06",
+    imageUrl: "https://picsum.photos/seed/uk-viral-products-research-2026/1200/630",
+  },
 ];
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
