@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -8,12 +8,26 @@ export default function ContactForm() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // TODO: wire this up to a real email/notification service.
-    // For now we just confirm receipt in the UI.
-    setSent(true);
+    setLoading(true);
+    setErrorMsg("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+      if (!res.ok) throw new Error("Failed to send");
+      setSent(true);
+    } catch {
+      setErrorMsg("Something went wrong - please try again or WhatsApp us instead.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -72,11 +86,14 @@ export default function ContactForm() {
                 />
               </div>
 
+              {errorMsg && <p className="text-xs text-[#DC2626]">{errorMsg}</p>}
+
               <button
                 type="submit"
-                className="w-full rounded-md bg-[#16A34A] py-2 text-sm font-medium text-white"
+                disabled={loading}
+                className="w-full rounded-md bg-[#16A34A] py-2 text-sm font-medium text-white disabled:opacity-50"
               >
-                Send message
+                {loading ? "Sending..." : "Send message"}
               </button>
             </form>
           )}
