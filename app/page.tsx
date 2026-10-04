@@ -6,14 +6,25 @@ import Testimonials from "./Testimonials";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://ukviralradar.com"),
   title: "UK Viral Radar - Spot Trending Products Before Your Competitors",
   description:
     "Track trending products in the UK market with live data from Google Trends, Wikipedia, eBay, Etsy and YouTube. Built for UK dropshippers and e-commerce sellers.",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "UK Viral Radar - Spot Trending Products Before Your Competitors",
     description:
       "Track trending products in the UK market with live data from Google Trends, Wikipedia, eBay, Etsy and YouTube. Built for UK dropshippers and e-commerce sellers.",
     type: "website",
+    url: "https://ukviralradar.com",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "UK Viral Radar - Spot Trending Products Before Your Competitors",
+    description:
+      "Track trending products in the UK market with live data from Google Trends, Wikipedia, eBay, Etsy and YouTube. Built for UK dropshippers and e-commerce sellers.",
   },
 };
 
@@ -273,11 +284,28 @@ function SocialIcon({ path }: { path: string }) {
 }
 
 export default function LandingPage() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+
   return (
     <main className="min-h-screen bg-[#F7F8FA]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <header className="flex flex-wrap items-center justify-between gap-3 py-6">
