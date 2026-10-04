@@ -27,7 +27,7 @@ export const blogPosts: BlogPost[] = [
     title: "5 UK Dropshipping Trends to Watch",
     slug: "5-uk-dropshipping-trends-to-watch",
     excerpt:
-      "Placeholder excerpt - a quick look at five product and market trends UK dropshippers should be watching right now.",
+      "From problem-solving home gadgets to kitchen tools with a visual wow factor, here are five category trends UK dropshippers should be watching right now.",
     content: `UK dropshippers who spend their time chasing whatever product is loudest on social media this week tend to burn through ad budget and still end up guessing. A more reliable approach is to watch the broader categories that keep resurfacing across search interest, marketplace listings and short-form video, and then find your own angle within them. Here are five category trends worth tracking in the UK market right now.
 
 ## Home Products That Solve a Small Problem
