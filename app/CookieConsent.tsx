@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -24,6 +24,9 @@ export default function CookieConsent() {
     } catch {
       // Ignore - worst case the banner reappears next visit.
     }
+    // Let AnalyticsScripts know immediately, so Accept loads GA/Tidio without
+    // needing a page refresh.
+    window.dispatchEvent(new Event("cookie-consent-changed"));
     setVisible(false);
   }
 

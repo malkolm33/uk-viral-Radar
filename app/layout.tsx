@@ -1,11 +1,9 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import CookieConsent from "./CookieConsent";
-
-const GA_MEASUREMENT_ID = "G-JEB97917KZ";
+import AnalyticsScripts from "./AnalyticsScripts";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,22 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
         <CookieConsent />
         <Analytics />
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${GA_MEASUREMENT_ID}');
-          `}
-        </Script>
-        <Script
-          src="https://code.tidio.co/s9ea9yis0lcohg4taqwnav4clhqd1wyw.js"
-          strategy="afterInteractive"
-        />
+        <AnalyticsScripts />
       </body>
     </html>
   );
