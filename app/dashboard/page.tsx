@@ -195,6 +195,7 @@ export default async function DashboardPage() {
           youtubeVideoCount: p.youtube_video_count ?? 0,
           youtubeGrowth: p.youtube_growth ?? 0,
           score: p.viral_score ?? 0,
+          lastUpdated: p.last_updated,
         };
       }
 
@@ -228,12 +229,19 @@ export default async function DashboardPage() {
         youtubeVideoCount: youtubeData.videoCount,
         youtubeGrowth: youtubeData.growth,
         score,
+        lastUpdated: new Date().toISOString(),
       };
     })
   );
 
   const products = productsWithRealData.sort((a: any, b: any) => b.score - a.score);
-  const lastUpdated = new Date().toLocaleString("en-GB", { timeZone: "Europe/London", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+  const validTimestamps = products
+    .map((p: any) => p.lastUpdated)
+    .filter(Boolean)
+    .map((t: string) => new Date(t).getTime())
+    .filter((t: number) => !isNaN(t));
+  const oldestTimestamp = validTimestamps.length > 0 ? Math.min(...validTimestamps) : Date.now();
+  const lastUpdated = new Date(oldestTimestamp).toLocaleString("en-GB", { timeZone: "Europe/London", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
 
   // Today's rule-based "Daily Insight", written once a day by
   // .github/scripts/update-product-data.mjs into the daily_insights table.
