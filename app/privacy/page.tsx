@@ -98,9 +98,24 @@ export default function PrivacyPolicyPage() {
             <section>
               <h2 className="text-lg font-semibold text-[#0F172A]">6. Cookies</h2>
               <p className="mt-2 text-[#64748B]">
-                We use cookies and similar technologies to keep you signed in, remember your preferences,
-                and understand how the Service is used. You can control or disable cookies through your
-                browser settings, though some parts of the Service may not function properly without them.
+                We use essential cookies to keep you signed in and remember basic preferences - these are
+                necessary for the Service to work and are not optional. With your consent, given through
+                the cookie banner shown when you first visit, we also use:
+              </p>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-[#64748B]">
+                <li>
+                  <strong>Google Analytics</strong> - to understand how visitors use the Service, so we can
+                  improve it.
+                </li>
+                <li>
+                  <strong>Tidio</strong> - to provide live chat support on the website.
+                </li>
+              </ul>
+              <p className="mt-2 text-[#64748B]">
+                These two are only loaded if you choose &quot;Accept&quot; on the cookie banner. If you
+                choose &quot;Decline&quot;, neither is loaded, though some parts of the Service may not
+                function as well without them. You can also control or disable cookies through your
+                browser settings at any time.
               </p>
             </section>
 
