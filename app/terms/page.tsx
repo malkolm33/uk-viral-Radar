@@ -1,5 +1,8 @@
 import Link from "next/link";
-
+export const metadata = {
+  title: "Terms of Service - UK Viral Radar",
+  description: "The terms that apply when you use UK Viral Radar, including subscriptions, billing and cancellation.",
+};
 export default function TermsOfServicePage() {
   return (
     <main className="min-h-screen bg-[#F7F8FA] px-6 py-12 sm:px-10">

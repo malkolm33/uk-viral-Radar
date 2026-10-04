@@ -1,5 +1,8 @@
 import Link from "next/link";
-
+export const metadata = {
+  title: "Privacy Policy - UK Viral Radar",
+  description: "How UK Viral Radar collects, uses and protects your data, including cookies, payments and your data rights.",
+};
 export default function PrivacyPolicyPage() {
   return (
     <main className="min-h-screen bg-[#F7F8FA] px-6 py-12 sm:px-10">
