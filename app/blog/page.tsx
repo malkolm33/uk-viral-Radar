@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "next/link";import Image from "next/image";
 import type { Metadata } from "next";
 import { getVisiblePosts } from "../lib/blog-posts";
 
@@ -51,11 +51,15 @@ export default function BlogPage() {
               className="block overflow-hidden rounded-lg border border-[#E4E7EC] bg-white transition-colors hover:border-[#16A34A]"
             >
               {post.imageUrl && (
-                <img
-                  src={post.imageUrl}
-                  alt={post.title}
-                  className="aspect-video w-full object-cover"
-                />
+                <div className="relative aspect-video w-full">
+                  <Image
+                    src={post.imageUrl}
+                    alt={post.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover"
+                  />
+                </div>
               )}
               <div className="p-6">
                 <span className="rounded-full bg-[#F7F8FA] px-2 py-0.5 text-[10px] font-medium text-[#64748B]">

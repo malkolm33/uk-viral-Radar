@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Image from "next/image";import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
@@ -86,11 +86,15 @@ export default async function BlogPostPage({
           </h1>
 
           {post.imageUrl && (
-            <img
-              src={post.imageUrl}
-              alt={post.title}
-              className="mt-6 h-64 w-full rounded-lg object-cover sm:h-80 md:h-[400px]"
-            />
+            <div className="relative mt-6 h-64 w-full overflow-hidden rounded-lg sm:h-80 md:h-[400px]">
+              <Image
+                src={post.imageUrl}
+                alt={post.title}
+                fill
+                sizes="(max-width: 768px) 100vw, 800px"
+                className="object-cover"
+              />
+            </div>
           )}
 
           <p className="mt-4 text-sm text-[#64748B]">
@@ -135,11 +139,15 @@ export default async function BlogPostPage({
                   className="block overflow-hidden rounded-lg border border-[#E4E7EC] transition-colors hover:border-[#16A34A]"
                 >
                   {related.imageUrl && (
-                    <img
-                      src={related.imageUrl}
-                      alt={related.title}
-                      className="aspect-video w-full object-cover"
-                    />
+                    <div className="relative aspect-video w-full">
+                      <Image
+                        src={related.imageUrl}
+                        alt={related.title}
+                        fill
+                        sizes="(max-width: 640px) 100vw, 50vw"
+                        className="object-cover"
+                      />
+                    </div>
                   )}
                   <div className="p-4">
                     <p className="text-sm font-medium text-[#0F172A]">{related.title}</p>

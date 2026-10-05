@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from "react";import Image from "next/image";
 
 const CATEGORIES = ["All", "Home", "Electronics", "Fitness", "Beauty", "Kitchen"];
 
@@ -120,10 +120,12 @@ function ProductImage({ src, fallbackSrc, alt }: { src: string; fallbackSrc: str
   return (
     <>
       {!loaded && <div className="absolute inset-0 animate-pulse bg-[#E4E7EC]" />}
-      <img
+      <Image
         src={currentSrc}
         alt={alt}
-        className={`h-full w-full object-contain p-3 transition-opacity duration-300 ${
+        fill
+        sizes="(max-width: 640px) 50vw, 240px"
+        className={`object-contain p-3 transition-opacity duration-300 ${
           loaded ? "opacity-100" : "opacity-0"
         }`}
         onLoad={() => setLoaded(true)}
@@ -168,12 +170,18 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
       </div>
 
       <div className="mb-6 flex flex-col gap-5 rounded-lg border border-[#E4E7EC] bg-[#F7F8FA] p-5 sm:flex-row sm:items-center sm:p-6">
-        <img
+        <div
           key={categoryContent.image}
-          src={categoryContent.image}
-          alt={categoryContent.title}
-          className="h-40 w-full shrink-0 rounded-lg object-cover shadow-sm sm:h-32 sm:w-48"
-        />
+          className="relative h-40 w-full shrink-0 overflow-hidden rounded-lg shadow-sm sm:h-32 sm:w-48"
+        >
+          <Image
+            src={categoryContent.image}
+            alt={categoryContent.title}
+            fill
+            sizes="(max-width: 640px) 100vw, 192px"
+            className="object-cover"
+          />
+        </div>
         <div>
           <h2 className="text-lg font-semibold text-[#0F172A]">{categoryContent.title}</h2>
           <p className="mt-2 text-sm leading-relaxed text-[#64748B]">{categoryContent.text}</p>
