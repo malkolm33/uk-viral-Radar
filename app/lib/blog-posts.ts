@@ -229,7 +229,7 @@ Before you commit to a product, run it through these three checks:
 Checking all of this by hand means five or six browser tabs open at once - Ad Library, TikTok Creative Center, Google Trends, eBay, Etsy, maybe Pinterest too. UK Viral Radar pulls several of these free signals together in one place: live Google Trends and eBay/Etsy competition data on every product, plus direct links to Facebook Ad Library, TikTok Creative Center and Pinterest Trends, so you're not checking five different sites by hand every time you want to size up a product.`,
     date: "2026-10-06",
     category: "Trends",
-    status: "scheduled",
+    status: "published",
     publishDate: "2026-10-06",
     imageUrl: "https://picsum.photos/seed/uk-viral-products-research-2026/1200/630",
   },
