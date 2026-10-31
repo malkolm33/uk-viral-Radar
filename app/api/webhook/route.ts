@@ -26,6 +26,35 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
 	}
 
+	// Subscription ended (cancelled at period end, unpaid, or deleted in the
+	// Stripe dashboard): take Pro away again. Without this a cancelled
+	// customer kept the full list forever. Needs these events ticked on the
+	// webhook endpoint in Stripe: customer.subscription.deleted and
+	// customer.subscription.updated.
+	if (
+		event.type === "customer.subscription.deleted" ||
+		event.type === "customer.subscription.updated"
+	) {
+		const sub = event.data.object as Stripe.Subscription;
+		const active = sub.status === "active" || sub.status === "trialing" || sub.status === "past_due";
+		if (event.type === "customer.subscription.deleted" || !active) {
+			try {
+				const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
+				const customer = await stripe.customers.retrieve(customerId);
+				const email = !customer.deleted ? customer.email : null;
+				if (email) {
+					await supabaseAdmin
+						.from("profiles")
+						.update({ is_subscribed: false })
+						.eq("email", email);
+				}
+			} catch (error) {
+				console.error("Could not end Pro for a cancelled subscription:", error);
+				return NextResponse.json({ error: "Retry later" }, { status: 500 });
+			}
+		}
+	}
+
 	if (event.type === "checkout.session.completed") {
 		const session = event.data.object as Stripe.Checkout.Session;
 		const email = session.customer_email;
