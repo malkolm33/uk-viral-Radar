@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "../../lib/supabase-admin";
+import { grantPaypalMonth, PRICE } from "../../lib/paypal-pro";
 
 const PAYPAL_API = "https://api-m.paypal.com";
 
@@ -82,7 +83,9 @@ export async function POST(request: NextRequest) {
 			"(from custom_id:", capture?.custom_id, ", payer email:", captureData.payer?.email_address, ")"
 		);
 
-		if (captureData.status === "COMPLETED" && email) {
+		const paidRight =
+			capture?.amount?.currency_code === PRICE.currency && capture?.amount?.value === PRICE.value;
+		if (captureData.status === "COMPLETED" && email && capture?.id && paidRight) {
 			console.log("[paypal-capture] upserting profiles row for", email);
 			// Uses the service role key (bypasses Row Level Security) because
 			// this is a server-to-server write with no logged-in user session
@@ -91,20 +94,17 @@ export async function POST(request: NextRequest) {
 			// the anon key would be rejected here once RLS is enabled.
 			const supabaseAdmin = createAdminClient();
 
-			const { data: upsertData, error: upsertError } = await supabaseAdmin
-				.from("profiles")
-				.upsert({ email, is_subscribed: true }, { onConflict: "email" })
-				.select();
-
-			if (upsertError) {
-				console.error("[paypal-capture] Supabase profiles upsert FAILED:", JSON.stringify(upsertError));
+			// One payment = 31 days of Pro (see app/lib/paypal-pro.ts).
+			const granted = await grantPaypalMonth(supabaseAdmin, email, capture.id);
+			if (!granted.ok) {
+				console.error("[paypal-capture] Supabase profiles update FAILED:", granted.error);
 			} else {
-				console.log("[paypal-capture] Supabase profiles upsert OK:", JSON.stringify(upsertData));
+				console.log("[paypal-capture] Pro until", granted.until, granted.skipped ? "(already recorded)" : "");
 			}
 		} else {
 			console.error(
 				"[paypal-capture] NOT upserting - order status:", captureData.status, ", email:", email,
-				"(need status COMPLETED and a non-empty email)"
+				"(need status COMPLETED, a non-empty email and £9.99 GBP)"
 			);
 		}
 

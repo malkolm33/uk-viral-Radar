@@ -1,6 +1,7 @@
 const googleTrends = require("google-trends-api");
 import { createClient } from "../lib/supabase-server";
 import { createAdminClient } from "../lib/supabase-admin";
+import { isProRow } from "../lib/paypal-pro";
 import UpgradeButton from "../UpgradeButton";
 import PayPalButton from "../PayPalButton";
 import PayPalCaptureHandler from "../PayPalCaptureHandler";
@@ -46,14 +47,14 @@ async function isProUser(email: string | undefined): Promise<boolean> {
     // email comes from the verified Supabase session, not from the request).
     const { data, error } = await createAdminClient()
       .from("profiles")
-      .select("is_subscribed")
+      .select("is_subscribed, pro_until")
       .eq("email", email)
       .limit(1);
     if (error) {
       console.error("Pro check failed:", error.message);
       return false;
     }
-    return data?.[0]?.is_subscribed === true;
+    return isProRow(data?.[0]);
   } catch (err) {
     console.error("Pro check failed:", err);
     return false;

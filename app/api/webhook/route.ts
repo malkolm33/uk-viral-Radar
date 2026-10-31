@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
 		if (email) {
 			await supabaseAdmin
 				.from("profiles")
-				.upsert({ email, is_subscribed: true }, { onConflict: "email" });
+				.upsert({ email, is_subscribed: true, pro_until: null }, { onConflict: "email" });
 		}
 	}
 
