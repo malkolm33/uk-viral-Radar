@@ -34,6 +34,8 @@ if (!supabaseUrl || !serviceRoleKey) {
 
 const supabase = createClient(supabaseUrl, serviceRoleKey);
 
+const YOUTUBE_MAX_PRODUCTS = 45;
+
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -41,11 +43,14 @@ function sleep(ms) {
 async function getYouTubeData(keyword) {
   try {
     const apiKey = process.env.YOUTUBE_API_KEY;
-    if (!apiKey) return { videoCount: 0, growth: 0 };
+    if (!apiKey) return { videoCount: null, growth: null };
     const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
     const recentUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(keyword)}&type=video&regionCode=GB&publishedAfter=${sevenDaysAgo}&maxResults=1&key=${apiKey}`;
     const recentResponse = await fetch(recentUrl);
-    if (!recentResponse.ok) return { videoCount: 0, growth: 0 };
+    if (!recentResponse.ok) {
+      console.warn(`YouTube API ${recentResponse.status} for "${keyword}" - stored as no data`);
+      return { videoCount: null, growth: null };
+    }
     const recentData = await recentResponse.json();
     const recentCount = recentData.pageInfo?.totalResults || 0;
     const fourteenDaysAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString();
@@ -63,7 +68,7 @@ async function getYouTubeData(keyword) {
         : Math.round(((recentCount - previousCount) / previousCount) * 100);
     return { videoCount: recentCount, growth };
   } catch (error) {
-    return { videoCount: 0, growth: 0 };
+    return { videoCount: null, growth: null };
   }
 }
 
@@ -173,18 +178,20 @@ async function getSearchData(keyword) {
     });
     const data = JSON.parse(results);
     const timelineData = data.default.timelineData;
-    if (!timelineData || timelineData.length === 0) return { growth: 0 };
+    if (!timelineData || timelineData.length === 0) return { growth: null };
     const points = timelineData.map((d) => d.value[0]);
     const firstValue = points[0];
     const lastValue =
       points[points.length - 1] === 0 && points.length > 1
         ? points[points.length - 2]
         : points[points.length - 1];
-    if (firstValue === 0) return { growth: 0 };
+    // A zero at either end means Trends has too little UK volume to compare
+    // (that is what produced "-100%") - store "no data" instead.
+    if (!firstValue || !lastValue) return { growth: null };
     const growth = Math.round(((lastValue - firstValue) / firstValue) * 100);
     return { growth };
   } catch (error) {
-    return { growth: 0 };
+    return { growth: null };
   }
 }
 
@@ -218,12 +225,11 @@ async function main() {
       const wikiGrowth = await getWikipediaViews(product.wiki_title);
       const ebayData = await getEbayCompetitionData(product.search_keyword);
       const etsyData = await getEtsyData(product.search_keyword);
-      // Only the very first product gets a YouTube lookup - this mirrors the
-      // same idx < 1 guard app/dashboard/page.tsx uses, since the YouTube
-      // Data API quota is tight and this job already runs for every product
-      // once a day.
+      // Each product costs 2 YouTube search calls = 200 quota units; the free
+      // daily quota is 10,000, so up to YOUTUBE_MAX_PRODUCTS (45) products get
+      // a lookup. Past that the product is stored as "no data" (null), never 0.
       const youtubeData =
-        idx < 1 ? await getYouTubeData(product.search_keyword) : { videoCount: 0, growth: 0 };
+        idx < YOUTUBE_MAX_PRODUCTS ? await getYouTubeData(product.search_keyword) : { videoCount: null, growth: null };
 
       const realCompetitionPenalty =
         ebayData.listingCount > 5000
@@ -236,9 +242,9 @@ async function main() {
 
       const score = calculateViralScore({
         socialGrowth: product.social_growth || 0,
-        searchGrowth: Math.max(0, searchData.growth),
+        searchGrowth: Math.max(0, searchData.growth ?? 0),
         salesSignal: product.sales_signal || 0,
-        adGrowth: Math.max(0, youtubeData.growth),
+        adGrowth: Math.max(0, youtubeData.growth ?? 0),
         creatorGrowth: Math.max(0, wikiGrowth),
         competitionPenalty: realCompetitionPenalty,
       });
@@ -329,12 +335,18 @@ async function writeDailyInsight(topProduct) {
 
   const { name, score, searchGrowth, youtubeGrowth, wikiGrowth } = topProduct;
 
-  const hasRisingSupportSignal = youtubeGrowth > 0 || wikiGrowth > 0;
+  const hasRisingSupportSignal = (youtubeGrowth ?? 0) > 0 || (wikiGrowth ?? 0) > 0;
+  const search = searchGrowth ?? 0;
 
+  // A strong UK search jump on its own (>= +50%) is a standout - the old rule
+  // also required YouTube/Wikipedia growth, so it said "no standout risers"
+  // on the same page that showed the #1 product at +170% and Accelerating.
   const insightText =
-    searchGrowth > 0 && hasRisingSupportSignal
-      ? `Today's standout is ${name} - search interest is up ${searchGrowth}%, backed by rising YouTube/Wikipedia activity. Viral Score: ${score}/100.`
-      : `No standout risers today - keep an eye on ${name}, currently the highest-scoring product at ${score}/100.`;
+    search > 0 && hasRisingSupportSignal
+      ? `Today's standout is ${name} - UK search interest is up ${search}%, backed by rising YouTube/Wikipedia activity. Viral Score: ${score}/100.`
+      : search >= 50
+        ? `Today's standout is ${name} - UK search interest is up ${search}% this week. Viral Score: ${score}/100.`
+        : `No standout risers today - keep an eye on ${name}, currently the highest-scoring product at ${score}/100.`;
 
   // UTC calendar date, same convention publish-scheduled-posts.mjs uses -
   // avoids timezone edge cases between UK time and the UTC clock this

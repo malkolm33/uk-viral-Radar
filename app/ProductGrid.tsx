@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";import Image from "next/image";
+import { useState } from "react";
+import Image from "next/image";
+import UpgradeButton from "./UpgradeButton";
 
 const CATEGORIES = ["All", "Home", "Electronics", "Fitness", "Beauty", "Kitchen"];
 
@@ -99,8 +101,11 @@ function getStatusLabel(score: number) {
 // Velocity is the average of the three growth signals (search, YouTube, Wikipedia) -
 // it answers "how fast is this accelerating right now", separately from the Viral
 // Score, which answers "how good does this product look overall".
-function getVelocity(searchGrowth: number, youtubeGrowth: number, wikiGrowth: number) {
-  const averageGrowth = (searchGrowth + youtubeGrowth + wikiGrowth) / 3;
+function getVelocity(searchGrowth: number | null, youtubeGrowth: number | null, wikiGrowth: number | null) {
+  // Average only the signals we actually have - a missing source ("no data")
+  // must not drag the average towards zero.
+  const known = [searchGrowth, youtubeGrowth, wikiGrowth].filter((v): v is number => typeof v === "number");
+  const averageGrowth = known.length ? known.reduce((a, b) => a + b, 0) / known.length : 0;
   if (averageGrowth > 50) {
     return { label: "Accelerating", emoji: "🚀", color: "#16A34A", averageGrowth };
   }
@@ -142,7 +147,44 @@ function ProductImage({ src, fallbackSrc, alt }: { src: string; fallbackSrc: str
   );
 }
 
-export default function ProductGrid({ products, isLoggedIn }: { products: any[]; isLoggedIn: boolean }) {
+// "—" for a source that returned no data, instead of a misleading 0 / -100%.
+function pct(v: number | null | undefined) {
+  if (typeof v !== "number") return "—";
+  return `${v > 0 ? "+" : ""}${v}%`;
+}
+function num(v: number | null | undefined) {
+  return typeof v === "number" ? v.toLocaleString("en-GB") : "—";
+}
+function growthClass(v: number | null | undefined) {
+  if (typeof v !== "number") return "text-[#94A3B8]";
+  return v < 0 ? "text-[#DC2626]" : "text-[#16A34A]";
+}
+
+function LockedCard({ product, isLoggedIn, email }: { product: any; isLoggedIn: boolean; email?: string }) {
+  return (
+    <div className="relative overflow-hidden rounded-lg border border-[#E4E7EC] bg-white">
+      <div className="relative h-36 w-full bg-[#F1F5F9]">
+        <div className="absolute left-2 top-2 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-medium text-[#64748B] shadow-sm">#{product.rank}</div>
+      </div>
+      <div className="space-y-2 p-4">
+        <div className="h-3 w-2/3 rounded bg-[#E4E7EC]" />
+        <div className="h-3 w-1/3 rounded bg-[#E4E7EC]" />
+        <div className="h-3 w-1/2 rounded bg-[#E4E7EC]" />
+      </div>
+      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-white/70 px-4 text-center backdrop-blur-sm">
+        <div className="rounded-full bg-[#0F172A] px-3 py-1.5 text-xs font-medium text-white">Pro</div>
+        <p className="text-xs text-[#64748B]">Product #{product.rank}{product.category ? ` · ${product.category}` : ""} is in the full Pro list</p>
+        {isLoggedIn && email ? (
+          <UpgradeButton email={email} />
+        ) : (
+          <a href="/login" className="rounded-md bg-[#0F172A] px-4 py-2 text-sm font-medium text-white">Log in to upgrade</a>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function ProductGrid({ products, isLoggedIn, email }: { products: any[]; isLoggedIn: boolean; email?: string }) {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const filteredProducts =
@@ -199,19 +241,15 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {filteredProducts.map((product: any, i: number) => {
+        {filteredProducts.map((product: any) => {
+          if (product.locked) {
+            return <LockedCard key={`locked-${product.rank}`} product={product} isLoggedIn={isLoggedIn} email={email} />;
+          }
           const status = getStatusLabel(product.score);
-          const velocity = getVelocity(product.searchGrowth || 0, product.youtubeGrowth || 0, product.wikiGrowth || 0);
-          const isLocked = !isLoggedIn && i >= 3;
+          const velocity = getVelocity(product.searchGrowth, product.youtubeGrowth, product.wikiGrowth);
           const barColor = product.score >= 60 ? "#16A34A" : product.score >= 40 ? "#D97706" : "#DC2626";
           return (
-            <div key={i} className="relative overflow-hidden rounded-lg border border-[#E4E7EC] bg-white">
-              {isLocked && (
-                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-white/70 backdrop-blur-md">
-                  <div className="rounded-full bg-[#0F172A] p-3 text-white">Lock</div>
-                  <a href="/login" className="rounded-md bg-[#0F172A] px-4 py-2 text-sm font-medium text-white">Sign up to unlock</a>
-                </div>
-              )}
+            <div key={`p-${product.rank}`} className="relative overflow-hidden rounded-lg border border-[#E4E7EC] bg-white">
               <div className="relative h-36 w-full bg-[#F1F5F9]">
                 <ProductImage
                   key={product.ebayImageUrl || product.imageQuery}
@@ -223,7 +261,7 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
                   <UKFlag />
                   <span className="text-[10px] font-medium text-[#0F172A]">UK</span>
                 </div>
-                <div className="absolute left-2 top-2 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-medium text-[#64748B] shadow-sm">#{i + 1}</div>
+                <div className="absolute left-2 top-2 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-medium text-[#64748B] shadow-sm">#{product.rank}</div>
               </div>
               <div className="p-4">
                 <div className="flex items-center justify-between gap-2">
@@ -250,15 +288,15 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
                 <div className="mt-3 space-y-1.5 border-t border-[#E4E7EC] pt-3 text-xs text-[#64748B]">
                   <div className="flex justify-between">
                     <span>Search growth</span>
-                    <span className={product.searchGrowth < 0 ? "text-[#DC2626]" : "text-[#16A34A]"}>{product.searchGrowth > 0 ? "+" : ""}{product.searchGrowth}%</span>
+                    <span className={growthClass(product.searchGrowth)}>{pct(product.searchGrowth)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Wikipedia interest</span>
-                    <span className={product.wikiGrowth < 0 ? "text-[#DC2626]" : "text-[#16A34A]"}>{product.wikiGrowth > 0 ? "+" : ""}{product.wikiGrowth}%</span>
+                    <span className={growthClass(product.wikiGrowth)}>{pct(product.wikiGrowth)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>eBay listings (live)</span>
-                    <span className="text-[#0F172A]">{product.ebayListingCount}</span>
+                    <span className="text-[#0F172A]">{num(product.ebayListingCount)}</span>
                   </div>
                   {product.searchKeyword && (
                     <div className="flex flex-col items-end">
@@ -332,14 +370,9 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
                                     {product.ebayUniqueSellerCount > 0 && (
                     <div className="flex items-center justify-between">
                       <span className="flex items-center gap-1.5">
-                        Unique sellers
-                        {product.ebayUniqueSellerCount >= 15 && (
-                          <span className="rounded-full bg-[#DC2626]/10 px-1.5 py-0.5 text-[10px] font-medium text-[#DC2626]">
-                            ⚠️ Saturated
-                          </span>
-                        )}
+                        Different sellers (top 20 eBay listings)
                       </span>
-                      <span className="text-[#0F172A]">{product.ebayUniqueSellerCount}</span>
+                      <span className="text-[#0F172A]">{product.ebayUniqueSellerCount}/20</span>
                     </div>
                   )}
                   {product.ebayAvgPrice && (
@@ -350,15 +383,15 @@ export default function ProductGrid({ products, isLoggedIn }: { products: any[];
                   )}
                   <div className="flex justify-between">
                     <span>Etsy listings (live)</span>
-                    <span className="text-[#0F172A]">{product.etsyListingCount}</span>
+                    <span className="text-[#0F172A]">{num(product.etsyListingCount)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>YouTube videos (7d, live)</span>
-                    <span className="text-[#0F172A]">{product.youtubeVideoCount}</span>
+                    <span className="text-[#0F172A]">{num(product.youtubeVideoCount)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>YouTube growth</span>
-                    <span className={product.youtubeGrowth < 0 ? "text-[#DC2626]" : "text-[#16A34A]"}>{product.youtubeGrowth > 0 ? "+" : ""}{product.youtubeGrowth}%</span>
+                    <span className={growthClass(product.youtubeGrowth)}>{pct(product.youtubeGrowth)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Competition</span>

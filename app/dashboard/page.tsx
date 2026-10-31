@@ -1,5 +1,6 @@
 const googleTrends = require("google-trends-api");
 import { createClient } from "../lib/supabase-server";
+import { createAdminClient } from "../lib/supabase-admin";
 import UpgradeButton from "../UpgradeButton";
 import PayPalButton from "../PayPalButton";
 import PayPalCaptureHandler from "../PayPalCaptureHandler";
@@ -23,14 +24,50 @@ export const metadata: Metadata = {
 // trusted before this page falls back to live API calls for that product.
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
-async function getYouTubeData(keyword: string): Promise<{ videoCount: number; growth: number }> {
+// Free visitors and free accounts see the top FREE_COUNT products; the rest
+// is Pro (£9.99/month). Locked rows are stripped HERE, on the server, so their
+// data never reaches the browser - a CSS blur alone can be read in view-source.
+const FREE_COUNT = 3;
+
+// Competition from the live listing counts (eBay UK + Etsy), instead of a
+// hand-typed column that could say LOW next to 150,000 listings.
+function competitionLevel(ebay: number | null, etsy: number | null): string {
+  const total = (ebay ?? 0) + (etsy ?? 0);
+  if (!ebay && !etsy) return "—";
+  if (total < 2000) return "LOW";
+  if (total < 20000) return "MEDIUM";
+  return "HIGH";
+}
+
+async function isProUser(email: string | undefined): Promise<boolean> {
+  if (!email) return false;
+  try {
+    // Server-only read of the user's own row (profiles is RLS-protected; the
+    // email comes from the verified Supabase session, not from the request).
+    const { data, error } = await createAdminClient()
+      .from("profiles")
+      .select("is_subscribed")
+      .eq("email", email)
+      .limit(1);
+    if (error) {
+      console.error("Pro check failed:", error.message);
+      return false;
+    }
+    return data?.[0]?.is_subscribed === true;
+  } catch (err) {
+    console.error("Pro check failed:", err);
+    return false;
+  }
+}
+
+async function getYouTubeData(keyword: string): Promise<{ videoCount: number | null; growth: number | null }> {
   try {
     const apiKey = process.env.YOUTUBE_API_KEY;
-    if (!apiKey) return { videoCount: 0, growth: 0 };
+    if (!apiKey) return { videoCount: null, growth: null };
     const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
     const recentUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(keyword)}&type=video&regionCode=GB&publishedAfter=${sevenDaysAgo}&maxResults=1&key=${apiKey}`;
     const recentResponse = await fetch(recentUrl);
-    if (!recentResponse.ok) return { videoCount: 0, growth: 0 };
+    if (!recentResponse.ok) return { videoCount: null, growth: null };
     const recentData = await recentResponse.json();
     const recentCount = recentData.pageInfo?.totalResults || 0;
     const fourteenDaysAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString();
@@ -41,7 +78,7 @@ async function getYouTubeData(keyword: string): Promise<{ videoCount: number; gr
     const growth = previousCount === 0 ? (recentCount > 0 ? 100 : 0) : Math.round(((recentCount - previousCount) / previousCount) * 100);
     return { videoCount: recentCount, growth };
   } catch (error) {
-    return { videoCount: 0, growth: 0 };
+    return { videoCount: null, growth: null };
   }
 }
 
@@ -131,20 +168,20 @@ function calculateViralScore(signals: { socialGrowth: number; searchGrowth: numb
   return Math.max(0, Math.min(100, Math.round(raw)));
 }
 
-async function getSearchData(keyword: string): Promise<{ growth: number; points: number[] }> {
+async function getSearchData(keyword: string): Promise<{ growth: number | null; points: number[] }> {
   try {
     const results = await googleTrends.interestOverTime({ keyword: keyword, geo: "GB", startTime: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) });
     const data = JSON.parse(results);
     const timelineData = data.default.timelineData;
-    if (!timelineData || timelineData.length === 0) return { growth: 0, points: [] };
+    if (!timelineData || timelineData.length === 0) return { growth: null, points: [] };
     const points = timelineData.map((d: any) => d.value[0]);
     const firstValue = points[0];
     const lastValue = points[points.length - 1] === 0 && points.length > 1 ? points[points.length - 2] : points[points.length - 1];
-    if (firstValue === 0) return { growth: 0, points };
+    if (!firstValue || !lastValue) return { growth: null, points };
     const growth = Math.round(((lastValue - firstValue) / firstValue) * 100);
     return { growth, points };
   } catch (error) {
-    return { growth: 0, points: [] };
+    return { growth: null, points: [] };
   }
 }
 
@@ -152,6 +189,7 @@ export default async function DashboardPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   const isLoggedIn = !!user;
+  const isPro = isLoggedIn && (await isProUser(user!.email));
 
   const { data: dbProducts } = await supabase.from("products").select("*");
 
@@ -184,7 +222,7 @@ export default async function DashboardPage() {
       if (isFresh) {
         return {
           ...base,
-          searchGrowth: p.search_growth ?? 0,
+          searchGrowth: p.search_growth ?? null,
           searchPoints: [] as number[],
           wikiGrowth: p.wiki_growth ?? 0,
           ebayListingCount: p.ebay_listing_count ?? 0,
@@ -192,8 +230,8 @@ export default async function DashboardPage() {
           ebayImageUrl: p.ebay_image_url ?? null,
           ebayUniqueSellerCount: p.ebay_unique_seller_count ?? 0,
           etsyListingCount: p.etsy_listing_count ?? 0,
-          youtubeVideoCount: p.youtube_video_count ?? 0,
-          youtubeGrowth: p.youtube_growth ?? 0,
+          youtubeVideoCount: p.youtube_video_count ?? null,
+          youtubeGrowth: p.youtube_growth ?? null,
           score: p.viral_score ?? 0,
           lastUpdated: p.last_updated,
         };
@@ -206,13 +244,13 @@ export default async function DashboardPage() {
       const wikiGrowth = await getWikipediaViews(base.wikiTitle);
       const ebayData = await getEbayCompetitionData(base.searchKeyword);
       const etsyData = await getEtsyData(base.searchKeyword);
-      const youtubeData = idx < 1 ? await getYouTubeData(base.searchKeyword) : { videoCount: 0, growth: 0 };
+      const youtubeData = idx < 1 ? await getYouTubeData(base.searchKeyword) : { videoCount: null as number | null, growth: null as number | null };
       const realCompetitionPenalty = ebayData.listingCount > 5000 ? 25 : ebayData.listingCount > 1000 ? 15 : ebayData.listingCount > 100 ? 8 : 3;
       const score = calculateViralScore({
         socialGrowth: base.socialGrowth,
-        searchGrowth: Math.max(0, searchData.growth),
+        searchGrowth: Math.max(0, searchData.growth ?? 0),
         salesSignal: base.salesSignal,
-        adGrowth: Math.max(0, youtubeData.growth),
+        adGrowth: Math.max(0, youtubeData.growth ?? 0),
         creatorGrowth: Math.max(0, wikiGrowth),
         competitionPenalty: realCompetitionPenalty,
       });
@@ -234,7 +272,20 @@ export default async function DashboardPage() {
     })
   );
 
-  const products = productsWithRealData.sort((a: any, b: any) => b.score - a.score);
+  const ranked = productsWithRealData
+    .sort((a: any, b: any) => b.score - a.score)
+    .map((p: any, i: number) => ({
+      ...p,
+      rank: i + 1,
+      competition: competitionLevel(p.ebayListingCount, p.etsyListingCount),
+    }));
+  // Only what a locked card needs to draw its placeholder - no name, image,
+  // keyword or numbers.
+  const products = ranked.map((p: any) =>
+    isPro || p.rank <= FREE_COUNT
+      ? p
+      : { rank: p.rank, category: p.category, locked: true, lastUpdated: p.lastUpdated }
+  );
   const validTimestamps = products
     .map((p: any) => p.lastUpdated)
     .filter(Boolean)
@@ -282,8 +333,14 @@ export default async function DashboardPage() {
             {isLoggedIn ? (
               <div className="flex items-center gap-2 text-xs text-[#64748B]">
                 <span className="hidden sm:inline">{user!.email}</span>
-                <UpgradeButton email={user!.email!} />
-                <PayPalButton email={user!.email!} />
+                {isPro ? (
+                  <span className="rounded-full bg-[#16A34A]/10 px-3 py-1.5 font-medium text-[#16A34A]">Pro</span>
+                ) : (
+                  <>
+                    <UpgradeButton email={user!.email!} />
+                    <PayPalButton email={user!.email!} />
+                  </>
+                )}
                 <a href="/logout" className="rounded-full border border-[#E4E7EC] bg-white px-3 py-1.5 font-medium text-[#0F172A]">Log out</a>
               </div>
             ) : (
@@ -302,7 +359,7 @@ export default async function DashboardPage() {
           </div>
         )}
 
-        <ProductGrid products={products} isLoggedIn={isLoggedIn} />
+        <ProductGrid products={products} isLoggedIn={isLoggedIn} email={user?.email ?? undefined} />
       </div>
     </main>
   );

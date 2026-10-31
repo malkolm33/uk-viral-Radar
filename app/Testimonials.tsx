@@ -1,20 +1,9 @@
 import { testimonials } from "./lib/testimonials";
 
 export default function Testimonials() {
-  if (testimonials.length === 0) {
-    return (
-      <section className="py-16">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-2xl font-bold tracking-tight text-[#0F172A] sm:text-3xl">
-            What early users are saying
-          </h2>
-          <p className="mt-3 text-sm text-[#64748B] sm:text-base">
-            We&apos;re just getting started - first reviews from early users will appear here soon.
-          </p>
-        </div>
-      </section>
-    );
-  }
+  // No section at all until real, permissioned reviews exist - an empty
+  // "reviews coming soon" block reads as weak social proof to visitors.
+  if (testimonials.length === 0) return null;
 
   return (
     <section className="py-16">
