@@ -1,0 +1,28 @@
+name: SEO/GEO Check
+
+# Runs the automated SEO/GEO gate (.github/scripts/seo-check.mjs) against every
+# successful Vercel deployment - previews (branches waiting for Hermes review)
+# and production. A red result means "do not merge / fix first".
+on:
+  deployment_status:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "URL to check"
+        required: true
+        default: "https://ukviralradar.com"
+
+jobs:
+  seo-check:
+    if: github.event_name == 'workflow_dispatch' || github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run SEO/GEO check
+        env:
+          TARGET_URL: ${{ github.event.inputs.url || github.event.deployment_status.environment_url }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: node .github/scripts/seo-check.mjs "$TARGET_URL"

@@ -4,6 +4,7 @@ const WHATSAPP_NUMBER = "447807868447"; // TODO: add your number with country co
 import VideoSection from "./VideoSection";
 import Testimonials from "./Testimonials";
 import type { Metadata } from "next";
+import { organizationSchema, websiteSchema, jsonLd } from "./lib/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ukviralradar.com"),
@@ -32,6 +33,8 @@ const softwareApplicationSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name: "UK Viral Radar",
+  url: "https://ukviralradar.com",
+  publisher: { "@id": "https://ukviralradar.com/#organization" },
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   description:
@@ -301,11 +304,19 @@ export default function LandingPage() {
     <main className="min-h-screen bg-[#F7F8FA]">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationSchema) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(softwareApplicationSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(organizationSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(faqSchema) }}
       />
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <header className="flex flex-wrap items-center justify-between gap-3 py-6">
@@ -547,13 +558,17 @@ export default function LandingPage() {
             <Link href="/dashboard" className="hover:text-[#0F172A]">Live rankings</Link>
             <Link href="/compare" className="hover:text-[#0F172A]">Compare</Link>
             <Link href="/tools/profit-calculator" className="hover:text-[#0F172A]">Free Tools</Link>
+            <Link href="/blog" className="hover:text-[#0F172A]">Blog</Link>
             <Link href="#faq" className="hover:text-[#0F172A]">FAQ</Link>
             <Link href="/contact" className="hover:text-[#0F172A]">Contact</Link>
             <Link href="/privacy" className="hover:text-[#0F172A]">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-[#0F172A]">Terms of Service</Link>
           </nav>
           <div className="flex items-center gap-2.5">
-            {socialLinks.map((social) => (
+            {socialLinks
+              // Hide placeholder icons (e.g. Facebook/Pinterest) until a real profile exists.
+              .filter((social) => !social.href.startsWith("https://ukviralradar.com"))
+              .map((social) => (
               <a
                 key={social.name}
                 href={social.href}

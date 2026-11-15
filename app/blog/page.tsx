@@ -1,12 +1,15 @@
 import Link from "next/link";import Image from "next/image";
 import type { Metadata } from "next";
 import { getVisiblePosts } from "../lib/blog-posts";
+import { SITE_URL, SITE_NAME, jsonLd } from "../lib/site";
 
 export const metadata: Metadata = {
   title: "Blog - UK Viral Radar",
   description:
     "Tips, trends and insights for UK dropshippers and e-commerce sellers, from UK Viral Radar.",
+  alternates: { canonical: "/blog" },
   openGraph: {
+    url: "/blog",
     title: "Blog - UK Viral Radar",
     description:
       "Tips, trends and insights for UK dropshippers and e-commerce sellers, from UK Viral Radar.",
@@ -23,8 +26,25 @@ export default function BlogPage() {
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 
+  const blogSchema = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": `${SITE_URL}/blog#blog`,
+    name: `${SITE_NAME} Blog`,
+    url: `${SITE_URL}/blog`,
+    inLanguage: "en-GB",
+    publisher: { "@id": `${SITE_URL}/#organization`, "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+    blogPost: sortedPosts.map((post) => ({
+      "@type": "BlogPosting",
+      headline: post.title,
+      url: `${SITE_URL}/blog/${post.slug}`,
+      datePublished: post.publishDate || post.date,
+    })),
+  };
+
   return (
     <main className="min-h-screen bg-[#F7F8FA] px-6 py-10 sm:px-10">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(blogSchema) }} />
       <div className="mx-auto max-w-4xl">
         <header className="mb-10 flex flex-wrap items-center justify-between gap-3">
           <Link href="/" className="flex items-center gap-2">

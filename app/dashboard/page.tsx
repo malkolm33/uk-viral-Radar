@@ -10,6 +10,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/dashboard" },
   title: "Live Rankings - UK Viral Radar",
   description:
     "Live ranked list of trending UK products, scored using real-time Google Trends, Wikipedia, eBay, Etsy and YouTube data.",

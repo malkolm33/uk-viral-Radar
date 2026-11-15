@@ -8,6 +8,7 @@ import {
   getReadingTimeMinutes,
   getRelatedPosts,
 } from "../../lib/blog-posts";
+import { SITE_URL, SITE_NAME, jsonLd } from "../../lib/site";
 
 // Only pre-render posts that aren't pure drafts. A "scheduled" post whose
 // date hasn't arrived yet still gets a page here, but the component below
@@ -32,14 +33,23 @@ export async function generateMetadata({
     return { title: "Post Not Found - UK Viral Radar" };
   }
 
-  const title = `${post.title} - UK Viral Radar`;
+  // Keep the brand suffix only when the whole title still fits in Google's
+  // ~65-character display; long headlines are shown on their own.
+  const branded = `${post.title} - UK Viral Radar`;
+  const title = branded.length <= 65 ? branded : post.title;
+  const url = `/blog/${post.slug}`;
   return {
     title,
     description: post.excerpt,
+    alternates: { canonical: url },
     openGraph: {
       title,
       description: post.excerpt,
       type: "article",
+      url,
+      publishedTime: post.publishDate || post.date,
+      modifiedTime: post.date,
+      section: post.category,
       images: post.imageUrl ? [post.imageUrl] : undefined,
     },
     twitter: {
@@ -67,8 +77,38 @@ export default async function BlogPostPage({
   const readingTime = getReadingTimeMinutes(post);
   const relatedPosts = getRelatedPosts(post);
 
+  const postUrl = `${SITE_URL}/blog/${post.slug}`;
+  const blogPostingSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": `${postUrl}#article`,
+    headline: post.title,
+    description: post.excerpt,
+    url: postUrl,
+    mainEntityOfPage: postUrl,
+    datePublished: post.publishDate || post.date,
+    dateModified: post.date,
+    articleSection: post.category,
+    inLanguage: "en-GB",
+    wordCount: post.content.trim().split(/\s+/).filter(Boolean).length,
+    image: post.imageUrl ? [post.imageUrl] : undefined,
+    author: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+    publisher: { "@id": `${SITE_URL}/#organization`, "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+  };
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
+      { "@type": "ListItem", position: 3, name: post.title, item: postUrl },
+    ],
+  };
+
   return (
     <main className="min-h-screen bg-[#F7F8FA] px-6 py-12 sm:px-10">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(blogPostingSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbSchema) }} />
       <div className="mx-auto max-w-3xl">
         <Link href="/" className="mb-8 flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#0F172A] text-sm font-bold text-white">
