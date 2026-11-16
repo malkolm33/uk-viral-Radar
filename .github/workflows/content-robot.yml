@@ -1,0 +1,99 @@
+name: Content Robot
+
+# Writes a data-driven blog post, has it checked automatically and by 4
+# specialist AI agents, and then either opens a pull request for Sukru Bey to
+# approve (mode "approval") or publishes it directly (mode "auto").
+# Mode and limits: .github/scripts/content-robot/config.json
+on:
+  schedule:
+    - cron: "23 7 * * 2"   # every Tuesday ~07:23 UK (winter): weekly trends post
+    - cron: "41 7 3 * *"   # 3rd of each month: category deep-dive
+  workflow_dispatch:
+    inputs:
+      type:
+        description: "weekly or category"
+        required: true
+        default: "weekly"
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: content-robot
+  cancel-in-progress: false
+
+jobs:
+  write:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Write and review article
+        id: robot
+        env:
+          INPUT_TYPE: ${{ github.event.inputs.type }}
+          SCHEDULE: ${{ github.event.schedule }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          TYPE="$INPUT_TYPE"
+          if [ -z "$TYPE" ]; then
+            if [ "$SCHEDULE" = "41 7 3 * *" ]; then TYPE=category; else TYPE=weekly; fi
+          fi
+          node .github/scripts/content-robot/run.mjs --type "$TYPE"
+
+      - name: Publish (approval mode - pull request)
+        if: steps.robot.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SLUG: ${{ steps.robot.outputs.slug }}
+          TITLE: ${{ steps.robot.outputs.title }}
+        run: |
+          MODE=$(node -p "require('./.github/scripts/content-robot/config.json').mode")
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add app/lib/blog-posts.ts data/robot-snapshots
+
+          if [ "$MODE" = "auto" ]; then
+            git commit -m "Robot: $TITLE (4 uzman onayladi)"
+            git push origin HEAD:main
+            echo "Published directly. Waiting for Vercel to deploy..."
+            sleep 180
+            if ! node .github/scripts/seo-check.mjs https://ukviralradar.com; then
+              echo "::error::Live check failed after publishing - reverting."
+              git revert --no-edit HEAD
+              git push origin HEAD:main
+              exit 1
+            fi
+            exit 0
+          fi
+
+          BRANCH="robot/$SLUG"
+          git checkout -b "$BRANCH"
+          git commit -m "Robot: $TITLE (4 uzman onayladi, sahibinin onayini bekliyor)"
+          git push origin "$BRANCH"
+          if ! gh pr create --base main --head "$BRANCH" --title "Onay bekliyor: $TITLE" --body-file robot-report.md; then
+            # Repo setting "Allow GitHub Actions to create pull requests" is off:
+            # fall back to an issue with a one-click link to open the PR.
+            URL="https://github.com/${{ github.repository }}/compare/main...$BRANCH?expand=1"
+            { echo "Pull request açılamadı. Onaylamak için bu bağlantıyı açıp **Create pull request**, sonra **Merge** deyin:"; echo; echo "$URL"; echo; cat robot-report.md; } > issue.md
+            gh issue create --title "Onay bekliyor: $TITLE" --body-file issue.md
+          fi
+
+      - name: Report failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          [ -f robot-report.md ] || echo "Robot çalışırken hata oluştu. Ayrıntı: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" > robot-report.md
+          gh issue create --title "İçerik robotu hata verdi ($(date +%F))" --body-file robot-report.md || true
