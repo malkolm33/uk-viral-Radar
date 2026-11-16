@@ -38,6 +38,8 @@ export default function DataPanel({ chart }: { chart: BlogChart }) {
   const bestSearch = withSearch.sort((a, b) => (b.search ?? 0) - (a.search ?? 0))[0];
   const max = Math.max(100, ...items.map((i) => i.score));
 
+  // Each headline tile gets its own accent stripe; the numbers stay in white ink.
+  const accents = ["#14B8A6", "#1FAF6A", "#2F8FE0", "#F2A93B"];
   const tiles = [
     { label: "Products analysed", value: String(items.length), note: `of ${chart.tracked} tracked` },
     { label: "Rising signals", value: String(rising.length), note: rising.map((r) => r.name).slice(0, 3).join(", ") || "none" },
@@ -50,22 +52,25 @@ export default function DataPanel({ chart }: { chart: BlogChart }) {
   ];
 
   return (
-    <figure className="!my-8 overflow-hidden rounded-xl border border-[#1E293B] bg-[#0B1220] text-[#E2E8F0] shadow-lg">
-      {/* Window bar */}
-      <div className="flex items-center gap-2 border-b border-[#1E293B] bg-[#0F172A] px-4 py-2.5">
-        <span className="h-2.5 w-2.5 rounded-full bg-[#E5534B]" aria-hidden="true" />
-        <span className="h-2.5 w-2.5 rounded-full bg-[#F2A93B]" aria-hidden="true" />
-        <span className="h-2.5 w-2.5 rounded-full bg-[#1FAF6A]" aria-hidden="true" />
-        <span className="ml-2 truncate text-xs font-medium text-[#94A3B8]">
-          UK Viral Radar · Data snapshot · {chart.label}
+    <figure className="!my-8 overflow-hidden rounded-xl border-2 border-[#14B8A6] bg-[#0B1220] text-[#E2E8F0] shadow-[0_10px_30px_-10px_rgba(20,184,166,0.45)]">
+      {/* Turquoise window bar */}
+      <div className="flex flex-wrap items-center justify-between gap-2 bg-gradient-to-r from-[#0F766E] via-[#0D9488] to-[#14B8A6] px-4 py-3">
+        <span className="flex items-center gap-2">
+          <span className="h-2.5 w-2.5 rounded-full bg-white/90" aria-hidden="true" />
+          <span className="h-2.5 w-2.5 rounded-full bg-white/60" aria-hidden="true" />
+          <span className="h-2.5 w-2.5 rounded-full bg-white/30" aria-hidden="true" />
+          <span className="ml-1 text-sm font-semibold tracking-wide text-white">Data at a glance</span>
+        </span>
+        <span className="rounded-full bg-white/15 px-2.5 py-0.5 text-[11px] font-medium text-white">
+          UK Viral Radar · {chart.label}
         </span>
       </div>
 
       <div className="space-y-6 p-4 sm:p-6">
         {/* Headline numbers */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {tiles.map((t) => (
-            <div key={t.label} className="rounded-lg border border-[#1E293B] bg-[#111A2E] p-3">
+          {tiles.map((t, idx) => (
+            <div key={t.label} className="rounded-lg border border-[#1E293B] border-t-4 bg-[#111A2E] p-3" style={{ borderTopColor: accents[idx] }}>
               <p className="text-[11px] font-medium uppercase tracking-wide text-[#94A3B8]">{t.label}</p>
               <p className="mt-1 text-2xl font-bold text-white">{t.value}</p>
               <p className="mt-0.5 line-clamp-2 text-[11px] text-[#94A3B8]">{t.note}</p>
@@ -76,7 +81,7 @@ export default function DataPanel({ chart }: { chart: BlogChart }) {
         {/* Viral Score bars */}
         <div>
           <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-            <p className="text-sm font-semibold text-white">Viral Score (0–100)</p>
+            <p className="text-sm font-semibold text-[#5EEAD4]">Viral Score ranking (0–100)</p>
             <div className="flex items-center gap-4 text-[11px] text-[#CBD5E1]">
               <span className="flex items-center gap-1.5">
                 <span className="h-2.5 w-2.5 rounded-sm" style={{ background: SCORE }} aria-hidden="true" />
@@ -112,6 +117,8 @@ export default function DataPanel({ chart }: { chart: BlogChart }) {
         </div>
 
         {/* Full table */}
+        <div>
+        <p className="mb-3 text-sm font-semibold text-[#5EEAD4]">Demand and competition, product by product</p>
         <div className="overflow-x-auto rounded-lg border border-[#1E293B]">
           <table className="w-full min-w-[560px] text-left text-xs">
             <thead className="bg-[#111A2E] text-[11px] uppercase tracking-wide text-[#94A3B8]">
@@ -151,9 +158,10 @@ export default function DataPanel({ chart }: { chart: BlogChart }) {
             </tbody>
           </table>
         </div>
+        </div>
       </div>
 
-      <figcaption className="border-t border-[#1E293B] px-4 py-2.5 text-[11px] text-[#94A3B8] sm:px-6">
+      <figcaption className="border-t border-[#14B8A6]/40 px-4 py-2.5 text-[11px] text-[#94A3B8] sm:px-6">
         Source: UK Viral Radar daily data ({chart.label}). The Viral Score signals rising interest; it is not a sales forecast. Competition = total live eBay UK + Etsy listings (LOW under 2,000 · MEDIUM under 20,000 · HIGH 20,000+).
       </figcaption>
     </figure>

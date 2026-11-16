@@ -10,6 +10,7 @@ import {
 } from "../../lib/blog-posts";
 import { SITE_URL, SITE_NAME, jsonLd } from "../../lib/site";
 import DataPanel from "./DataPanel";
+import ArticleGuide, { headingId } from "./ArticleGuide";
 
 // Only pre-render posts that aren't pure drafts. A "scheduled" post whose
 // date hasn't arrived yet still gets a page here, but the component below
@@ -76,6 +77,7 @@ export default async function BlogPostPage({
 
   const blocks = post.content.split(/\n\n+/);
   const firstParagraph = blocks.findIndex((b) => !b.startsWith("## "));
+  const headings = blocks.filter((b) => b.startsWith("## ")).map((b) => b.slice(3));
   const readingTime = getReadingTimeMinutes(post);
   const relatedPosts = getRelatedPosts(post);
 
@@ -155,7 +157,8 @@ export default async function BlogPostPage({
                 return (
                   <h2
                     key={i}
-                    className="!mt-8 text-base font-semibold text-[#0F172A] sm:text-lg"
+                    id={headingId(block.slice(3))}
+                    className="!mt-8 scroll-mt-6 border-l-4 border-[#14B8A6] pl-3 text-base font-semibold text-[#0F172A] sm:text-lg"
                   >
                     {block.slice(3)}
                   </h2>
@@ -169,6 +172,10 @@ export default async function BlogPostPage({
               // Data posts: show the chart right after the opening answer.
               if (i === firstParagraph && post.chart) {
                 return [paragraph, <DataPanel key="data-panel" chart={post.chart} />];
+              }
+              // Other posts: a section guide after the opening paragraph.
+              if (i === firstParagraph) {
+                return [paragraph, <ArticleGuide key="guide" headings={headings} minutes={readingTime} />];
               }
               return paragraph;
             })}
