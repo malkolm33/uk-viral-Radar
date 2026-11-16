@@ -64,9 +64,9 @@ Perhaps the biggest shift in UK e-commerce over the past few years is that trend
 
 ## Fees: eBay UK vs Etsy UK
 
-eBay UK charges a final value fee of roughly 12.8% of the sale price plus a flat £0.30 per order, and your first 1,000 listings each month are free. Etsy UK's fee structure is more fragmented: a listing fee of £0.16-0.20 per item, a 6.5% transaction fee, and payment processing of around 4% plus £0.20 per order - which together typically works out to somewhere around 10-11% of the sale price, depending on the order value.
+On eBay UK, private sellers pay no final value fee, but if you are selling as a business (which most dropshippers are), eBay charges a final value fee of around 12.9% of the total sale in most categories (some categories are lower) plus a per-order fee of £0.40 on orders over £10 (£0.30 at £10 or less), as of 2026. Business fees are shown excluding VAT. Etsy UK's fee structure is more fragmented: a listing fee of £0.16-0.20 per item, a 6.5% transaction fee, and payment processing of around 4% plus £0.20 per order - which together typically works out to somewhere around 10-11% of the sale price, depending on the order value.
 
-On a £30 product, that works out to roughly £4.14 in eBay fees versus around £3.52 on Etsy - meaning Etsy tends to be slightly cheaper on small and mid-priced items, while eBay's flat per-order fee makes it relatively more efficient on higher-value items where the percentage-based Etsy fees add up faster.
+On a £30 product, that works out to roughly £4.27 in eBay business-seller fees versus around £3.52 on Etsy - so on standard fees alone Etsy usually comes out a little cheaper for business sellers, although Etsy's Offsite Ads fee (below) can quickly reverse that on individual orders.
 
 ## What Sells Best Where
 
@@ -80,7 +80,7 @@ One cost that catches new Etsy sellers off guard is Offsite Ads. Etsy automatica
 
 ## So, Which Platform Should You Choose?
 
-In practice, the decision usually comes down to the product rather than a blanket preference for one platform. Commodity items that buyers search for by name tend to do better on eBay; anything with a handmade, vintage, or personalised angle tends to do better on Etsy. Running the same product on both isn't unusual either, since it costs nothing extra in listing fees to test both audiences and see where demand and competition actually sit.
+In practice, the decision usually comes down to the product rather than a blanket preference for one platform. Commodity items that buyers search for by name tend to do better on eBay; anything with a handmade, vintage, or personalised angle tends to do better on Etsy. Running the same product on both isn't unusual either, since eBay's free listing allowance and Etsy's small listing fee make it cheap to test both audiences and see where demand and competition actually sit.
 
 That's also where having visibility into both marketplaces at once helps. UK Viral Radar tracks eBay and Etsy listings side by side alongside broader trend signals, so instead of guessing, you can see which platform currently has less competition for a given product before deciding where to put your listing effort.`,
     date: "2026-09-17",
@@ -122,10 +122,10 @@ The common thread across all four categories is that UK winter demand is driven 
     imageUrl: "https://images.unsplash.com/photo-1607626856747-14da3dec6188?w=1200&h=630&fit=crop&q=80&auto=format",
   },
   {
-    title: "Autumn and Winter Dropshipping: What's Actually Selling in the UK Right Now",
+    title: "Autumn & Winter Dropshipping: What's Selling in the UK Now",
     slug: "autumn-winter-uk-dropshipping-2026",
     excerpt:
-      "As UK energy prices stay high and evenings get darker, buying habits shift fast. Here's what's genuinely moving right now - not just another generic trending list.",
+      "As UK energy prices stay high and evenings get darker, buying habits shift fast. Here's what's genuinely moving now - not another generic trend list.",
     content: `Energy prices in the UK haven't dropped the way anyone hoped, and that's quietly reshaping how people spend at home this autumn. The old winter playbook - chunky coats, novelty gifts, generic "cosy" products - still works, but it's not where the real movement is right now. The bigger shift is behavioural: people are heating themselves, not their houses. That's not a marketing angle I'm inventing - it's just what happens when a full central heating cycle costs what it costs this year. If you're sourcing for the next few months, that one sentence should shape most of your picks.
 
 ## Warming the Room You're Actually In
@@ -176,7 +176,7 @@ This is where a lot of product research goes wrong - people search "personalized
 
 ## A Niche Worth a Closer Look
 
-One category that's been quietly outperforming expectations is premium pet wellness products - orthopedic pet beds, GPS trackers, joint supplements, that sort of thing. Sellers in this space have reported margins in the 35-65% range, which is unusually high for physical products, mostly because pet owners treat these as health purchases rather than impulse buys and shop accordingly, the same way they would for their own supplements. It won't stay under-the-radar forever, but it's a decent example of what a genuinely winning product actually looks like right now: not hidden, just overlooked because it's less exciting to talk about than the latest gadget.
+One category that's been quietly outperforming expectations is premium pet wellness products - orthopedic pet beds, GPS trackers, joint supplements, that sort of thing. These products can often support healthier margins than typical gadgets, mostly because pet owners treat these as health purchases rather than impulse buys and shop accordingly, the same way they would for their own supplements. It won't stay under-the-radar forever, but it's a decent example of what a genuinely winning product actually looks like right now: not hidden, just overlooked because it's less exciting to talk about than the latest gadget.
 
 Amazon's own Best Sellers page works the same way, and it's easy to forget it's sitting there for free. Sellers already use it every day to see what's actually moving units in a category, not what an algorithm decided to push into someone's feed for a few days. Cross-referencing that against Etsy search trends and eBay listing counts gives you a rough picture of demand versus competition without paying for a single tool.
 
@@ -185,13 +185,13 @@ None of this replaces checking the actual numbers before you commit stock or ad 
     category: "Trends",
     status: "published",
     publishDate: "2026-09-30",
-    imageUrl: "https://picsum.photos/seed/profitable-products-research-2026/1200/630",
+    imageUrl: "/blog-cover/how-to-find-profitable-products-to-sell-online",
   },
   {
     title: "How to Spot Viral and Best-Selling Products in the UK Market",
     slug: "how-to-spot-viral-best-selling-products-uk",
     excerpt:
-      "A practical look at the free signals UK sellers actually check before committing to a product - ad activity, TikTok Shop momentum, search trends and marketplace competition.",
+      "The free signals UK sellers check before committing to a product: ad activity, TikTok Shop momentum, search trends and marketplace competition.",
     content: `Spotting a winning product isn't luck. It's pattern recognition - you're watching the same handful of signals every serious UK seller checks before committing stock or ad spend. None of these signals mean much on their own. Stacked together, they tell you whether you've found one of the real best selling products UK buyers actually want, or just another product someone's pushing hard on ads this week.
 
 ## Ad Activity Signals
@@ -231,7 +231,7 @@ Checking all of this by hand means five or six browser tabs open at once - Ad Li
     category: "Trends",
     status: "published",
     publishDate: "2026-10-06",
-    imageUrl: "https://picsum.photos/seed/uk-viral-products-research-2026/1200/630",
+    imageUrl: "/blog-cover/how-to-spot-viral-best-selling-products-uk",
   },
 ];
 

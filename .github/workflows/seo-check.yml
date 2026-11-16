@@ -1,7 +1,7 @@
 name: SEO/GEO Check
 
-# Runs the automated SEO/GEO gate (.github/scripts/seo-check.mjs) against every
-# successful Vercel deployment - previews (branches waiting for Hermes review)
+# Runs the automated SEO/GEO check (.github/scripts/seo-check.mjs) against every
+# successful Vercel deployment - previews (branches waiting for review)
 # and production. A red result means "do not merge / fix first".
 on:
   deployment_status:
