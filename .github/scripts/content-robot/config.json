@@ -5,5 +5,6 @@
   "maxRevisionRounds": 3,
   "maxPostsPerWeek": 2,
   "topProducts": 12,
+  "minRisingProducts": 3,
   "siteUrl": "https://ukviralradar.com"
 }

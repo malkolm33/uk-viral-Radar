@@ -55,6 +55,15 @@ async function main() {
   const facts = buildFacts(products, { type, category, topN: config.topProducts, today });
   const slugs = existingSlugs(source);
 
+  // Weak data guard: a "what's rising" article needs something to be rising.
+  const rising = facts.products.filter((p) => p.risingSignal);
+  if (rising.length < config.minRisingProducts) {
+    return finish(
+      `# İçerik robotu: yazı YAYINLANMADI (veri yetersiz)\n\nBu dönem sadece ${rising.length} üründe yükseliş sinyali var (en az ${config.minRisingProducts} gerekiyor). Zayıf veriyle "yükselen ürünler" yazısı yazmak yanıltıcı olur, bu yüzden yazı yazılmadı. Site değişmedi.\n\nÖneri: admin panelinden takip edilen ürün sayısını artırın veya ürün listesini güncelleyin.\n`,
+      false
+    );
+  }
+
   let article = null;
   let previous = null;
   let reviews = [];
@@ -82,7 +91,35 @@ async function main() {
     reviews = [];
   }
 
-  const approved = reviews.length === REVIEWERS.length && reviews.every((r) => r.approved);
+  let approved = reviews.length === REVIEWERS.length && reviews.every((r) => r.approved);
+
+  // Polish round: apply the agents' minor suggestions, then require all 4
+  // approvals again. If the polished draft fails anything, keep the approved one.
+  const pending = approved ? reviews.flatMap((r) => r.suggestions.map((s) => `[${r.name}] ${s}`)) : [];
+  if (pending.length) {
+    try {
+      const polished = await writeArticle({ model: config.model, facts, previous: { article, problems: pending, polish: true } });
+      polished.slug = article.slug;
+      const polishProblems = autoCheck(polished, facts, slugs);
+      if (!polishProblems.length) {
+        const polishReviews = await Promise.all(
+          REVIEWERS.map((reviewer) => review({ model: config.model, reviewer, article: polished, facts, autoProblems: [] }))
+        );
+        if (polishReviews.every((r) => r.approved)) {
+          article = polished;
+          reviews = polishReviews;
+          log.push(`Son düzeltme turu: uzmanların ${pending.length} küçük önerisi uygulandı, 4 uzman yeniden onayladı.`);
+        } else {
+          log.push("Son düzeltme turu onay alamadı, onaylanmış önceki hali kullanıldı.");
+        }
+      } else {
+        log.push("Son düzeltme turu otomatik kontrollerden geçemedi, onaylanmış önceki hali kullanıldı.");
+      }
+    } catch (err) {
+      log.push(`Son düzeltme turu yapılamadı (${err.message.slice(0, 60)}), onaylanmış önceki hali kullanıldı.`);
+    }
+  }
+  approved = reviews.length === REVIEWERS.length && reviews.every((r) => r.approved);
   const reviewLines = reviews
     .map((r) => `| ${r.name} | ${r.approved ? "Onayladı" : "İtiraz etti"} | ${r.summary.replace(/\|/g, "/")} |`)
     .join("\n");

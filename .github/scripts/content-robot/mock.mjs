@@ -19,7 +19,7 @@ export function mockAnswer(role, prompt) {
     const f = factsFrom(prompt);
     const p = f.products;
     const para = (x) =>
-      `${x.name} sits at number ${x.rank} with a Viral Score of ${x.viralScore}. UK search interest moved ${x.searchGrowth7dPercent} percent over the last 7 days, while eBay UK shows ${x.ebayUkListings} listings from ${x.ebayUniqueSellers} sellers at an average of £${x.ebayUkAvgPriceGBP}. ` +
+      `${x.name} sits at number ${x.rank} with a Viral Score of ${x.viralScore}. UK search interest moved ${x.searchGrowth7dPercent} percent over the last 7 days, while eBay UK shows ${x.ebayUkListings} listings with ${x.competition} competition at an average of £${x.ebayUkAvgPriceGBP}. ` +
       "That combination tells a seller how much demand is building compared with how crowded the marketplace already is, which matters more than the score on its own. A rising score with few sellers is an early signal worth testing in small quantities, while a high score with many sellers usually means the easy window has already closed.";
     const filler =
       "The useful way to read these signals is as a shortlist for research rather than a buying list. Check supplier lead times, look at the listing photos competitors use, and work out your landed cost before committing to stock. Trends move quickly in the UK market, so a product that is climbing this week can level off within a fortnight, and a small first order protects you if interest fades.";
@@ -48,7 +48,7 @@ export function mockAnswer(role, prompt) {
     return JSON.stringify(
       reject
         ? { verdict: "REJECT", blockers: ["Test: tighten the opening paragraph."], suggestions: [], summary_tr: "Test reddi." }
-        : { verdict: "APPROVE", blockers: [], suggestions: [], summary_tr: `${role} onayladı (test).` }
+        : { verdict: "APPROVE", blockers: [], suggestions: process.env.CONTENT_ROBOT_MOCK_SUGGEST === "1" ? ["Test: smooth one sentence."] : [], summary_tr: `${role} onayladı (test).` }
     );
   }
   throw new Error("mock: unknown role " + role);

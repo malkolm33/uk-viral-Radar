@@ -31,7 +31,7 @@ function allowedNumbers(facts) {
   walk(facts);
   for (let i = 0; i <= 20; i += 1) allowed.add(i);
   for (let y = 2024; y <= 2030; y += 1) allowed.add(y);
-  [7, 24, 30, 100, 9.99, 15].forEach((n) => allowed.add(n));
+  [7, 24, 30, 100, 9.99, 15, 2000, 20000].forEach((n) => allowed.add(n));
   const d = new Date(facts.date);
   allowed.add(d.getUTCDate());
   return allowed;

@@ -8,6 +8,8 @@ const HOUSE_RULES = `House rules for ukviralradar.com articles:
 - Describe the data honestly: a Viral Score is a signal of rising interest, not a promise of sales. No earnings promises, no "guaranteed", no "make £X".
 - Do not name competitor tools by brand.
 - Plain text only: paragraphs separated by a blank line and "## " subheadings. No bullet lists, no bold, no links, no HTML.
+- The title must match what the data shows: only call products "rising" or "fastest-rising" if their risingSignal is true. If few products are rising, say so honestly.
+- "ebayUniqueSellersInTop20Listings" only describes the top 20 eBay listings - never present it as total sellers or as proof of saturation. Use "competition" for that.
 - Open with a 2-3 sentence direct answer (what is rising this week and why it matters), so AI search engines can quote it.
 - Useful, specific and original: explain what the signals mean for a seller (demand vs competition, saturation, price point) - not generic filler.`;
 
@@ -20,7 +22,7 @@ export async function writeArticle({ model, facts, previous }) {
 
 FACTS (the only data you may use):
 ${JSON.stringify(facts, null, 2)}
-${previous ? `\nPREVIOUS DRAFT:\n${JSON.stringify(previous.article)}\n\nFIX ALL OF THESE PROBLEMS:\n- ${previous.problems.join("\n- ")}\n` : ""}
+${previous ? `\nPREVIOUS DRAFT:\n${JSON.stringify(previous.article)}\n\n${previous.polish ? "This draft is already approved. Improve it by applying these editor suggestions, keeping every fact, number and the slug unchanged" : "FIX ALL OF THESE PROBLEMS"}:\n- ${previous.problems.join("\n- ")}\n` : ""}
 Return ONLY a JSON object:
 {"title": "max 60 characters, include UK and the month/week context",
  "slug": "lowercase-hyphenated, include the date like ${facts.date}",

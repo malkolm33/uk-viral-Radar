@@ -26,6 +26,14 @@ export async function loadProducts() {
 
 // Builds the fact sheet handed to the writer and the checkers.
 // type "weekly": top products overall. type "category": one category in depth.
+export function competitionLevel(ebay, etsy) {
+  if (!ebay && !etsy) return "unknown";
+  const total = (ebay ?? 0) + (etsy ?? 0);
+  if (total < 2000) return "LOW";
+  if (total < 20000) return "MEDIUM";
+  return "HIGH";
+}
+
 export function buildFacts(products, { type, category, topN, today }) {
   const valid = products.filter((p) => typeof p.viral_score === "number");
   if (valid.length < 5) throw new Error(`Only ${valid.length} products have a Viral Score - not enough to write about.`);
@@ -51,9 +59,13 @@ export function buildFacts(products, { type, category, topN, today }) {
     youtubeRecentVideos: p.youtube_video_count,
     ebayUkListings: p.ebay_listing_count,
     ebayUkAvgPriceGBP: typeof p.ebay_avg_price === "number" ? Math.round(p.ebay_avg_price * 100) / 100 : null,
-    ebayUniqueSellers: p.ebay_unique_seller_count,
+    ebayUniqueSellersInTop20Listings: p.ebay_unique_seller_count,
     etsyListings: p.etsy_listing_count,
-    saturated: (p.ebay_unique_seller_count ?? 0) >= 15,
+    // Same rule as the site's dashboard (competitionLevel in app/dashboard/page.tsx):
+    // total live eBay UK + Etsy listings. (ebay_unique_seller_count only covers
+    // the top 20 eBay listings, so it must not be used as a saturation signal.)
+    competition: competitionLevel(p.ebay_listing_count, p.etsy_listing_count),
+    risingSignal: p.trend_status === "rising" || (typeof p.search_growth === "number" && p.search_growth >= 20),
   }));
 
   const categories = [...new Set(valid.map((p) => p.category).filter(Boolean))].sort();
@@ -66,6 +78,8 @@ export function buildFacts(products, { type, category, topN, today }) {
     products: top,
     about: {
       site: "UK Viral Radar",
+      competition: "LOW / MEDIUM / HIGH from total live eBay UK + Etsy listings (under 2,000 / under 20,000 / 20,000+)",
+      risingSignal: "true when the product's score rose since yesterday or its UK search interest grew 20%+ in 7 days",
       viralScore: "0-100 score combining Google Trends UK search growth, Wikipedia page-view growth, YouTube video growth, eBay UK and Etsy competition",
       dataSources: 5,
       freeProductsShown: 3,
