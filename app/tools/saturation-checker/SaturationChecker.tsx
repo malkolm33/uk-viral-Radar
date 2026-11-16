@@ -144,7 +144,9 @@ export default function SaturationChecker() {
                 { label: "eBay UK listings", value: nf.format(result.ebay.total), stripe: "#2563EB", bg: "#EFF6FF", ink: "#1D4ED8", p: gaugePos(result.ebay.total) / 100, note: "live, all sellers" },
                 { label: "Etsy listings", value: result.etsy === null ? "—" : nf.format(result.etsy), stripe: "#F59E0B", bg: "#FFFBEB", ink: "#B45309", p: result.etsy ? gaugePos(result.etsy) / 100 : 0, note: result.etsy === null ? "not available right now" : "live, worldwide shops" },
                 { label: "Different sellers", value: `${result.ebay.uniqueSellers}/${result.ebay.sample}`, stripe: "#8B5CF6", bg: "#F5F3FF", ink: "#6D28D9", p: spread, note: "in the top eBay results" },
-                { label: "Typical eBay price", value: gbp(result.ebay.medianPrice), stripe: "#16A34A", bg: "#F0FDF4", ink: "#15803D", p: 0, note: `average ${gbp(result.ebay.avgPrice)}` },
+                ...(result.ebay.medianPrice !== null
+                  ? [{ label: "Typical eBay price", value: gbp(result.ebay.medianPrice), stripe: "#16A34A", bg: "#F0FDF4", ink: "#15803D", p: 0, note: `average ${gbp(result.ebay.avgPrice)}` }]
+                  : []),
               ].map((k) => (
                 <div key={k.label} className="rounded-xl border border-t-4 bg-white p-3 shadow-sm" style={{ borderColor: "#E2E8F0", borderTopColor: k.stripe }}>
                   <p className="text-[11px] font-semibold uppercase tracking-wide text-[#475569]">{k.label}</p>
@@ -157,6 +159,19 @@ export default function SaturationChecker() {
                   <p className="mt-1.5 text-[11px] text-[#475569]">{k.note}</p>
                 </div>
               ))}
+              {result.ebay.medianPrice === null && (
+                <a
+                  href={`https://www.ebay.co.uk/sch/i.html?_nkw=${encodeURIComponent(result.keyword)}`}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                  className="flex flex-col justify-between rounded-xl border border-t-4 bg-white p-3 shadow-sm hover:bg-[#F0FDF4]"
+                  style={{ borderColor: "#E2E8F0", borderTopColor: "#16A34A" }}
+                >
+                  <span className="text-[11px] font-semibold uppercase tracking-wide text-[#475569]">Live eBay prices</span>
+                  <span className="mt-1 text-lg font-bold text-[#15803D]">Check on eBay ↗</span>
+                  <span className="mt-1.5 text-[11px] text-[#475569]">Prices change hourly – see them live</span>
+                </a>
+              )}
             </div>
 
             {/* Competition gauge */}

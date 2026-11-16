@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getEbaySnapshot, getEtsyCount, competitionLevel } from "../../../lib/marketplace";
+import { SHOW_EBAY_PRICES } from "../../../lib/flags";
 
 // Free "Is this product saturated?" checker. Public, so it is protected by:
 // strict input validation, a per-IP rate limit and a result cache (which also
@@ -32,8 +33,10 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Please enter a product name of 3–60 letters or numbers." }, { status: 400 });
   }
   const keyword = raw.toLowerCase();
+  // The flag is part of the cache key so answers cached with prices are never reused once prices are off.
+  const cacheKey = `${SHOW_EBAY_PRICES ? 1 : 0}:${keyword}`;
 
-  const hit = cache.get(keyword);
+  const hit = cache.get(cacheKey);
   if (hit && Date.now() - hit.at < CACHE_MS) {
     return NextResponse.json(hit.body, { headers: { "Cache-Control": "public, s-maxage=21600" } });
   }
@@ -60,7 +63,7 @@ export async function GET(req: NextRequest) {
     etsy,
     competition: competitionLevel(ebay.total, etsy),
   };
-  cache.set(keyword, { at: Date.now(), body });
+  cache.set(cacheKey, { at: Date.now(), body });
   if (cache.size > 2000) cache.clear();
   return NextResponse.json(body, { headers: { "Cache-Control": "public, s-maxage=21600" } });
 }

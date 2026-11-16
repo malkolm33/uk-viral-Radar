@@ -57,7 +57,7 @@ const dataSources = [
   },
   {
     name: "eBay",
-    description: "Live UK listing counts and average price, so you know how crowded a niche already is.",
+    description: "Live UK listing counts and seller spread, so you know how crowded a niche already is.",
   },
   {
     name: "Etsy",
@@ -206,7 +206,7 @@ const freeFeatures = [
 const proFeatures = [
   "Full ranked list of every tracked product",
   "Live Google Trends, Wikipedia, eBay, Etsy and YouTube data",
-  "eBay and Etsy competition counts with average price",
+  "eBay and Etsy competition counts and seller spread",
   "New products added as they start trending",
 ];
 

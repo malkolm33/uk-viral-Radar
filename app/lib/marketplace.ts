@@ -2,6 +2,8 @@
 // Etsy Open API). API keys come from environment variables and never reach the
 // browser.
 
+import { SHOW_EBAY_PRICES } from "./flags";
+
 export type EbaySnapshot = {
   total: number; // live eBay UK listings matching the keyword
   sample: number; // listings actually sampled (max 50)
@@ -34,11 +36,14 @@ async function ebayToken(): Promise<string | null> {
   return cachedToken.value;
 }
 
+const NO_PRICES = { avgPrice: null, medianPrice: null, minPrice: null, maxPrice: null };
+
 function round2(n: number) {
   return Math.round(n * 100) / 100;
 }
 
 export async function getEbaySnapshot(keyword: string): Promise<EbaySnapshot | null> {
+  if (process.env.MOCK_MARKET) { const t = keyword.includes("rare") ? 640 : keyword.includes("insoles") ? 7400 : keyword.includes("down") ? -1 : 31916; if (t < 0) return null; return { total: t, sample: 50, uniqueSellers: 41, ...(SHOW_EBAY_PRICES ? { avgPrice: 24.37, medianPrice: 18.99, minPrice: 6.49, maxPrice: 89 } : NO_PRICES) }; }
   try {
     const token = await ebayToken();
     if (!token) return null;
@@ -56,10 +61,11 @@ export async function getEbaySnapshot(keyword: string): Promise<EbaySnapshot | n
       .sort((a, b) => a - b);
     const sellers = new Set(items.map((i) => i.seller?.username).filter(Boolean));
     const mid = Math.floor(prices.length / 2);
+    const base = { total: Number(data.total) || items.length, sample: items.length, uniqueSellers: sellers.size };
+    // Price statistics only leave this function when eBay has given permission (see flags.ts).
+    if (!SHOW_EBAY_PRICES) return { ...base, ...NO_PRICES };
     return {
-      total: Number(data.total) || items.length,
-      sample: items.length,
-      uniqueSellers: sellers.size,
+      ...base,
       avgPrice: prices.length ? round2(prices.reduce((a, b) => a + b, 0) / prices.length) : null,
       medianPrice: prices.length ? round2(prices.length % 2 ? prices[mid] : (prices[mid - 1] + prices[mid]) / 2) : null,
       minPrice: prices.length ? round2(prices[0]) : null,
@@ -71,6 +77,7 @@ export async function getEbaySnapshot(keyword: string): Promise<EbaySnapshot | n
 }
 
 export async function getEtsyCount(keyword: string): Promise<number | null> {
+  if (process.env.MOCK_MARKET) return keyword.includes("rare") ? 120 : 2310;
   try {
     const key = process.env.ETSY_API_KEY;
     if (!key) return null;

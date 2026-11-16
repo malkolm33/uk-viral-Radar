@@ -11,7 +11,7 @@ const TOOLS = [
   {
     href: "/tools/saturation-checker",
     name: "Is my product saturated?",
-    text: "Live eBay UK and Etsy listing counts, seller spread and typical price for any product.",
+    text: "Live eBay UK and Etsy listing counts and seller spread for any product.",
     stripe: "#14B8A6",
     bg: "#F0FDFA",
     tag: "Live data",

@@ -8,7 +8,7 @@ export type BlogChartItem = {
   change: number | null; // Viral Score change since yesterday
   search: number | null; // UK search growth, % over 7 days
   competition: string; // LOW | MEDIUM | HIGH | unknown
-  price: number | null; // average eBay UK price, GBP
+  price: number | null; // average eBay UK price, GBP (null while SHOW_EBAY_PRICES is off)
   rising: boolean;
 };
 
@@ -269,27 +269,27 @@ The rising signal is deliberately simple. It switches on when a product's score 
 
 The Neck Massager is the only product with a rising trend label. Its score is 22, up 4 since yesterday, and UK search interest grew 52% over seven days, the strongest search growth in the report. The picture is mixed elsewhere, though. Wikipedia page views are down 34% and YouTube video growth is down 16%, so the interest looks driven by search rather than by a wave of new content.
 
-The competition side is where a seller needs to be careful. There are 32,143 eBay UK listings and 256 on Etsy, which puts competition at HIGH. The average eBay UK price is £11.98, and all 20 of the top 20 eBay listings come from different sellers. That figure only describes the top of the results page, so it is not a count of total sellers. Combined with the listing volume, though, it suggests a market where many sellers are already competing at a low price point.
+The competition side is where a seller needs to be careful. There are 32,143 eBay UK listings and 256 on Etsy, which puts competition at HIGH. All 20 of the top 20 eBay listings come from different sellers. That figure only describes the top of the results page, so it is not a count of total sellers. Combined with the listing volume, though, it suggests a market where many sellers are already competing.
 
-Rising search against HIGH competition usually means a seller needs an angle rather than just a listing. That could be a bundle, a better photo set, faster UK dispatch or a clear niche such as a particular user group. A plain copy of what is already ranking is unlikely to stand out at an average price of £11.98.
+Rising search against HIGH competition usually means a seller needs an angle rather than just a listing. That could be a bundle, a better photo set, faster UK dispatch or a clear niche such as a particular user group. A plain copy of what is already ranking is unlikely to stand out.
 
 ## Smart Water Bottle: rising search, lighter competition
 
 The Smart Water Bottle is the clearest example this week of the demand-versus-competition question. Its score is 25, down 1 since yesterday, and the trend label is stable. It still earns a rising signal because UK search interest grew 38% in seven days. Wikipedia growth is down 20% and YouTube growth is down 8%, so the search lift is not matched elsewhere.
 
-Competition is MEDIUM, with 1,369 eBay UK listings and 816 on Etsy. That is far fewer eBay listings than the Neck Massager or the Pet Hair Remover. The average eBay UK price is £18.36, higher than the other two rising products. There are 52,325 recent YouTube videos on the topic, so the product is clearly known. A higher price point and a smaller listing pool leave more room to differentiate, but one week of search growth is not proof of lasting demand.
+Competition is MEDIUM, with 1,369 eBay UK listings and 816 on Etsy. That is far fewer eBay listings than the Neck Massager or the Pet Hair Remover. There are 52,325 recent YouTube videos on the topic, so the product is clearly known. A smaller listing pool leaves more room to differentiate, but one week of search growth is not proof of lasting demand.
 
-## Pet Hair Remover: search is up, but the price is very low
+## Pet Hair Remover: search is up, but competition is heavy
 
 The Pet Hair Remover has a score of 14, down 1 since yesterday, and a stable trend. Search interest is up 30% over seven days, which triggers its rising signal. Wikipedia growth is down 14% and YouTube growth is down 12%.
 
-The commercial side is the difficulty. There are 30,020 eBay UK listings and 320 on Etsy, so competition is HIGH, and the average eBay UK price is just £7.10. At that price, shipping, platform fees and advertising can take most of the margin. A low price point is not automatically bad, but it rewards sellers with cheap, reliable supply and punishes anyone who relies on paid traffic.
+The commercial side is the difficulty. There are 30,020 eBay UK listings and 320 on Etsy, so competition is HIGH. Check live eBay prices before committing: on low-priced items, shipping, platform fees and advertising can take most of the margin, which rewards sellers with cheap, reliable supply and punishes anyone who relies on paid traffic.
 
 ## The biggest score is not a rising product
 
-The Portable Ice Maker leads the table with a score of 35, but its rising signal is false. The score fell 3 points since yesterday, search interest is down 7% over seven days, and YouTube growth is down 28%. Its Wikipedia page views are up 175%, which looks dramatic, but that is one signal against several soft ones, and percentage growth can come from a small starting point. It also has 31,916 eBay UK listings, HIGH competition and an average eBay price of £132.75. A high ticket price means more cash at risk per unsold unit, so a high score here is not a reason to rush.
+The Portable Ice Maker leads the table with a score of 35, but its rising signal is false. The score fell 3 points since yesterday, search interest is down 7% over seven days, and YouTube growth is down 28%. Its Wikipedia page views are up 175%, which looks dramatic, but that is one signal against several soft ones, and percentage growth can come from a small starting point. It also has 31,916 eBay UK listings and HIGH competition, so a high score here is not a reason to rush.
 
-The Posture Corrector (score 27) is a similar story in a different direction. YouTube growth is up 106%, but search interest is down 18% and its score fell 3 points. With competition at MEDIUM, 8,062 eBay UK listings, 179 on Etsy and an average price of £9.10, it is worth watching to see whether search catches up with the video activity. At the moment it does not qualify as rising.
+The Posture Corrector (score 27) is a similar story in a different direction. YouTube growth is up 106%, but search interest is down 18% and its score fell 3 points. With competition at MEDIUM, 8,062 eBay UK listings and 179 on Etsy, it is worth watching to see whether search catches up with the video activity. At the moment it does not qualify as rising.
 
 ## Products to be cautious about
 
@@ -299,15 +299,15 @@ The Electric Wine Opener has no search growth figure this week, and only 182 rec
 
 ## How to use this week's data
 
-Start by separating demand from competition. The Neck Massager has the strongest momentum but the toughest market. The Smart Water Bottle has a smaller listing pool and a higher average price, so on these figures alone it looks the least crowded of the three rising products. That is an observation about the data, not a recommendation to buy or sell it. The Pet Hair Remover has rising search but a thin £7.10 price point.
+Start by separating demand from competition. The Neck Massager has the strongest momentum but the toughest market. The Smart Water Bottle has a smaller listing pool, so on these figures alone it looks the least crowded of the three rising products. That is an observation about the data, not a recommendation to buy or sell it. The Pet Hair Remover has rising search but heavy competition.
 
-Before ordering stock, check the live eBay and Etsy results yourself, work out your landed cost and fees at the average price shown, and consider a small test batch or a supplier with no minimum order. This report is not advice on whether any product is suitable, safe or compliant to sell in the UK, so check that for yourself too. With only three rising signals out of 12 products this week, there is no pressure to chase everything. A selective approach, backed by your own margin maths, is the safer reading of the data.`,
+Before ordering stock, check the live eBay and Etsy results yourself, check live prices, work out your landed cost and fees, and consider a small test batch or a supplier with no minimum order. This report is not advice on whether any product is suitable, safe or compliant to sell in the UK, so check that for yourself too. With only three rising signals out of 12 products this week, there is no pressure to chase everything. A selective approach, backed by your own margin maths, is the safer reading of the data.`,
     date: "2026-11-16",
     category: "Trends",
     status: "published",
     publishDate: "2026-11-16",
     imageUrl: "/blog-cover/uk-fastest-rising-products-week-2026-11-16",
-    chart: {"label": "Week of 16 Nov 2026", "tracked": 15, "items": [{"name": "Portable Ice Maker", "score": 35, "change": -3, "search": -7, "competition": "HIGH", "price": 132.75, "rising": false}, {"name": "Posture Corrector", "score": 27, "change": -3, "search": -18, "competition": "MEDIUM", "price": 9.1, "rising": false}, {"name": "Smart Water Bottle", "score": 25, "change": -1, "search": 38, "competition": "MEDIUM", "price": 18.36, "rising": true}, {"name": "Neck Massager", "score": 22, "change": 4, "search": 52, "competition": "HIGH", "price": 11.98, "rising": true}, {"name": "Resistance Bands", "score": 15, "change": -4, "search": -11, "competition": "HIGH", "price": 10.9, "rising": false}, {"name": "Pet Hair Remover", "score": 14, "change": -1, "search": 30, "competition": "HIGH", "price": 7.1, "rising": true}, {"name": "Mini Thermal Printer", "score": 14, "change": -1, "search": -52, "competition": "MEDIUM", "price": 15.97, "rising": false}, {"name": "Portable Blender", "score": 12, "change": -9, "search": -27, "competition": "MEDIUM", "price": 36, "rising": false}, {"name": "LED Strip Lights", "score": 12, "change": 0, "search": -14, "competition": "HIGH", "price": 15.17, "rising": false}, {"name": "Electric Wine Opener", "score": 11, "change": -2, "search": null, "competition": "MEDIUM", "price": 15.57, "rising": false}, {"name": "Magnetic Phone Stand", "score": 10, "change": 0, "search": null, "competition": "HIGH", "price": 6.06, "rising": false}, {"name": "Reusable Water Bottle", "score": 6, "change": -46, "search": 0, "competition": "HIGH", "price": 10.08, "rising": false}]},
+    chart: {"label": "Week of 16 Nov 2026", "tracked": 15, "items": [{"name": "Portable Ice Maker", "score": 35, "change": -3, "search": -7, "competition": "HIGH", "price": null, "rising": false}, {"name": "Posture Corrector", "score": 27, "change": -3, "search": -18, "competition": "MEDIUM", "price": null, "rising": false}, {"name": "Smart Water Bottle", "score": 25, "change": -1, "search": 38, "competition": "MEDIUM", "price": null, "rising": true}, {"name": "Neck Massager", "score": 22, "change": 4, "search": 52, "competition": "HIGH", "price": null, "rising": true}, {"name": "Resistance Bands", "score": 15, "change": -4, "search": -11, "competition": "HIGH", "price": null, "rising": false}, {"name": "Pet Hair Remover", "score": 14, "change": -1, "search": 30, "competition": "HIGH", "price": null, "rising": true}, {"name": "Mini Thermal Printer", "score": 14, "change": -1, "search": -52, "competition": "MEDIUM", "price": null, "rising": false}, {"name": "Portable Blender", "score": 12, "change": -9, "search": -27, "competition": "MEDIUM", "price": null, "rising": false}, {"name": "LED Strip Lights", "score": 12, "change": 0, "search": -14, "competition": "HIGH", "price": null, "rising": false}, {"name": "Electric Wine Opener", "score": 11, "change": -2, "search": null, "competition": "MEDIUM", "price": null, "rising": false}, {"name": "Magnetic Phone Stand", "score": 10, "change": 0, "search": null, "competition": "HIGH", "price": null, "rising": false}, {"name": "Reusable Water Bottle", "score": 6, "change": -46, "search": 0, "competition": "HIGH", "price": null, "rising": false}]},
   },
 ];
 

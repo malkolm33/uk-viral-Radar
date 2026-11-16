@@ -5,7 +5,7 @@ import { SITE_URL, jsonLd } from "../../lib/site";
 
 const TITLE = "Is My Product Saturated? Free UK Saturation Checker";
 const DESCRIPTION =
-  "Check if a product is saturated in the UK before you sell it. Live eBay UK and Etsy listing counts, seller spread and typical price - free, no sign-up.";
+  "Check if a product is saturated in the UK before you sell it. Live eBay UK and Etsy listing counts and seller spread - free, no sign-up.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -26,7 +26,7 @@ const FAQS = [
   },
   {
     q: "Where does the data come from?",
-    a: "Live listing counts and prices come from the official eBay UK Browse API and the Etsy Open API at the moment you check. Results are cached for up to 6 hours.",
+    a: "Live listing counts come from the official eBay UK Browse API and the Etsy Open API at the moment you check. Results are cached for up to 6 hours.",
   },
   {
     q: "Is low competition enough to pick a product?",
@@ -68,7 +68,7 @@ export default function SaturationCheckerPage() {
         <h1 className="text-3xl font-bold tracking-tight text-[#0F172A] sm:text-4xl">Is my product saturated?</h1>
         <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[#475569] sm:text-base">
           Type a product to see how crowded it is on UK marketplaces right now: live eBay UK and Etsy listing counts, how many
-          different sellers compete, and the typical selling price. Free, no sign-up.
+          different sellers compete, with a one-click link to live eBay prices. Free, no sign-up.
         </p>
 
         <div className="mt-8">

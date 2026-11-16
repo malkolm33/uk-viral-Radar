@@ -8,6 +8,7 @@ import PayPalCaptureHandler from "../PayPalCaptureHandler";
 import ProductGrid from "../ProductGrid";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { SHOW_EBAY_PRICES } from "../lib/flags";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/dashboard" },
@@ -228,7 +229,7 @@ export default async function DashboardPage() {
           searchPoints: [] as number[],
           wikiGrowth: p.wiki_growth ?? 0,
           ebayListingCount: p.ebay_listing_count ?? 0,
-          ebayAvgPrice: p.ebay_avg_price ?? null,
+          ebayAvgPrice: SHOW_EBAY_PRICES ? (p.ebay_avg_price ?? null) : null,
           ebayImageUrl: p.ebay_image_url ?? null,
           ebayUniqueSellerCount: p.ebay_unique_seller_count ?? 0,
           etsyListingCount: p.etsy_listing_count ?? 0,
@@ -262,7 +263,7 @@ export default async function DashboardPage() {
         searchPoints: searchData.points,
         wikiGrowth,
         ebayListingCount: ebayData.listingCount,
-        ebayAvgPrice: ebayData.avgPrice,
+        ebayAvgPrice: SHOW_EBAY_PRICES ? ebayData.avgPrice : null,
         ebayImageUrl: ebayData.imageUrl,
         ebayUniqueSellerCount: ebayData.uniqueSellerCount,
         etsyListingCount: etsyData.listingCount,

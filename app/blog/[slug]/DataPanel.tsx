@@ -58,6 +58,7 @@ function heat(v: number | null) {
 export default function DataPanel({ chart, slug }: { chart: BlogChart; slug: string }) {
   const t = themeFor(slug);
   const items = [...chart.items].sort((a, b) => b.score - a.score);
+  const showPrice = items.some((i) => typeof i.price === "number");
   if (!items.length) return null;
   const rising = items.filter((i) => i.rising);
   const top = items[0];
@@ -183,7 +184,7 @@ export default function DataPanel({ chart, slug }: { chart: BlogChart; slug: str
           </div>
         )}
 
-        {/* Table with heat-tinted search cells */}
+        {/* Table with heat-tinted search cells. The price column only appears when a post carries eBay prices (flag-controlled at write time). */}
         <div>
           <p className="mb-3 text-sm font-semibold" style={{ color: t.accent }}>Demand and competition, product by product</p>
           <div className="overflow-x-auto rounded-xl border bg-white shadow-sm" style={{ borderColor: "#E2E8F0" }}>
@@ -195,7 +196,7 @@ export default function DataPanel({ chart, slug }: { chart: BlogChart; slug: str
                   <th className="px-3 py-2 text-right font-semibold">Since yesterday</th>
                   <th className="px-3 py-2 text-right font-semibold">UK search, 7d</th>
                   <th className="px-3 py-2 font-semibold">Competition</th>
-                  <th className="px-3 py-2 text-right font-semibold">Avg eBay price</th>
+                  {showPrice && <th className="px-3 py-2 text-right font-semibold">Avg eBay price</th>}
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#E2E8F0]">
@@ -226,7 +227,7 @@ export default function DataPanel({ chart, slug }: { chart: BlogChart; slug: str
                           <span className="text-[#94A3B8]">—</span>
                         )}
                       </td>
-                      <td className="px-3 py-2 text-right tabular-nums text-[#334155]">{typeof i.price === "number" ? `£${i.price.toFixed(2)}` : "—"}</td>
+                      {showPrice && <td className="px-3 py-2 text-right tabular-nums text-[#334155]">{typeof i.price === "number" ? `£${i.price.toFixed(2)}` : "—"}</td>}
                     </tr>
                   );
                 })}

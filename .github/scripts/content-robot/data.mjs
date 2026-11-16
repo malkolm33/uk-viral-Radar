@@ -58,7 +58,10 @@ export function buildFacts(products, { type, category, topN, today }) {
     youtubeGrowthPercent: p.youtube_growth,
     youtubeRecentVideos: p.youtube_video_count,
     ebayUkListings: p.ebay_listing_count,
-    ebayUkAvgPriceGBP: typeof p.ebay_avg_price === "number" ? Math.round(p.ebay_avg_price * 100) / 100 : null,
+    // eBay price statistics need eBay's written permission (API licence s.8.1(d)); only passed on when SHOW_EBAY_PRICES=true.
+    ...(process.env.SHOW_EBAY_PRICES === "true" && typeof p.ebay_avg_price === "number"
+      ? { ebayUkAvgPriceGBP: Math.round(p.ebay_avg_price * 100) / 100 }
+      : {}),
     ebayUniqueSellersInTop20Listings: p.ebay_unique_seller_count,
     etsyListings: p.etsy_listing_count,
     // Same rule as the site's dashboard (competitionLevel in app/dashboard/page.tsx):

@@ -272,7 +272,8 @@ async function main() {
           search_growth: searchData.growth,
           wiki_growth: wikiGrowth,
           ebay_listing_count: ebayData.listingCount,
-          ebay_avg_price: ebayData.avgPrice,
+          // eBay price statistics need eBay's written permission (API licence s.8.1(d)); stored only when SHOW_EBAY_PRICES=true.
+          ebay_avg_price: process.env.SHOW_EBAY_PRICES === "true" ? ebayData.avgPrice : null,
           ebay_image_url: ebayData.imageUrl,
           ebay_unique_seller_count: ebayData.uniqueSellerCount,
           etsy_listing_count: etsyData.listingCount,

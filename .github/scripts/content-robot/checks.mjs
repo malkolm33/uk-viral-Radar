@@ -69,6 +69,13 @@ export function autoCheck(article, facts, existingSlugs) {
   if (unknown.length)
     problems.push(`These numbers are not in the fact sheet (possible invented data): ${unknown.join(", ")}. Use only numbers from the facts.`);
 
+  // eBay price statistics need eBay's written permission (API licence s.8.1(d)).
+  // Until SHOW_EBAY_PRICES=true, no £ amounts may appear except the Pro plan price.
+  if (process.env.SHOW_EBAY_PRICES !== "true") {
+    const pounds = (all.match(/£\s?\d[\d,]*(?:\.\d+)?/g) || []).filter((m) => !/^£\s?9\.99$/.test(m));
+    if (pounds.length) problems.push(`Price figures are not allowed in posts right now (found: ${[...new Set(pounds)].join(", ")}). Remove all £ amounts.`);
+  }
+
   const names = facts.products.map((p) => p.name.toLowerCase());
   const mentioned = names.filter((n) => all.toLowerCase().includes(n)).length;
   if (mentioned < Math.min(3, names.length)) problems.push("Mention at least 3 tracked products by their exact name.");

@@ -375,10 +375,22 @@ export default function ProductGrid({ products, isLoggedIn, email }: { products:
                       <span className="text-[#0F172A]">{product.ebayUniqueSellerCount}/20</span>
                     </div>
                   )}
-                  {product.ebayAvgPrice && (
+                  {product.ebayAvgPrice ? (
                     <div className="flex justify-between">
                       <span>Avg. price</span>
                       <span className="text-[#0F172A]">£{product.ebayAvgPrice.toFixed(2)}</span>
+                    </div>
+                  ) : (
+                    <div className="flex justify-between">
+                      <span>eBay prices</span>
+                      <a
+                        href={`https://www.ebay.co.uk/sch/i.html?_nkw=${encodeURIComponent(product.searchKeyword ?? product.name)}`}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow"
+                        className="font-semibold text-[#0D9488] hover:underline"
+                      >
+                        Check live ↗
+                      </a>
                     </div>
                   )}
                   <div className="flex justify-between">
