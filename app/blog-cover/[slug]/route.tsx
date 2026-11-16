@@ -29,7 +29,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "64px 72px",
-          backgroundColor: "#0B1220",
+          background: "linear-gradient(135deg, #E0F2FE 0%, #CCFBF1 100%)",
+          border: "10px solid #14B8A6",
           position: "relative",
         }}
       >
@@ -42,7 +43,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
             width: 520,
             height: 520,
             borderRadius: "50%",
-            border: "2px solid rgba(56,189,248,0.18)",
+            border: "3px solid rgba(20,184,166,0.25)",
             display: "flex",
           }}
         />
@@ -54,7 +55,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
             width: 280,
             height: 280,
             borderRadius: "50%",
-            border: "2px solid rgba(56,189,248,0.28)",
+            border: "3px solid rgba(20,184,166,0.40)",
             display: "flex",
           }}
         />
@@ -64,8 +65,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
               display: "flex",
               fontSize: 26,
               fontWeight: 700,
-              color: "#22C55E",
-              backgroundColor: "rgba(34,197,94,0.12)",
+              color: "#FFFFFF",
+              backgroundColor: "#0D9488",
               padding: "8px 20px",
               borderRadius: 999,
             }}
@@ -78,7 +79,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
             display: "flex",
             fontSize: titleSize,
             fontWeight: 800,
-            color: "#FFFFFF",
+            color: "#0F172A",
             lineHeight: 1.15,
             maxWidth: 1000,
           }}
@@ -89,19 +90,19 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
           <div style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 1000 }}>
             {bars.map((b) => (
               <div key={b.name} style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                <div style={{ display: "flex", width: 260, fontSize: 22, color: "#CBD5E1" }}>{b.name}</div>
-                <div style={{ display: "flex", flex: 1, height: 22, backgroundColor: "rgba(255,255,255,0.07)", borderRadius: 4 }}>
+                <div style={{ display: "flex", width: 260, fontSize: 22, color: "#334155" }}>{b.name}</div>
+                <div style={{ display: "flex", flex: 1, height: 22, backgroundColor: "rgba(255,255,255,0.75)", borderRadius: 4 }}>
                   <div
                     style={{
                       display: "flex",
                       width: `${Math.max(4, (b.score / maxScore) * 100)}%`,
                       height: 22,
                       borderRadius: 4,
-                      backgroundColor: b.rising ? "#1FAF6A" : "#2F8FE0",
+                      backgroundColor: b.rising ? "#16A34A" : "#2563EB",
                     }}
                   />
                 </div>
-                <div style={{ display: "flex", width: 150, justifyContent: "flex-end", fontSize: 22, color: "#FFFFFF" }}>
+                <div style={{ display: "flex", width: 150, justifyContent: "flex-end", fontSize: 22, fontWeight: 700, color: b.rising ? "#15803D" : "#1E3A8A" }}>
                   {b.rising ? "▲ " : ""}
                   {b.score}
                 </div>
@@ -119,8 +120,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
               background: "linear-gradient(135deg, #2563EB, #38BDF8)",
             }}
           />
-          <div style={{ display: "flex", fontSize: 30, fontWeight: 700, color: "#FFFFFF" }}>UK Viral Radar</div>
-          <div style={{ display: "flex", fontSize: 26, color: "#93A3B8", marginLeft: 12 }}>ukviralradar.com</div>
+          <div style={{ display: "flex", fontSize: 30, fontWeight: 700, color: "#0F172A" }}>UK Viral Radar</div>
+          <div style={{ display: "flex", fontSize: 26, color: "#0F766E", marginLeft: 12 }}>ukviralradar.com</div>
         </div>
       </div>
     ),

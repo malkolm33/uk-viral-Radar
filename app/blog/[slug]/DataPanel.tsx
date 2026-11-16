@@ -2,14 +2,15 @@ import type { BlogChart } from "../../lib/blog-posts";
 
 // Data snapshot shown inside robot-written, data-driven posts: headline stats,
 // a Viral Score bar chart and the full table. Server-rendered, no JS needed.
-// Colours validated for the dark panel (dataviz validator, surface #0B1220):
-// score bars #2F8FE0, rising signal #1FAF6A - rising is also labelled in text.
-const SCORE = "#2F8FE0";
-const RISING = "#1FAF6A";
+// Light theme (site owner's rule: no black/dark backgrounds). Surface is a
+// light sky blue; score bars blue-600, rising signal green-600 - rising is
+// also labelled in text, so colour is never the only cue.
+const SCORE = "#2563EB";
+const RISING = "#16A34A";
 const COMPETITION: Record<string, { bg: string; fg: string }> = {
-  LOW: { bg: "rgba(31,175,106,0.16)", fg: "#6EE7A8" },
-  MEDIUM: { bg: "rgba(242,169,59,0.16)", fg: "#F7C873" },
-  HIGH: { bg: "rgba(229,83,75,0.18)", fg: "#F59A94" },
+  LOW: { bg: "#DCFCE7", fg: "#166534" },
+  MEDIUM: { bg: "#FEF3C7", fg: "#92400E" },
+  HIGH: { bg: "#FEE2E2", fg: "#991B1B" },
 };
 
 function signed(n: number | null, suffix = "") {
@@ -18,11 +19,11 @@ function signed(n: number | null, suffix = "") {
 }
 
 function Trend({ value, suffix = "" }: { value: number | null; suffix?: string }) {
-  if (value === null || value === undefined) return <span className="text-[#64748B]">—</span>;
+  if (value === null || value === undefined) return <span className="text-[#94A3B8]">—</span>;
   const up = value > 0;
   const down = value < 0;
   return (
-    <span className={up ? "text-[#6EE7A8]" : down ? "text-[#F59A94]" : "text-[#CBD5E1]"}>
+    <span className={up ? "font-semibold text-[#15803D]" : down ? "font-semibold text-[#B91C1C]" : "text-[#475569]"}>
       <span aria-hidden="true">{up ? "▲ " : down ? "▼ " : ""}</span>
       {signed(value, suffix)}
     </span>
@@ -38,8 +39,13 @@ export default function DataPanel({ chart }: { chart: BlogChart }) {
   const bestSearch = withSearch.sort((a, b) => (b.search ?? 0) - (a.search ?? 0))[0];
   const max = Math.max(100, ...items.map((i) => i.score));
 
-  // Each headline tile gets its own accent stripe; the numbers stay in white ink.
-  const accents = ["#14B8A6", "#1FAF6A", "#2F8FE0", "#F2A93B"];
+  // Each headline tile has its own light tint, accent stripe and number colour.
+  const accents = [
+    { stripe: "#14B8A6", bg: "#ECFEFF", ink: "#0F766E" },
+    { stripe: "#16A34A", bg: "#F0FDF4", ink: "#15803D" },
+    { stripe: "#2563EB", bg: "#EFF6FF", ink: "#1D4ED8" },
+    { stripe: "#F59E0B", bg: "#FFFBEB", ink: "#B45309" },
+  ];
   const tiles = [
     { label: "Products analysed", value: String(items.length), note: `of ${chart.tracked} tracked` },
     { label: "Rising signals", value: String(rising.length), note: rising.map((r) => r.name).slice(0, 3).join(", ") || "none" },
@@ -52,7 +58,7 @@ export default function DataPanel({ chart }: { chart: BlogChart }) {
   ];
 
   return (
-    <figure className="!my-8 overflow-hidden rounded-xl border-2 border-[#14B8A6] bg-[#0B1220] text-[#E2E8F0] shadow-[0_10px_30px_-10px_rgba(20,184,166,0.45)]">
+    <figure className="!my-8 overflow-hidden rounded-xl border-2 border-[#14B8A6] bg-[#F0F9FF] text-[#0F172A] shadow-[0_10px_30px_-10px_rgba(20,184,166,0.45)]">
       {/* Turquoise window bar */}
       <div className="flex flex-wrap items-center justify-between gap-2 bg-gradient-to-r from-[#0F766E] via-[#0D9488] to-[#14B8A6] px-4 py-3">
         <span className="flex items-center gap-2">
@@ -70,10 +76,10 @@ export default function DataPanel({ chart }: { chart: BlogChart }) {
         {/* Headline numbers */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {tiles.map((t, idx) => (
-            <div key={t.label} className="rounded-lg border border-[#1E293B] border-t-4 bg-[#111A2E] p-3" style={{ borderTopColor: accents[idx] }}>
-              <p className="text-[11px] font-medium uppercase tracking-wide text-[#94A3B8]">{t.label}</p>
-              <p className="mt-1 text-2xl font-bold text-white">{t.value}</p>
-              <p className="mt-0.5 line-clamp-2 text-[11px] text-[#94A3B8]">{t.note}</p>
+            <div key={t.label} className="rounded-lg border border-[#BAE6FD] border-t-4 p-3 shadow-sm" style={{ borderTopColor: accents[idx].stripe, background: accents[idx].bg }}>
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-[#475569]">{t.label}</p>
+              <p className="mt-1 text-2xl font-bold" style={{ color: accents[idx].ink }}>{t.value}</p>
+              <p className="mt-0.5 line-clamp-2 text-[11px] text-[#475569]">{t.note}</p>
             </div>
           ))}
         </div>
@@ -81,8 +87,8 @@ export default function DataPanel({ chart }: { chart: BlogChart }) {
         {/* Viral Score bars */}
         <div>
           <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-            <p className="text-sm font-semibold text-[#5EEAD4]">Viral Score ranking (0–100)</p>
-            <div className="flex items-center gap-4 text-[11px] text-[#CBD5E1]">
+            <p className="text-sm font-semibold text-[#0F766E]">Viral Score ranking (0–100)</p>
+            <div className="flex items-center gap-4 text-[11px] text-[#334155]">
               <span className="flex items-center gap-1.5">
                 <span className="h-2.5 w-2.5 rounded-sm" style={{ background: SCORE }} aria-hidden="true" />
                 Viral Score
@@ -97,18 +103,18 @@ export default function DataPanel({ chart }: { chart: BlogChart }) {
             {items.map((i) => (
               <div
                 key={i.name}
-                className="group grid grid-cols-[1fr_auto] items-center gap-x-2 gap-y-1 rounded px-1 py-0.5 hover:bg-white/5 sm:grid-cols-[minmax(0,11rem)_1fr_auto]"
+                className="group grid grid-cols-[1fr_auto] items-center gap-x-2 gap-y-1 rounded px-1 py-0.5 hover:bg-white sm:grid-cols-[minmax(0,11rem)_1fr_auto]"
                 title={`${i.name}: Viral Score ${i.score}${i.change !== null ? `, ${signed(i.change)} since yesterday` : ""}${i.search !== null ? `, UK search ${signed(i.search, "%")} in 7 days` : ""}, ${i.competition} competition`}
               >
-                <span className="truncate text-xs text-[#CBD5E1]">{i.name}</span>
-                <span className="relative order-last col-span-2 h-3 rounded-r bg-white/[0.06] sm:order-none sm:col-span-1">
+                <span className="truncate text-xs text-[#334155]">{i.name}</span>
+                <span className="relative order-last col-span-2 h-3 rounded-r bg-[#DBEAFE] sm:order-none sm:col-span-1">
                   <span
                     className="absolute inset-y-0 left-0 rounded-r"
                     style={{ width: `${Math.max(2, (i.score / max) * 100)}%`, background: i.rising ? RISING : SCORE }}
                   />
                 </span>
-                <span className="flex w-20 items-center justify-end gap-1.5 text-xs tabular-nums text-white">
-                  {i.rising && <span className="text-[10px] font-semibold text-[#6EE7A8]">▲ Rising</span>}
+                <span className="flex w-20 items-center justify-end gap-1.5 text-xs font-semibold tabular-nums text-[#0F172A]">
+                  {i.rising && <span className="text-[10px] font-semibold text-[#15803D]">▲ Rising</span>}
                   {i.score}
                 </span>
               </div>
@@ -118,10 +124,10 @@ export default function DataPanel({ chart }: { chart: BlogChart }) {
 
         {/* Full table */}
         <div>
-        <p className="mb-3 text-sm font-semibold text-[#5EEAD4]">Demand and competition, product by product</p>
-        <div className="overflow-x-auto rounded-lg border border-[#1E293B]">
+        <p className="mb-3 text-sm font-semibold text-[#0F766E]">Demand and competition, product by product</p>
+        <div className="overflow-x-auto rounded-lg border border-[#99F6E4] bg-white">
           <table className="w-full min-w-[560px] text-left text-xs">
-            <thead className="bg-[#111A2E] text-[11px] uppercase tracking-wide text-[#94A3B8]">
+            <thead className="bg-[#CCFBF1] text-[11px] uppercase tracking-wide text-[#115E59]">
               <tr>
                 <th className="px-3 py-2 font-medium">Product</th>
                 <th className="px-3 py-2 text-right font-medium">Score</th>
@@ -131,13 +137,13 @@ export default function DataPanel({ chart }: { chart: BlogChart }) {
                 <th className="px-3 py-2 text-right font-medium">Avg eBay price</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#1E293B]">
+            <tbody className="divide-y divide-[#E2E8F0]">
               {items.map((i) => {
                 const c = COMPETITION[i.competition];
                 return (
-                  <tr key={i.name} className="hover:bg-white/5">
-                    <td className="px-3 py-2 text-white">{i.name}</td>
-                    <td className="px-3 py-2 text-right tabular-nums text-white">{i.score}</td>
+                  <tr key={i.name} className="odd:bg-white even:bg-[#F8FAFC] hover:bg-[#F0FDFA]">
+                    <td className="px-3 py-2 font-medium text-[#0F172A]">{i.name}</td>
+                    <td className="px-3 py-2 text-right font-semibold tabular-nums text-[#1D4ED8]">{i.score}</td>
                     <td className="px-3 py-2 text-right tabular-nums"><Trend value={i.change} /></td>
                     <td className="px-3 py-2 text-right tabular-nums"><Trend value={i.search} suffix="%" /></td>
                     <td className="px-3 py-2">
@@ -146,10 +152,10 @@ export default function DataPanel({ chart }: { chart: BlogChart }) {
                           {i.competition}
                         </span>
                       ) : (
-                        <span className="text-[#64748B]">—</span>
+                        <span className="text-[#94A3B8]">—</span>
                       )}
                     </td>
-                    <td className="px-3 py-2 text-right tabular-nums text-[#CBD5E1]">
+                    <td className="px-3 py-2 text-right tabular-nums text-[#334155]">
                       {typeof i.price === "number" ? `£${i.price.toFixed(2)}` : "—"}
                     </td>
                   </tr>
@@ -161,7 +167,7 @@ export default function DataPanel({ chart }: { chart: BlogChart }) {
         </div>
       </div>
 
-      <figcaption className="border-t border-[#14B8A6]/40 px-4 py-2.5 text-[11px] text-[#94A3B8] sm:px-6">
+      <figcaption className="border-t border-[#99F6E4] bg-[#ECFEFF] px-4 py-2.5 text-[11px] text-[#475569] sm:px-6">
         Source: UK Viral Radar daily data ({chart.label}). The Viral Score signals rising interest; it is not a sales forecast. Competition = total live eBay UK + Etsy listings (LOW under 2,000 · MEDIUM under 20,000 · HIGH 20,000+).
       </figcaption>
     </figure>

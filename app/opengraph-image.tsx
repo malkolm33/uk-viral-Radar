@@ -16,7 +16,8 @@ export default function OpengraphImage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#0B1220",
+          background: "linear-gradient(135deg, #E0F2FE 0%, #CCFBF1 100%)",
+          border: "10px solid #14B8A6",
         }}
       >
         <div
@@ -25,7 +26,7 @@ export default function OpengraphImage() {
             width: 150,
             height: 150,
             borderRadius: "50%",
-            border: "2px solid rgba(56,189,248,0.35)",
+            border: "3px solid rgba(20,184,166,0.45)",
             alignItems: "center",
             justifyContent: "center",
             marginBottom: 36,
@@ -41,10 +42,10 @@ export default function OpengraphImage() {
             }}
           />
         </div>
-        <div style={{ display: "flex", fontSize: 68, fontWeight: 800, color: "#FFFFFF" }}>
+        <div style={{ display: "flex", fontSize: 68, fontWeight: 800, color: "#0F172A" }}>
           UK Viral Radar
         </div>
-        <div style={{ display: "flex", fontSize: 30, color: "#93A3B8", marginTop: 18 }}>
+        <div style={{ display: "flex", fontSize: 30, color: "#0F766E", marginTop: 18 }}>
           Spot Trending Products Before Your Competitors
         </div>
       </div>

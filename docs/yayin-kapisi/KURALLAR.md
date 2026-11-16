@@ -52,3 +52,6 @@ Bu dosya ukviralradar.com'a giden her değişikliğin hangi kontrollerden geçec
 - **Engel (yayın durur):** derleme hatası, SEO kontrolü FAIL, yanlış bilgi, uydurma veri,
   lisans şüphesi, hukuki risk, kişisel veri, güvenlik açığı, bozuk sayfa.
 - **Uyarı (düzeltilir ya da nedeni yazılır):** karakter uzunlukları, küçük stil konuları.
+
+## Tasarım kuralı
+- Siyah veya koyu arka plan kullanılmaz. Paneller, görseller ve kapaklar açık gök mavisi, açık turkuaz veya açık yeşil zemin üzerinde, turkuaz çerçeveli ve renkli içerikli olur.
