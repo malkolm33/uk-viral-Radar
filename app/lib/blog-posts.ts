@@ -1,5 +1,23 @@
 export type BlogPostStatus = "draft" | "scheduled" | "published";
 
+// Data shown as a chart + table on robot-written, data-driven posts
+// (rendered by app/blog/[slug]/DataPanel.tsx and on the cover image).
+export type BlogChartItem = {
+  name: string;
+  score: number;
+  change: number | null; // Viral Score change since yesterday
+  search: number | null; // UK search growth, % over 7 days
+  competition: string; // LOW | MEDIUM | HIGH | unknown
+  price: number | null; // average eBay UK price, GBP
+  rising: boolean;
+};
+
+export type BlogChart = {
+  label: string; // e.g. "Week of 16 Nov 2026"
+  tracked: number;
+  items: BlogChartItem[];
+};
+
 export type BlogPost = {
   title: string;
   slug: string;
@@ -20,6 +38,7 @@ export type BlogPost = {
   // "published": always shown.
   status: BlogPostStatus;
   publishDate: string; // ISO date, e.g. "2026-09-18" - when a "scheduled" post should go live
+  chart?: BlogChart;
 };
 
 export const blogPosts: BlogPost[] = [
@@ -288,6 +307,7 @@ Before ordering stock, check the live eBay and Etsy results yourself, work out y
     status: "published",
     publishDate: "2026-11-16",
     imageUrl: "/blog-cover/uk-fastest-rising-products-week-2026-11-16",
+    chart: {"label": "Week of 16 Nov 2026", "tracked": 15, "items": [{"name": "Portable Ice Maker", "score": 35, "change": -3, "search": -7, "competition": "HIGH", "price": 132.75, "rising": false}, {"name": "Posture Corrector", "score": 27, "change": -3, "search": -18, "competition": "MEDIUM", "price": 9.1, "rising": false}, {"name": "Smart Water Bottle", "score": 25, "change": -1, "search": 38, "competition": "MEDIUM", "price": 18.36, "rising": true}, {"name": "Neck Massager", "score": 22, "change": 4, "search": 52, "competition": "HIGH", "price": 11.98, "rising": true}, {"name": "Resistance Bands", "score": 15, "change": -4, "search": -11, "competition": "HIGH", "price": 10.9, "rising": false}, {"name": "Pet Hair Remover", "score": 14, "change": -1, "search": 30, "competition": "HIGH", "price": 7.1, "rising": true}, {"name": "Mini Thermal Printer", "score": 14, "change": -1, "search": -52, "competition": "MEDIUM", "price": 15.97, "rising": false}, {"name": "Portable Blender", "score": 12, "change": -9, "search": -27, "competition": "MEDIUM", "price": 36, "rising": false}, {"name": "LED Strip Lights", "score": 12, "change": 0, "search": -14, "competition": "HIGH", "price": 15.17, "rising": false}, {"name": "Electric Wine Opener", "score": 11, "change": -2, "search": null, "competition": "MEDIUM", "price": 15.57, "rising": false}, {"name": "Magnetic Phone Stand", "score": 10, "change": 0, "search": null, "competition": "HIGH", "price": 6.06, "rising": false}, {"name": "Reusable Water Bottle", "score": 6, "change": -46, "search": 0, "competition": "HIGH", "price": 10.08, "rising": false}]},
   },
 ];
 

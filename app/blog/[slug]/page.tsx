@@ -9,6 +9,7 @@ import {
   getRelatedPosts,
 } from "../../lib/blog-posts";
 import { SITE_URL, SITE_NAME, jsonLd } from "../../lib/site";
+import DataPanel from "./DataPanel";
 
 // Only pre-render posts that aren't pure drafts. A "scheduled" post whose
 // date hasn't arrived yet still gets a page here, but the component below
@@ -74,6 +75,7 @@ export default async function BlogPostPage({
   }
 
   const blocks = post.content.split(/\n\n+/);
+  const firstParagraph = blocks.findIndex((b) => !b.startsWith("## "));
   const readingTime = getReadingTimeMinutes(post);
   const relatedPosts = getRelatedPosts(post);
 
@@ -159,11 +161,16 @@ export default async function BlogPostPage({
                   </h2>
                 );
               }
-              return (
+              const paragraph = (
                 <p key={i} className="text-[#64748B]">
                   {block}
                 </p>
               );
+              // Data posts: show the chart right after the opening answer.
+              if (i === firstParagraph && post.chart) {
+                return [paragraph, <DataPanel key="data-panel" chart={post.chart} />];
+              }
+              return paragraph;
             })}
           </div>
         </div>

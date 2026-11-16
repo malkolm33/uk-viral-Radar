@@ -19,7 +19,26 @@ const str = (s) => JSON.stringify(String(s)); // double-quoted, fully escaped
 // Template literal body: escape backslashes, backticks and "${".
 const tpl = (s) => String(s).replace(/\r/g, "").replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$\{/g, "\\${");
 
-export function appendPost(source, article, today) {
+// Compact data for the post's chart + table (see BlogChart in blog-posts.ts).
+export function chartFromFacts(facts) {
+  const d = new Date(`${facts.date}T00:00:00Z`);
+  const when = d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+  return {
+    label: facts.type === "category" ? `${facts.category} · ${when}` : `Week of ${when}`,
+    tracked: facts.trackedProducts,
+    items: facts.products.map((p) => ({
+      name: p.name,
+      score: p.viralScore,
+      change: p.scoreChangeSinceYesterday ?? null,
+      search: p.searchGrowth7dPercent ?? null,
+      competition: p.competition,
+      price: p.ebayUkAvgPriceGBP ?? null,
+      rising: Boolean(p.risingSignal),
+    })),
+  };
+}
+
+export function appendPost(source, article, today, chart) {
   const nl = source.includes("\r\n") ? "\r\n" : "\n";
   // Same field order as README-BLOG.md - publish-scheduled-posts.mjs relies on
   // `status:` being directly followed by `publishDate:`.
@@ -35,6 +54,7 @@ export function appendPost(source, article, today) {
     `    status: "published",`,
     `    publishDate: "${today}",`,
     `    imageUrl: "/blog-cover/${article.slug}",`,
+    ...(chart ? [`    chart: ${JSON.stringify(chart)},`] : []),
     "  },",
   ].join("\n").replace(/\n/g, nl);
 

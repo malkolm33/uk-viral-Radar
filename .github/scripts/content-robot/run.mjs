@@ -10,7 +10,7 @@ import { readFileSync, writeFileSync, mkdirSync, appendFileSync } from "node:fs"
 import { loadProducts, buildFacts } from "./data.mjs";
 import { autoCheck } from "./checks.mjs";
 import { writeArticle, REVIEWERS, review } from "./agents.mjs";
-import { readBlogFile, existingSlugs, postDates, appendPost, writeBlogFile } from "./blog-file.mjs";
+import { readBlogFile, existingSlugs, postDates, appendPost, writeBlogFile, chartFromFacts } from "./blog-file.mjs";
 
 const config = JSON.parse(readFileSync(new URL("./config.json", import.meta.url), "utf8"));
 const type = process.argv.includes("--type") ? process.argv[process.argv.indexOf("--type") + 1] : "weekly";
@@ -136,7 +136,7 @@ async function main() {
   // and the basis for week-over-week comparisons later).
   mkdirSync("data/robot-snapshots", { recursive: true });
   writeFileSync(`data/robot-snapshots/${today}-${type}.json`, JSON.stringify(facts, null, 2) + "\n");
-  writeBlogFile(appendPost(source, article, today));
+  writeBlogFile(appendPost(source, article, today, chartFromFacts(facts)));
 
   const url = `${config.siteUrl}/blog/${article.slug}`;
   const suggestions = reviews.flatMap((r) => r.suggestions.map((s) => `- [${r.name}] ${s}`)).join("\n") || "- Yok";
