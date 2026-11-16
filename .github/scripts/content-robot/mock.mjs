@@ -42,6 +42,7 @@ export function mockAnswer(role, prompt) {
     });
   }
   if (role.startsWith("review:")) {
+    if (process.env.CONTENT_ROBOT_MOCK_BAD_REVIEW === "1" && role === "review:technical") return '{"verdict":"APPROVE","suggestions":["cut off';
     if (role === "review:editor") reviewRound += 1;
     const reject = process.env.CONTENT_ROBOT_MOCK_REJECT_FIRST === "1" && role === "review:editor" && reviewRound === 1;
     return JSON.stringify(

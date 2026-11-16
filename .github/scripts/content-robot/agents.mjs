@@ -65,13 +65,25 @@ ${JSON.stringify(article, null, 2)}
 
 Automated checks already passed: ${autoProblems.length === 0 ? "yes" : "no: " + autoProblems.join("; ")}
 
-Review only your own area. Return ONLY JSON:
+Review only your own area. Keep every list item to one short sentence (max 3 suggestions). Return ONLY JSON, nothing before or after it:
 {"verdict": "APPROVE" or "REJECT",
  "blockers": ["specific problems that must be fixed before publishing - empty if none"],
  "suggestions": ["optional minor improvements"],
  "summary_tr": "1-2 sentence summary of your verdict in plain Turkish for the site owner"}`;
-  const text = await ask({ model, system: HOUSE_RULES, prompt, maxTokens: 1500, role: `review:${reviewer.id}` });
-  const r = parseJson(text);
+  // A reviewer answer that is cut off or malformed is retried once; if it is
+  // still unreadable it counts as a rejection (never as an approval) and the
+  // run carries on instead of crashing.
+  let r = null;
+  for (let attempt = 1; attempt <= 2 && !r; attempt += 1) {
+    try {
+      const text = await ask({ model, system: HOUSE_RULES, prompt, maxTokens: 4000, role: `review:${reviewer.id}` });
+      r = parseJson(text);
+    } catch (err) {
+      if (attempt === 2) {
+        r = { verdict: "REJECT", blockers: [`Reviewer answer could not be read (${err.message.slice(0, 80)}) - please review again.`], summary_tr: "Değerlendirme okunamadı, tekrar incelenecek." };
+      }
+    }
+  }
   const blockers = Array.isArray(r.blockers) ? r.blockers.filter(Boolean) : [];
   return {
     id: reviewer.id,

@@ -90,6 +90,15 @@ jobs:
             gh issue create --title "Onay bekliyor: $TITLE" --body-file issue.md
           fi
 
+      - name: Report article not approved
+        if: steps.robot.outputs.published == 'false' && steps.robot.outputs.error != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if grep -q "YAYINLANMADI" robot-report.md; then
+            gh issue create --title "Robot yazısı onay alamadı ($(date +%F))" --body-file robot-report.md || true
+          fi
+
       - name: Report failure
         if: failure()
         env:
