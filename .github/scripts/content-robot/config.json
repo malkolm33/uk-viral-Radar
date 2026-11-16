@@ -1,0 +1,9 @@
+{
+  "_help": "mode: 'approval' = robot opens a pull request and Sukru Bey approves it; 'auto' = published when all 4 agents approve. Keep 'approval' for the first 4-6 weeks.",
+  "mode": "approval",
+  "model": "claude-sonnet-5-5",
+  "maxRevisionRounds": 3,
+  "maxPostsPerWeek": 2,
+  "topProducts": 12,
+  "siteUrl": "https://ukviralradar.com"
+}
