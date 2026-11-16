@@ -171,7 +171,7 @@ export default async function BlogPostPage({
               );
               // Data posts: show the chart right after the opening answer.
               if (i === firstParagraph && post.chart) {
-                return [paragraph, <DataPanel key="data-panel" chart={post.chart} />];
+                return [paragraph, <DataPanel key="data-panel" chart={post.chart} slug={post.slug} />];
               }
               // Other posts: a section guide after the opening paragraph.
               if (i === firstParagraph) {

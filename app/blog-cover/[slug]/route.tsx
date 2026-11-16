@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { getPostBySlug, isPostVisible } from "../../lib/blog-posts";
+import { themeFor, RISING, DECLINING } from "../../lib/panel-themes";
 
 // Branded 1200x630 cover image for a blog post, generated from its title and
 // category. Used when a post has no photo of its own: it is always relevant,
@@ -18,6 +19,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
   const hasChart = bars.length > 0;
   const titleSize = hasChart ? (post.title.length > 50 ? 44 : 52) : post.title.length > 60 ? 54 : post.title.length > 40 ? 62 : 72;
   const maxScore = Math.max(...bars.map((b) => b.score), 1);
+  const t = themeFor(slug); // light colours, different per post
 
   return new ImageResponse(
     (
@@ -29,8 +31,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "64px 72px",
-          background: "linear-gradient(135deg, #E0F2FE 0%, #CCFBF1 100%)",
-          border: "10px solid #14B8A6",
+          background: `linear-gradient(135deg, ${t.coverFrom} 0%, ${t.coverTo} 100%)`,
+          border: `10px solid ${t.frame}`,
           position: "relative",
         }}
       >
@@ -43,7 +45,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
             width: 520,
             height: 520,
             borderRadius: "50%",
-            border: "3px solid rgba(20,184,166,0.25)",
+            border: `3px solid ${t.frame}40`,
             display: "flex",
           }}
         />
@@ -55,7 +57,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
             width: 280,
             height: 280,
             borderRadius: "50%",
-            border: "3px solid rgba(20,184,166,0.40)",
+            border: `3px solid ${t.frame}66`,
             display: "flex",
           }}
         />
@@ -66,7 +68,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
               fontSize: 26,
               fontWeight: 700,
               color: "#FFFFFF",
-              backgroundColor: "#0D9488",
+              backgroundColor: t.headerFrom,
               padding: "8px 20px",
               borderRadius: 999,
             }}
@@ -98,11 +100,11 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
                       width: `${Math.max(4, (b.score / maxScore) * 100)}%`,
                       height: 22,
                       borderRadius: 4,
-                      backgroundColor: b.rising ? "#16A34A" : "#2563EB",
+                      backgroundColor: b.rising ? RISING : typeof b.change === "number" && b.change <= -15 ? DECLINING : t.bar,
                     }}
                   />
                 </div>
-                <div style={{ display: "flex", width: 150, justifyContent: "flex-end", fontSize: 22, fontWeight: 700, color: b.rising ? "#15803D" : "#1E3A8A" }}>
+                <div style={{ display: "flex", width: 150, justifyContent: "flex-end", fontSize: 22, fontWeight: 700, color: b.rising ? "#15803D" : "#0F172A" }}>
                   {b.rising ? "▲ " : ""}
                   {b.score}
                 </div>
@@ -121,7 +123,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
             }}
           />
           <div style={{ display: "flex", fontSize: 30, fontWeight: 700, color: "#0F172A" }}>UK Viral Radar</div>
-          <div style={{ display: "flex", fontSize: 26, color: "#0F766E", marginLeft: 12 }}>ukviralradar.com</div>
+          <div style={{ display: "flex", fontSize: 26, color: t.accent, marginLeft: 12 }}>ukviralradar.com</div>
         </div>
       </div>
     ),
