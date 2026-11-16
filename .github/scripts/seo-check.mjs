@@ -78,6 +78,8 @@ try {
     ["/blog", ["Blog"]],
     ["/dashboard", []],
     ["/compare", []],
+    ["/tools", []],
+    ["/tools/saturation-checker", ["WebApplication", "FAQPage"]],
     ["/tools/profit-calculator", []],
     ["/contact", []],
     ["/privacy", []],
