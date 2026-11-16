@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import ProfitCalculatorForm from "./ProfitCalculatorForm";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/tools/profit-calculator" },
   title: "Free Profit Margin Calculator for UK Dropshippers",
   description:
     "Calculate your profit margin before listing a product. Free tool for UK dropshippers and e-commerce sellers.",

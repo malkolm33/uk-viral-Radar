@@ -1,5 +1,6 @@
 import Link from "next/link";
 export const metadata = {
+  alternates: { canonical: "/privacy" },
   title: "Privacy Policy - UK Viral Radar",
   description: "How UK Viral Radar collects, uses and protects your data, including cookies, payments and your data rights.",
 };

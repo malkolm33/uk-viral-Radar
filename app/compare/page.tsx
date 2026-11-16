@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/compare" },
   title: "UK Viral Radar vs Other Trend Tools - Compare Pricing & Features",
   description:
     "See how UK Viral Radar compares to typical trend research tools on pricing, UK-specific data coverage and free tier access, before you choose a tool.",

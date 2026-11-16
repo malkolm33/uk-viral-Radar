@@ -10,6 +10,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/dashboard" },
   title: "Live Rankings - UK Viral Radar",
   description:
     "Live ranked list of trending UK products, scored using real-time Google Trends, Wikipedia, eBay, Etsy and YouTube data.",
@@ -323,7 +324,7 @@ export default async function DashboardPage() {
       <div className="mx-auto max-w-6xl">
         <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <Link href="/" className="text-3xl font-bold tracking-tight text-[#0F172A] hover:opacity-80">UK Viral Product <span className="text-[#16A34A]">Radar</span></Link>
+            <h1 className="text-3xl font-bold tracking-tight text-[#0F172A]"><Link href="/" className="hover:opacity-80">UK Viral Product <span className="text-[#16A34A]">Radar</span></Link></h1>
             <p className="mt-1 text-sm text-[#64748B]">Ranked by Viral Score, using live Google Trends, Wikipedia, eBay, Etsy and YouTube data</p>
           </div>
           <div className="flex items-center gap-3">

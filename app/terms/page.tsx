@@ -1,5 +1,6 @@
 import Link from "next/link";
 export const metadata = {
+  alternates: { canonical: "/terms" },
   title: "Terms of Service - UK Viral Radar",
   description: "The terms that apply when you use UK Viral Radar, including subscriptions, billing and cancellation.",
 };
