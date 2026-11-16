@@ -233,6 +233,62 @@ Checking all of this by hand means five or six browser tabs open at once - Ad Li
     publishDate: "2026-10-06",
     imageUrl: "/blog-cover/how-to-spot-viral-best-selling-products-uk",
   },
+  {
+    title: "Trending Products UK: 3 Rising Home Signals (16 Nov 2026)",
+    slug: "uk-fastest-rising-products-week-2026-11-16",
+    excerpt:
+      "Week of 16 Nov 2026: three of 12 UK Home products show a rising signal. The Smart Water Bottle is the best demand-versus-competition example.",
+    content: `Three of the 12 Home products in this week's UK Viral Radar report carry a rising signal: the Neck Massager, the Smart Water Bottle and the Pet Hair Remover. Of those, just the Neck Massager is labelled "rising" overall, with a Viral Score of 22 that is up 4 points since yesterday. The nine products without a rising signal are stable or declining, so this is a quiet week rather than a breakout one, and that matters if you are deciding where to spend your testing budget.
+
+## What the report covers
+
+UK Viral Radar tracks 15 products, and this report covers the 12 listed in the Home category for the week of 16 November 2026. The Viral Score runs from 0 to 100 and combines Google Trends UK search growth, Wikipedia page-view growth, YouTube video growth, and eBay UK and Etsy competition. It is a signal of rising interest, not a forecast of sales. A product can score well and still be a poor business if the market is crowded or the margin is thin.
+
+The rising signal is deliberately simple. It switches on when a product's score rose since yesterday, or when its UK search interest grew 20% or more over seven days. That is why a product can show a rising signal while its overall trend label still says stable, as you will see below.
+
+## Neck Massager: the clearest riser, and the most crowded
+
+The Neck Massager is the only product with a rising trend label. Its score is 22, up 4 since yesterday, and UK search interest grew 52% over seven days, the strongest search growth in the report. The picture is mixed elsewhere, though. Wikipedia page views are down 34% and YouTube video growth is down 16%, so the interest looks driven by search rather than by a wave of new content.
+
+The competition side is where a seller needs to be careful. There are 32,143 eBay UK listings and 256 on Etsy, which puts competition at HIGH. The average eBay UK price is £11.98, and all 20 of the top 20 eBay listings come from different sellers. That figure only describes the top of the results page, so it is not a count of total sellers. Combined with the listing volume, though, it suggests a market where many sellers are already competing at a low price point.
+
+Rising search against HIGH competition usually means a seller needs an angle rather than just a listing. That could be a bundle, a better photo set, faster UK dispatch or a clear niche such as a particular user group. A plain copy of what is already ranking is unlikely to stand out at an average price of £11.98.
+
+## Smart Water Bottle: rising search, lighter competition
+
+The Smart Water Bottle is the clearest example this week of the demand-versus-competition question. Its score is 25, down 1 since yesterday, and the trend label is stable. It still earns a rising signal because UK search interest grew 38% in seven days. Wikipedia growth is down 20% and YouTube growth is down 8%, so the search lift is not matched elsewhere.
+
+Competition is MEDIUM, with 1,369 eBay UK listings and 816 on Etsy. That is far fewer eBay listings than the Neck Massager or the Pet Hair Remover. The average eBay UK price is £18.36, higher than the other two rising products. There are 52,325 recent YouTube videos on the topic, so the product is clearly known. A higher price point and a smaller listing pool leave more room to differentiate, but one week of search growth is not proof of lasting demand.
+
+## Pet Hair Remover: search is up, but the price is very low
+
+The Pet Hair Remover has a score of 14, down 1 since yesterday, and a stable trend. Search interest is up 30% over seven days, which triggers its rising signal. Wikipedia growth is down 14% and YouTube growth is down 12%.
+
+The commercial side is the difficulty. There are 30,020 eBay UK listings and 320 on Etsy, so competition is HIGH, and the average eBay UK price is just £7.10. At that price, shipping, platform fees and advertising can take most of the margin. A low price point is not automatically bad, but it rewards sellers with cheap, reliable supply and punishes anyone who relies on paid traffic.
+
+## The biggest score is not a rising product
+
+The Portable Ice Maker leads the table with a score of 35, but its rising signal is false. The score fell 3 points since yesterday, search interest is down 7% over seven days, and YouTube growth is down 28%. Its Wikipedia page views are up 175%, which looks dramatic, but that is one signal against several soft ones, and percentage growth can come from a small starting point. It also has 31,916 eBay UK listings, HIGH competition and an average eBay price of £132.75. A high ticket price means more cash at risk per unsold unit, so a high score here is not a reason to rush.
+
+The Posture Corrector (score 27) is a similar story in a different direction. YouTube growth is up 106%, but search interest is down 18% and its score fell 3 points. With competition at MEDIUM, 8,062 eBay UK listings, 179 on Etsy and an average price of £9.10, it is worth watching to see whether search catches up with the video activity. At the moment it does not qualify as rising.
+
+## Products to be cautious about
+
+Several products show signals pointing the wrong way. The Mini Thermal Printer has search interest down 52% and Wikipedia growth down 52%. The Portable Blender's score dropped 9 points since yesterday, to 12, even though YouTube growth is up 41%. The Reusable Water Bottle is the only product labelled declining: its score is 6 after a 46-point fall since yesterday, with 56,186 eBay UK listings and 12,350 on Etsy.
+
+The Electric Wine Opener has no search growth figure this week, and only 182 recent YouTube videos, with YouTube growth down 66%. When a data source is missing, the score may rest on less information, so read it with extra caution. The same applies to the Magnetic Phone Stand, which also has no search figure and sits at HIGH competition with 26,259 eBay UK listings and 5,367 on Etsy.
+
+## How to use this week's data
+
+Start by separating demand from competition. The Neck Massager has the strongest momentum but the toughest market. The Smart Water Bottle has a smaller listing pool and a higher average price, so on these figures alone it looks the least crowded of the three rising products. That is an observation about the data, not a recommendation to buy or sell it. The Pet Hair Remover has rising search but a thin £7.10 price point.
+
+Before ordering stock, check the live eBay and Etsy results yourself, work out your landed cost and fees at the average price shown, and consider a small test batch or a supplier with no minimum order. This report is not advice on whether any product is suitable, safe or compliant to sell in the UK, so check that for yourself too. With only three rising signals out of 12 products this week, there is no pressure to chase everything. A selective approach, backed by your own margin maths, is the safer reading of the data.`,
+    date: "2026-11-16",
+    category: "Trends",
+    status: "published",
+    publishDate: "2026-11-16",
+    imageUrl: "/blog-cover/uk-fastest-rising-products-week-2026-11-16",
+  },
 ];
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
