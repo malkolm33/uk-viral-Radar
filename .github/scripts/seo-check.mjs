@@ -80,6 +80,7 @@ try {
     ["/compare", []],
     ["/tools", []],
     ["/tools/saturation-checker", ["WebApplication", "FAQPage"]],
+    ["/tools/fee-calculator", ["WebApplication", "FAQPage"]],
     ["/tools/profit-calculator", []],
     ["/contact", []],
     ["/privacy", []],

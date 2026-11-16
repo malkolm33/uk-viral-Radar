@@ -26,6 +26,7 @@ export function GET() {
     `- [Live rankings](${SITE_URL}/dashboard): Today's ranked list of trending UK products with Viral Scores`,
     `- [Compare](${SITE_URL}/compare): How UK Viral Radar compares with other trend research tools on price and UK coverage`,
     `- [Is my product saturated? (free checker)](${SITE_URL}/tools/saturation-checker): Live eBay UK and Etsy listing counts, seller spread and typical price for any product`,
+    `- [eBay UK vs Etsy UK fee calculator](${SITE_URL}/tools/fee-calculator): Every 2026 eBay UK and Etsy UK seller fee side by side, with profit per sale`,
     `- [Free profit margin calculator](${SITE_URL}/tools/profit-calculator): Work out margin before listing a product`,
     `- [Contact](${SITE_URL}/contact): Questions, feedback and support`,
     "",

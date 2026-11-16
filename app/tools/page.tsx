@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Free Tools for UK Dropshippers - UK Viral Radar",
-  description: "Free tools for UK sellers: check if a product is saturated on eBay UK and Etsy, and calculate your profit margin before you list.",
+  description: "Free tools for UK sellers: check if a product is saturated on eBay UK and Etsy, compare eBay and Etsy fees, and calculate your profit margin before you list.",
   alternates: { canonical: "/tools" },
 };
 
@@ -15,6 +15,14 @@ const TOOLS = [
     stripe: "#14B8A6",
     bg: "#F0FDFA",
     tag: "Live data",
+  },
+  {
+    href: "/tools/fee-calculator",
+    name: "eBay UK vs Etsy UK fee calculator",
+    text: "Every 2026 fee side by side, your profit on each platform and which one leaves you more.",
+    stripe: "#F59E0B",
+    bg: "#FFFBEB",
+    tag: "2026 fees",
   },
   {
     href: "/tools/profit-calculator",
