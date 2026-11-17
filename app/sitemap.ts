@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/tools/fee-calculator", changeFrequency: "monthly", priority: 0.8 },
     { path: "/tools/profit-calculator", changeFrequency: "monthly", priority: 0.7 },
     { path: "/blog", changeFrequency: "weekly", priority: 0.7 },
+    { path: "/about", changeFrequency: "monthly", priority: 0.6 },
     { path: "/contact", changeFrequency: "monthly", priority: 0.5 },
     { path: "/privacy", changeFrequency: "monthly", priority: 0.3 },
     { path: "/terms", changeFrequency: "monthly", priority: 0.3 },

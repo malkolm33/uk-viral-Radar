@@ -1,0 +1,59 @@
+name: Daily Sentinel
+
+# Checks the live site every day (even when nothing was changed) and opens a
+# GitHub issue - which GitHub emails to the owner - when something is broken.
+on:
+  schedule:
+    - cron: "17 5 * * *"   # daily; GitHub may start scheduled jobs late
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: sentinel
+  cancel-in-progress: false
+
+jobs:
+  sentinel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run sentinel checks
+        id: run
+        run: node .github/scripts/sentinel.mjs https://ukviralradar.com
+        continue-on-error: true
+      - name: Add report to the run summary
+        if: always()
+        run: |
+          [ -f sentinel-report.md ] || echo "Sentinel crashed before writing a report - see $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" > sentinel-report.md
+          cat sentinel-report.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Open or update an issue when something is broken
+        if: steps.run.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TITLE="Daily Sentinel: problem found on ukviralradar.com"
+          gh label create sentinel --repo "$GITHUB_REPOSITORY" --color D93F0B --description "Daily Sentinel alerts" 2>/dev/null || true
+          NUM=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --label sentinel --json number --jq '.[0].number // empty')
+          if [ -n "$NUM" ]; then
+            gh issue comment "$NUM" --repo "$GITHUB_REPOSITORY" --body-file sentinel-report.md
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --title "$TITLE" --label sentinel --body-file sentinel-report.md
+          fi
+          exit 1
+      - name: Close the open issue when everything is fine again
+        if: steps.run.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TITLE="Daily Sentinel: problem found on ukviralradar.com"
+          NUM=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --label sentinel --json number --jq '.[0].number // empty')
+          if [ -n "$NUM" ]; then
+            gh issue close "$NUM" --repo "$GITHUB_REPOSITORY" --comment "All checks pass again ($(date -u +%F)). Closing automatically."
+          fi

@@ -560,6 +560,7 @@ export default function LandingPage() {
             <Link href="/tools" className="hover:text-[#0F172A]">Free Tools</Link>
             <Link href="/blog" className="hover:text-[#0F172A]">Blog</Link>
             <Link href="#faq" className="hover:text-[#0F172A]">FAQ</Link>
+            <Link href="/about" className="hover:text-[#0F172A]">About</Link>
             <Link href="/contact" className="hover:text-[#0F172A]">Contact</Link>
             <Link href="/privacy" className="hover:text-[#0F172A]">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-[#0F172A]">Terms of Service</Link>

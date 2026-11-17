@@ -82,6 +82,7 @@ try {
     ["/tools/saturation-checker", ["WebApplication", "FAQPage"]],
     ["/tools/fee-calculator", ["WebApplication", "FAQPage"]],
     ["/tools/profit-calculator", []],
+    ["/about", ["AboutPage"]],
     ["/contact", []],
     ["/privacy", []],
     ["/terms", []],

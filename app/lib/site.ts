@@ -22,6 +22,9 @@ export const organizationSchema = {
   name: SITE_NAME,
   url: SITE_URL,
   logo: `${SITE_URL}/opengraph-image`,
+  description: "UK-focused product trend tracker for dropshippers and online sellers, using daily Google Trends (UK), Wikipedia, YouTube, eBay UK and Etsy signals.",
+  email: "info@ukviralradar.com",
+  areaServed: { "@type": "Country", name: "United Kingdom" },
   sameAs: OFFICIAL_PROFILES,
 };
 
