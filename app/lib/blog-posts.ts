@@ -309,6 +309,63 @@ Before ordering stock, check the live eBay and Etsy results yourself, check live
     imageUrl: "/blog-cover/uk-fastest-rising-products-week-2026-11-16",
     chart: {"label": "Week of 16 Nov 2026", "tracked": 15, "items": [{"name": "Portable Ice Maker", "score": 35, "change": -3, "search": -7, "competition": "HIGH", "price": null, "rising": false}, {"name": "Posture Corrector", "score": 27, "change": -3, "search": -18, "competition": "MEDIUM", "price": null, "rising": false}, {"name": "Smart Water Bottle", "score": 25, "change": -1, "search": 38, "competition": "MEDIUM", "price": null, "rising": true}, {"name": "Neck Massager", "score": 22, "change": 4, "search": 52, "competition": "HIGH", "price": null, "rising": true}, {"name": "Resistance Bands", "score": 15, "change": -4, "search": -11, "competition": "HIGH", "price": null, "rising": false}, {"name": "Pet Hair Remover", "score": 14, "change": -1, "search": 30, "competition": "HIGH", "price": null, "rising": true}, {"name": "Mini Thermal Printer", "score": 14, "change": -1, "search": -52, "competition": "MEDIUM", "price": null, "rising": false}, {"name": "Portable Blender", "score": 12, "change": -9, "search": -27, "competition": "MEDIUM", "price": null, "rising": false}, {"name": "LED Strip Lights", "score": 12, "change": 0, "search": -14, "competition": "HIGH", "price": null, "rising": false}, {"name": "Electric Wine Opener", "score": 11, "change": -2, "search": null, "competition": "MEDIUM", "price": null, "rising": false}, {"name": "Magnetic Phone Stand", "score": 10, "change": 0, "search": null, "competition": "HIGH", "price": null, "rising": false}, {"name": "Reusable Water Bottle", "score": 6, "change": -46, "search": 0, "competition": "HIGH", "price": null, "rising": false}]},
   },
+  {
+    title: "UK Rising Products: Week of 17 Nov 2026",
+    slug: "uk-fastest-rising-products-week-2026-11-17",
+    excerpt:
+      "Only the Posture Corrector shows a big jump this week; the other four rising Home products moved by a point or two.",
+    content: `The Posture Corrector is the clear standout in the UK this week, with a Viral Score of 100 after a 69-point jump since yesterday and YouTube video growth of 3,088%. Four other Home products carry a rising flag, but they moved by only one or two points, and UK search interest is down across almost every product we track. That makes this a week for selective, careful research rather than broad optimism.
+
+## What the data covers this week
+
+UK Viral Radar tracks 15 products, and this week's ranked list shows 12 of them, all in the Home category. The Viral Score runs from 0 to 100 and combines Google Trends UK search growth, Wikipedia page-view growth, YouTube video growth, and eBay UK and Etsy competition. It is a signal of rising interest, not a prediction of sales.
+
+A product gets the rising flag when its score went up since yesterday or its UK search interest grew 20% or more over seven days. This week no product with a search figure meets the search test, so every rising flag comes from day-on-day score movement. A score moving up by one point is a much weaker signal than a 69-point jump, and you should read the list with that in mind.
+
+## The Posture Corrector: one real spike
+
+The Posture Corrector sits at rank 1 with a Viral Score of 100, up 69 since yesterday. The YouTube growth figure of 3,088% is what drives it, with 12,721 recent videos. That is a large amount of new video content appearing in a short window.
+
+The other signals are less exciting. UK search interest is down 22% over seven days and Wikipedia page views are flat at 0%. So the picture is a burst of video activity that has not yet shown up in search. That can mean attention is building and search will follow, or it can mean a burst of content that fades. One week of data cannot tell you which, so treat it as a product to watch.
+
+On competition, the Posture Corrector is rated MEDIUM, with 8,075 eBay UK listings and 182 Etsy listings. That is far less crowded than the biggest Home products further down this list. The top 20 eBay listings come from 18 unique sellers, but that figure only describes those 20 listings and says nothing about the total number of sellers. Use the MEDIUM rating and the listing counts to judge how crowded the market is, not the seller count.
+
+## The four smaller risers
+
+Portable Ice Maker scores 24, up 1 point. Wikipedia page views are up 60%, but search is down 21% and YouTube growth is down 51%. Competition is HIGH, with 32,188 eBay UK listings and 1,910 Etsy listings. The interest signals are mixed and the market is already busy.
+
+Resistance Bands scores 19, up 2 points, with Wikipedia growth of 76% and YouTube growth of 8%. Search is down 22%. It has 48,226 eBay UK listings and 2,471 Etsy listings, so it is rated HIGH. A product like this does not need a new trend to sell. It needs a clear angle, such as a bundle, better photography or a particular audience, to stand out from tens of thousands of existing listings.
+
+LED Strip Lights scores 14, up 2 points. Wikipedia growth is 17%, YouTube growth is -30% and search is down 24%. With 55,216 eBay UK listings and 565 Etsy listings, competition is HIGH. That is the biggest eBay count of any of the five risers and the second-largest on the whole list, behind only Reusable Water Bottle at 56,961. A small score rise on a market this big is not a strong reason to start.
+
+Electric Wine Opener scores 12, up 1 point. It has no seven-day search figure, so we cannot say whether search is rising or falling. Wikipedia growth is 15% and YouTube growth is -46%, but only 115 recent videos sit behind that figure, so it is a very small sample and a big percentage swing there means little. Competition is MEDIUM, with 4,842 eBay UK listings and just 31 on Etsy. The Etsy gap is the most interesting detail, though a thin marketplace can also mean there is little demand there.
+
+## Products that cooled off
+
+Several products are not rising and lost ground since yesterday. Mini Thermal Printer fell 12 points to 15, Neck Massager fell 10 to 11, Smart Water Bottle fell 9 to 16 and Pet Hair Remover fell 7 to 7. Daily score moves can be noisy, so one bad day is not a verdict. They do show that this week's list is a mix of small gains and small losses rather than a market in full growth.
+
+Magnetic Phone Stand deserves a mention for a different reason. Its score is steady, but UK search is down 56% over seven days, the biggest search decline on the list, and it faces HIGH competition with 26,115 eBay UK listings and 5,399 Etsy listings. Portable Blender has YouTube growth of 36% and MEDIUM competition at 6,519 eBay UK listings and 90 Etsy listings, but its score is only 10 and it carries no rising flag.
+
+## What this means for a UK seller
+
+First, separate attention from demand. The Posture Corrector's video surge shows people are making and watching content, not that they are buying. Falling search is a reason for caution, and a sensible check is whether search stabilises over the next week or two.
+
+Second, use competition as a filter. All five rising products sit in MEDIUM or HIGH markets: three are rated HIGH (Portable Ice Maker, Resistance Bands and LED Strip Lights) and two are rated MEDIUM (Posture Corrector and Electric Wine Opener). The HIGH ones have tens of thousands of listings, and entering them with a plain, undifferentiated listing means competing mainly on price. MEDIUM-rated products leave more room, but you still need a reason for a buyer to choose you.
+
+Third, the report has no price data, so work out your own numbers before ordering stock. Check the supplier cost, shipping, eBay and Etsy fees and returns, then compare the result with live UK prices. Posture correctors and similar body-worn products can also bring return and sizing questions, so check the relevant UK product rules and your marketplace policies before listing.
+
+Finally, test small. A small order or a made-to-order setup limits your exposure if the video spike fades. One week of data is a starting point for research, not a buying signal on its own.
+
+## How we build this report
+
+UK Viral Radar draws on five data sources. The free view shows three products, and Pro at £9.99 per month shows the full ranking. This week's headline is simple: one product spiked sharply, four moved slightly, and UK search interest is mostly falling. We will keep tracking whether the Posture Corrector's video surge carries through into search.`,
+    date: "2026-11-17",
+    category: "Trends",
+    status: "published",
+    publishDate: "2026-11-17",
+    imageUrl: "/blog-cover/uk-fastest-rising-products-week-2026-11-17",
+    chart: {"label":"Week of 17 Nov 2026","tracked":15,"items":[{"name":"Posture Corrector","score":100,"change":69,"search":-22,"competition":"MEDIUM","price":null,"rising":true},{"name":"Portable Ice Maker","score":24,"change":1,"search":-21,"competition":"HIGH","price":null,"rising":true},{"name":"Resistance Bands","score":19,"change":2,"search":-22,"competition":"HIGH","price":null,"rising":true},{"name":"Smart Water Bottle","score":16,"change":-9,"search":-9,"competition":"MEDIUM","price":null,"rising":false},{"name":"Mini Thermal Printer","score":15,"change":-12,"search":-20,"competition":"MEDIUM","price":null,"rising":false},{"name":"LED Strip Lights","score":14,"change":2,"search":-24,"competition":"HIGH","price":null,"rising":true},{"name":"Electric Wine Opener","score":12,"change":1,"search":null,"competition":"MEDIUM","price":null,"rising":true},{"name":"Neck Massager","score":11,"change":-10,"search":-10,"competition":"HIGH","price":null,"rising":false},{"name":"Magnetic Phone Stand","score":10,"change":0,"search":-56,"competition":"HIGH","price":null,"rising":false},{"name":"Portable Blender","score":10,"change":-2,"search":-9,"competition":"MEDIUM","price":null,"rising":false},{"name":"Pet Hair Remover","score":7,"change":-7,"search":-29,"competition":"HIGH","price":null,"rising":false},{"name":"Reusable Water Bottle","score":6,"change":0,"search":-5,"competition":"HIGH","price":null,"rising":false}]},
+  },
 ];
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
