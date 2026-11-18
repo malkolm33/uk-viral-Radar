@@ -25,7 +25,11 @@ async function getAccessToken() {
 // the browser DevTools console. Look here, not in the browser, for these.
 export async function POST(request: NextRequest) {
 	try {
-		const { email } = await request.json().catch(() => ({ email: undefined }));
+		const { email, consent } = await request.json().catch(() => ({ email: undefined, consent: undefined }));
+		// Consumer Contracts Regulations: immediate-access request + 14-day-right acknowledgement.
+		if (consent !== true) {
+			return NextResponse.json({ error: "Please tick the box to confirm before paying." }, { status: 400 });
+		}
 		console.log("[paypal-checkout] creating order for email:", email);
 
 		const accessToken = await getAccessToken();

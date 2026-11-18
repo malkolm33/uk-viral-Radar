@@ -60,10 +60,21 @@ export default function TermsOfServicePage() {
             <section>
               <h2 className="text-lg font-semibold text-[#0F172A]">4. Cancellation Policy</h2>
               <p className="mt-2 text-[#64748B]">
-                You may cancel your Pro subscription at any time. Cancellation will take effect at the end
-                of your current billing period, and you will retain Pro access until that date. We do not
-                provide partial refunds for unused time within a billing period unless required by
-                applicable law.
+                You may cancel your Pro subscription at any time. Card (Stripe) subscribers can cancel
+                themselves from the dashboard using the &quot;Manage subscription&quot; button, or by
+                emailing info@ukviralradar.com. Cancellation will take effect at the end of your current
+                billing period, and you will retain Pro access until that date. A PayPal payment buys one
+                month of Pro and does not renew, so there is nothing to cancel. We do not provide partial
+                refunds for unused time within a billing period unless required by applicable law.
+              </p>
+              <p className="mt-2 text-[#64748B]">
+                <strong className="text-[#0F172A]">Your 14-day right to cancel.</strong> If you are a
+                consumer, you normally have 14 days from the day you subscribe to cancel and get a refund.
+                Because Pro is digital content that starts straight away, before paying we ask you to
+                confirm that you want access to begin immediately and that you understand you lose this
+                right once access begins. If you subscribe without giving that confirmation, or we have not
+                started your access, you can still cancel within 14 days for a full refund by emailing
+                info@ukviralradar.com. This does not affect your other statutory rights.
               </p>
             </section>
 

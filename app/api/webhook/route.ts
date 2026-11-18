@@ -32,40 +32,53 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
 	}
 
-	// Subscription ended (cancelled at period end, unpaid, or deleted in the
-	// Stripe dashboard): take Pro away again. Without this a cancelled
-	// customer kept the full list forever. Needs these events ticked on the
-	// webhook endpoint in Stripe: customer.subscription.deleted and
-	// customer.subscription.updated.
+	// Subscription changed or ended (cancelled, unpaid, deleted in the Stripe
+	// dashboard, or paid again after a failed renewal). Needs these events
+	// ticked on the webhook endpoint in Stripe: customer.subscription.deleted
+	// and customer.subscription.updated.
 	if (
 		event.type === "customer.subscription.deleted" ||
 		event.type === "customer.subscription.updated"
 	) {
 		const sub = event.data.object as Stripe.Subscription;
 		const active = sub.status === "active" || sub.status === "trialing" || sub.status === "past_due";
-		if (event.type === "customer.subscription.deleted" || !active) {
-			try {
-				const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
-				const customer = await stripe.customers.retrieve(customerId);
-				const email = !customer.deleted ? customer.email : null;
-				if (email) {
-					await supabaseAdmin
-						.from("profiles")
-						.update({ is_subscribed: false })
-						.eq("email", email);
-				}
-			} catch (error) {
-				console.error("Could not end Pro for a cancelled subscription:", error);
-				return NextResponse.json({ error: "Retry later" }, { status: 500 });
+		const ended = event.type === "customer.subscription.deleted" || !active;
+		try {
+			const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
+			const customer = await stripe.customers.retrieve(customerId);
+			const email = !customer.deleted ? customer.email : null;
+			if (email) {
+				// Only rows with no pro_until are Stripe Pro; PayPal Pro (with a
+				// pro_until date) is left alone so a card cancellation can't remove it.
+				const { error } = ended
+					? await supabaseAdmin
+							.from("profiles")
+							.update({ is_subscribed: false })
+							.eq("email", email)
+							.is("pro_until", null)
+					: await supabaseAdmin
+							.from("profiles")
+							.update({ is_subscribed: true })
+							.eq("email", email)
+							.is("pro_until", null);
+				if (error) throw new Error(error.message);
 			}
+		} catch (error) {
+			console.error("Could not update Pro after a subscription change:", error);
+			return NextResponse.json({ error: "Retry later" }, { status: 500 });
 		}
 	}
 
 	if (event.type === "checkout.session.completed") {
 		const session = event.data.object as Stripe.Checkout.Session;
-		const email = session.customer_email;
+		const email = session.customer_email ?? session.customer_details?.email ?? null;
 
-		if (email) {
+		// Grant Pro only for a session that was actually paid.
+		if (session.payment_status !== "paid" && session.payment_status !== "no_payment_required") {
+			console.warn("Checkout completed but not paid yet:", session.id, session.payment_status);
+		} else if (!email) {
+			console.error("Paid checkout has no email, Pro NOT granted - fix by hand:", session.id);
+		} else {
 			const { error } = await supabaseAdmin
 				.from("profiles")
 				.upsert({ email, is_subscribed: true, pro_until: null }, { onConflict: "email" });

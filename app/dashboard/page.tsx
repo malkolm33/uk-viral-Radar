@@ -3,7 +3,7 @@ import { createClient } from "../lib/supabase-server";
 import { createAdminClient } from "../lib/supabase-admin";
 import { isProRow } from "../lib/paypal-pro";
 import UpgradeButton from "../UpgradeButton";
-import PayPalButton from "../PayPalButton";
+import { ManageSubscriptionButton, StripeSuccessNotice } from "../BillingControls";
 import PayPalCaptureHandler from "../PayPalCaptureHandler";
 import ProductGrid from "../ProductGrid";
 import Link from "next/link";
@@ -337,12 +337,12 @@ export default async function DashboardPage() {
               <div className="flex items-center gap-2 text-xs text-[#64748B]">
                 <span className="hidden sm:inline">{user!.email}</span>
                 {isPro ? (
-                  <span className="rounded-full bg-[#16A34A]/10 px-3 py-1.5 font-medium text-[#16A34A]">Pro</span>
-                ) : (
                   <>
-                    <UpgradeButton email={user!.email!} />
-                    <PayPalButton email={user!.email!} />
+                    <span className="rounded-full bg-[#16A34A]/10 px-3 py-1.5 font-medium text-[#16A34A]">Pro</span>
+                    <ManageSubscriptionButton />
                   </>
+                ) : (
+                  <UpgradeButton email={user!.email!} />
                 )}
                 <a href="/logout" className="rounded-full border border-[#E4E7EC] bg-white px-3 py-1.5 font-medium text-[#0F172A]">Log out</a>
               </div>
@@ -351,6 +351,8 @@ export default async function DashboardPage() {
             )}
           </div>
         </header>
+
+        {isLoggedIn && <StripeSuccessNotice isPro={isPro} />}
 
         {dailyInsight?.insight_text && (
           <div className="mb-6 flex items-start gap-3 rounded-lg border border-[#16A34A]/30 bg-[#16A34A]/5 p-4 sm:p-5">
