@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "../../lib/supabase-server";
 
 const PAYPAL_API = "https://api-m.paypal.com";
 
@@ -25,12 +26,19 @@ async function getAccessToken() {
 // the browser DevTools console. Look here, not in the browser, for these.
 export async function POST(request: NextRequest) {
 	try {
-		const { email, consent } = await request.json().catch(() => ({ email: undefined, consent: undefined }));
+		// The account to upgrade comes from the verified login session, not the request body.
+		const supabase = await createClient();
+		const { data: { user } } = await supabase.auth.getUser();
+		const email = user?.email;
+		if (!email) {
+			return NextResponse.json({ error: "Please log in to upgrade." }, { status: 401 });
+		}
+		const { consent } = await request.json().catch(() => ({ consent: undefined }));
 		// Consumer Contracts Regulations: immediate-access request + 14-day-right acknowledgement.
 		if (consent !== true) {
 			return NextResponse.json({ error: "Please tick the box to confirm before paying." }, { status: 400 });
 		}
-		console.log("[paypal-checkout] creating order for email:", email);
+		console.log("[paypal-checkout] creating order");
 
 		const accessToken = await getAccessToken();
 

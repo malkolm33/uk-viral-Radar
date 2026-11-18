@@ -27,6 +27,9 @@ export async function POST(request: NextRequest) {
   try {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
+      // Cards only (Apple Pay / Google Pay included): delayed methods like Bacs
+      // would finish "unpaid" and need extra webhook handling.
+      payment_method_types: ["card"],
       line_items: [{ price: process.env.STRIPE_PRICE_ID, quantity: 1 }],
       customer_email: user.email,
       client_reference_id: user.id,

@@ -49,7 +49,12 @@ export function StripeSuccessNotice({ isPro }: { isPro: boolean }) {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get("payment") !== "success" || params.get("provider") !== "stripe") return;
+    if (params.get("payment") !== "success" || params.get("provider") !== "stripe") {
+      try {
+        sessionStorage.removeItem("stripeWait");
+      } catch {}
+      return;
+    }
     if (isPro) {
       params.delete("payment");
       params.delete("provider");

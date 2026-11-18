@@ -18,8 +18,12 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const found = await stripe.customers.list({ email: user.email, limit: 1 });
-    const customer = found.data[0];
+    // Checkout can create a new Stripe customer per purchase, so prefer the one
+    // that still has a live subscription.
+    const found = await stripe.customers.list({ email: user.email, limit: 10, expand: ["data.subscriptions"] });
+    const customer =
+      found.data.find((c) => c.subscriptions?.data.some((sb) => ["active", "trialing", "past_due"].includes(sb.status))) ??
+      found.data[0];
     if (!customer) {
       return NextResponse.json(
         { error: "No card subscription found for this account. PayPal Pro ends by itself at the end of the paid period - nothing to cancel." },

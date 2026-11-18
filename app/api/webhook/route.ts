@@ -3,6 +3,21 @@ import type Stripe from "stripe";
 import { createAdminClient } from "../../lib/supabase-admin";
 import { getStripe } from "../../lib/stripe";
 
+// The account is found by the Supabase user id we attach at checkout, so a
+// customer who changes their email in Stripe still maps to the right profile.
+// The Stripe email is only a fallback (e.g. sessions created before this).
+async function accountEmail(
+	supabaseAdmin: ReturnType<typeof createAdminClient>,
+	userId: string | null | undefined,
+	fallback: string | null | undefined
+): Promise<string | null> {
+	if (userId) {
+		const { data, error } = await supabaseAdmin.auth.admin.getUserById(userId);
+		if (!error && data?.user?.email) return data.user.email;
+	}
+	return fallback ?? null;
+}
+
 export async function POST(request: NextRequest) {
 	const stripe = getStripe();
 	if (!stripe || !process.env.STRIPE_WEBHOOK_SECRET) {
@@ -44,9 +59,13 @@ export async function POST(request: NextRequest) {
 		const active = sub.status === "active" || sub.status === "trialing" || sub.status === "past_due";
 		const ended = event.type === "customer.subscription.deleted" || !active;
 		try {
-			const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
-			const customer = await stripe.customers.retrieve(customerId);
-			const email = !customer.deleted ? customer.email : null;
+			let stripeEmail: string | null = null;
+			if (!sub.metadata?.user_id) {
+				const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
+				const customer = await stripe.customers.retrieve(customerId);
+				stripeEmail = !customer.deleted ? customer.email : null;
+			}
+			const email = await accountEmail(supabaseAdmin, sub.metadata?.user_id, stripeEmail);
 			if (email) {
 				// Only rows with no pro_until are Stripe Pro; PayPal Pro (with a
 				// pro_until date) is left alone so a card cancellation can't remove it.
@@ -71,7 +90,11 @@ export async function POST(request: NextRequest) {
 
 	if (event.type === "checkout.session.completed") {
 		const session = event.data.object as Stripe.Checkout.Session;
-		const email = session.customer_email ?? session.customer_details?.email ?? null;
+		const email = await accountEmail(
+			supabaseAdmin,
+			session.client_reference_id,
+			session.customer_email ?? session.customer_details?.email
+		);
 
 		// Grant Pro only for a session that was actually paid.
 		if (session.payment_status !== "paid" && session.payment_status !== "no_payment_required") {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 // One "Upgrade" button that opens a small panel with the price, the renewal
@@ -11,6 +11,25 @@ export default function UpgradeButton({ email }: { email: string }) {
   const [agreed, setAgreed] = useState(false);
   const [busy, setBusy] = useState<"" | "card" | "paypal">("");
   const [msg, setMsg] = useState("");
+  const wrap = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent | TouchEvent) => {
+      if (wrap.current && !wrap.current.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("touchstart", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("touchstart", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
 
   async function go(kind: "card" | "paypal") {
     if (!agreed) {
@@ -38,7 +57,7 @@ export default function UpgradeButton({ email }: { email: string }) {
   }
 
   return (
-    <span className="relative inline-flex flex-col items-end">
+    <span ref={wrap} className="relative inline-flex flex-col items-end">
       <button
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
@@ -50,7 +69,7 @@ export default function UpgradeButton({ email }: { email: string }) {
         <span
           role="dialog"
           aria-label="Upgrade to Pro"
-          className="absolute right-0 top-full z-30 mt-2 flex w-72 flex-col gap-2 rounded-lg border-2 border-[#14B8A6] bg-[#F0FDFA] p-3 text-left text-xs text-[#0F172A] shadow-lg"
+          className="absolute right-0 top-full z-30 mt-2 flex w-72 max-w-[calc(100vw-2rem)] flex-col gap-2 rounded-lg border-2 border-[#14B8A6] bg-[#F0FDFA] p-3 text-left text-xs text-[#0F172A] shadow-lg"
         >
           <span className="font-semibold">UK Viral Radar Pro - £9.99/month</span>
           <span className="text-[#475569]">
