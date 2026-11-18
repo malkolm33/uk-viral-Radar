@@ -9,13 +9,17 @@ import { createAdminClient } from "../../../lib/supabase-admin";
 // enabled with no public insert/update/delete policy. This check just keeps
 // this endpoint from being trivially discoverable/callable by anyone who
 // doesn't already know the admin panel exists.
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+// Read per request; an unset ADMIN_PASSWORD must never match an empty password.
+const isAdmin = (password: unknown) => {
+  const expected = process.env.ADMIN_PASSWORD;
+  return !!expected && typeof password === "string" && password === expected;
+};
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
   const { password, product } = body;
 
-  if (password !== ADMIN_PASSWORD) {
+  if (!isAdmin(password)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -32,7 +36,7 @@ export async function DELETE(request: NextRequest) {
   const body = await request.json();
   const { password, id } = body;
 
-  if (password !== ADMIN_PASSWORD) {
+  if (!isAdmin(password)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

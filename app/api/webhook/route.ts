@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
+import type Stripe from "stripe";
 import { createAdminClient } from "../../lib/supabase-admin";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+import { getStripe } from "../../lib/stripe";
 
 export async function POST(request: NextRequest) {
+	const stripe = getStripe();
+	if (!stripe || !process.env.STRIPE_WEBHOOK_SECRET) {
+		console.error("Stripe webhook: STRIPE_SECRET_KEY or STRIPE_WEBHOOK_SECRET is not set");
+		// 500 makes Stripe retry later, so no event is lost while the keys are missing.
+		return NextResponse.json({ error: "Not configured" }, { status: 500 });
+	}
+
 	// Service role key: this is a server-to-server call from Stripe's
 	// servers with no logged-in user session, so the anon key would be
 	// rejected by the "profiles" table's Row Level Security policies.
@@ -19,7 +25,7 @@ export async function POST(request: NextRequest) {
 		event = stripe.webhooks.constructEvent(
 			body,
 			signature,
-			process.env.STRIPE_WEBHOOK_SECRET!
+			process.env.STRIPE_WEBHOOK_SECRET
 		);
 	} catch (error) {
 		console.error("Webhook signature verification failed:", error);
@@ -60,9 +66,14 @@ export async function POST(request: NextRequest) {
 		const email = session.customer_email;
 
 		if (email) {
-			await supabaseAdmin
+			const { error } = await supabaseAdmin
 				.from("profiles")
 				.upsert({ email, is_subscribed: true, pro_until: null }, { onConflict: "email" });
+			if (error) {
+				// 500 makes Stripe retry, so a paying customer is not left without Pro.
+				console.error("Could not grant Pro after checkout:", error.message);
+				return NextResponse.json({ error: "Retry later" }, { status: 500 });
+			}
 		}
 	}
 
