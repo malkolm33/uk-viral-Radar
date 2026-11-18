@@ -27,20 +27,13 @@ export async function POST(request: NextRequest) {
   try {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
-      // Cards only (Apple Pay / Google Pay included): delayed methods like Bacs
-      // would finish "unpaid" and need extra webhook handling.
-      payment_method_types: ["card"],
       line_items: [{ price: process.env.STRIPE_PRICE_ID, quantity: 1 }],
       customer_email: user.email,
       client_reference_id: user.id,
       metadata: { user_id: user.id, immediate_access_consent: "yes", consent_at: new Date().toISOString() },
       subscription_data: { metadata: { user_id: user.id } },
-      custom_text: {
-        submit: {
-          message:
-            "£9.99/month, renews automatically until you cancel. Cancel any time from your dashboard (Manage subscription). Access starts immediately, so the 14-day cancellation right ends once you start using Pro.",
-        },
-      },
+      // Price, renewal and the 14-day acknowledgement are shown on our own
+      // Upgrade panel; custom_text is not allowed with Stripe Managed Payments.
       success_url: `${request.nextUrl.origin}/dashboard?payment=success&provider=stripe`,
       cancel_url: `${request.nextUrl.origin}/dashboard?payment=cancelled`,
     });
