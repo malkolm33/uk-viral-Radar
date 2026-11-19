@@ -99,6 +99,18 @@ export default function ContactForm() {
           )}
         </div>
 
+        <div className="mt-4 rounded-lg border border-[#14B8A6] bg-[#F0FDFA] p-4 text-xs leading-relaxed text-[#0F172A]">
+          <p className="font-semibold">Business details</p>
+          <p className="mt-1">UK Viral Radar is a trading name of Şükrü Erek (sole trader).</p>
+          <p>236 Gloucester Road, Bristol, BS7 8NZ, United Kingdom</p>
+          <p>
+            Email:{" "}
+            <a href="mailto:info@ukviralradar.com" className="font-medium text-[#0D9488] underline">
+              info@ukviralradar.com
+            </a>
+          </p>
+        </div>
+
         <p className="mt-4 text-center text-xs text-[#64748B]">
           <Link href="/" className="hover:text-[#0F172A]">Back to home</Link>
         </p>

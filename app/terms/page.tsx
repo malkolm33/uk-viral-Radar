@@ -149,6 +149,10 @@ export default function TermsOfServicePage() {
                 </Link>
                 .
               </p>
+              <p className="mt-2 text-[#64748B]">
+                UK Viral Radar is a trading name of Şükrü Erek (sole trader), 236 Gloucester Road,
+                Bristol, BS7 8NZ, United Kingdom. Email: info@ukviralradar.com.
+              </p>
             </section>
           </div>
         </div>
