@@ -366,6 +366,73 @@ UK Viral Radar draws on five data sources. The free view shows three products, a
     imageUrl: "/blog-cover/uk-fastest-rising-products-week-2026-11-17",
     chart: {"label":"Week of 17 Nov 2026","tracked":15,"items":[{"name":"Posture Corrector","score":100,"change":69,"search":-22,"competition":"MEDIUM","price":null,"rising":true},{"name":"Portable Ice Maker","score":24,"change":1,"search":-21,"competition":"HIGH","price":null,"rising":true},{"name":"Resistance Bands","score":19,"change":2,"search":-22,"competition":"HIGH","price":null,"rising":true},{"name":"Smart Water Bottle","score":16,"change":-9,"search":-9,"competition":"MEDIUM","price":null,"rising":false},{"name":"Mini Thermal Printer","score":15,"change":-12,"search":-20,"competition":"MEDIUM","price":null,"rising":false},{"name":"LED Strip Lights","score":14,"change":2,"search":-24,"competition":"HIGH","price":null,"rising":true},{"name":"Electric Wine Opener","score":12,"change":1,"search":null,"competition":"MEDIUM","price":null,"rising":true},{"name":"Neck Massager","score":11,"change":-10,"search":-10,"competition":"HIGH","price":null,"rising":false},{"name":"Magnetic Phone Stand","score":10,"change":0,"search":-56,"competition":"HIGH","price":null,"rising":false},{"name":"Portable Blender","score":10,"change":-2,"search":-9,"competition":"MEDIUM","price":null,"rising":false},{"name":"Pet Hair Remover","score":7,"change":-7,"search":-29,"competition":"HIGH","price":null,"rising":false},{"name":"Reusable Water Bottle","score":6,"change":0,"search":-5,"competition":"HIGH","price":null,"rising":false}]},
   },
+  {
+    title: "Fastest-Rising UK Home Products: Week of 24 Nov 2026",
+    slug: "fastest-rising-products-uk-2026-11-24",
+    excerpt:
+      "Five of 12 tracked Home products show a rising signal. Electric Wine Opener leads with a Viral Score of 55 and medium competition.",
+    content: `Among the products UK Viral Radar tracks, the Electric Wine Opener is the fastest riser this week, with a Viral Score of 55, up 20 points since yesterday, and medium competition. Posture Corrector follows on 50, up 10, and only five of the 12 products in this week's Home report carry a rising signal, so this is a selective list rather than a broad boom.
+
+A Viral Score is a signal of rising interest, and it does not mean sales will follow. Treat everything below as a shortlist to investigate, not a buying list.
+
+## What the data covers this week
+
+UK Viral Radar is tracking 15 products, and this report covers the 12 ranked in the Home category, which is the only category in this week's data. That means the findings describe Home products only, not the UK market as a whole. The Viral Score runs from 0 to 100 and combines Google Trends UK search growth, Wikipedia page-view growth, YouTube video growth, and eBay UK and Etsy competition. A product is flagged as rising if its score went up since yesterday or its UK search interest grew by 20% or more over seven days.
+
+Of the 12 products, five meet that test: Electric Wine Opener, Posture Corrector, Magnetic Phone Stand, Resistance Bands and Reusable Water Bottle. The other seven are stable, and four of those saw their scores slip.
+
+## Electric Wine Opener: strongest signal, still early
+
+The Electric Wine Opener tops the table with a score of 55 and the biggest one-day jump of any product (+20). YouTube video growth is 291%, and Wikipedia page views are up 7%. Seven-day search growth is not available for this product, so the score is being driven mainly by video growth rather than confirmed search demand.
+
+The competition picture is what makes it interesting. There are 4,845 eBay UK listings and 31 Etsy listings, which puts it in the MEDIUM band (the combined total is under 20,000). Thirty-one Etsy listings is a thin field. The 906 recent YouTube videos is also the smallest video base of any product in this report, so a 291% jump could reflect a modest number of new videos. Check whether search interest follows over the coming days before committing to stock.
+
+The unique-sellers figure for the top 20 eBay listings is 17. That only describes who appears in the first 20 results, not how many sellers exist in total, so don't read it as proof of saturation either way. Use the competition band and listing counts instead.
+
+## Posture Corrector: demand with confirmation
+
+Posture Corrector scores 50, up 10 since yesterday. Unlike the wine opener, it has search backing: UK search interest grew 37% over seven days, and YouTube video growth is 227%. Wikipedia page views are down 11%, a reminder that the signals don't all point the same way.
+
+This is a much busier space. There are 16,760 recent YouTube videos, 7,843 eBay UK listings and 174 Etsy listings. It still sits in the MEDIUM band, but closer to the busy end than the wine opener. A seller entering now is competing against established listings and a lot of existing video content, so you will probably need a clear angle, such as a bundle, quality, fit or delivery speed, rather than a generic listing.
+
+One practical warning: posture products sit close to health territory. Whatever you sell here, keep your own listings free of medical or health-benefit claims, and describe what the item is and how it is used rather than what it will cure or fix. The same applies to neck massagers and similar items.
+
+## Magnetic Phone Stand: search is up, but the field is crowded
+
+Magnetic Phone Stand has the highest seven-day search growth in the report at 42%, and its score rose 12 points to 22. YouTube growth is a modest 14%, and Wikipedia is flat at 0%.
+
+The competition is HIGH: 25,625 eBay UK listings and 5,568 Etsy listings. Rising search alongside that many listings often means demand is real but shared among many sellers. The score of 22 is well below the top two despite the strong search growth, which fits with a crowded market and little video momentum. For a new seller this is more a question of margins and differentiation than of being first.
+
+## Resistance Bands and Reusable Water Bottle: marginal risers
+
+Both products are flagged as rising, but the movements are small. Resistance Bands has a score of 15 (+3), search growth of 12% and YouTube growth of 11%. Wikipedia page views are down 58%. With 46,992 eBay UK listings, 2,525 Etsy listings and HIGH competition, this looks like a mature market with a faint uptick.
+
+Reusable Water Bottle scores 10 (+1), with search up 6% and YouTube up 18%. It has 56,310 eBay UK listings and 12,229 Etsy listings, also HIGH. A one-point gain is close to noise. We include it because it meets the rising definition, but we wouldn't call it one of the fastest-rising products this week.
+
+## What isn't rising
+
+Portable Ice Maker holds a score of 22 but fell 9 points, with search down 8% and YouTube growth at -34%, even though Wikipedia views rose 40%. Smart Water Bottle's search interest is down 26%. LED Strip Lights sees search down 20%, and Pet Hair Remover and Portable Blender both slipped by 3 points while Neck Massager stayed flat. Mini Thermal Printer is flat at 16, with YouTube growth of 21% and 45 Etsy listings.
+
+These are not necessarily bad products. They are simply not showing rising momentum this week, and four of the seven sit in HIGH competition. Smart Water Bottle, Mini Thermal Printer and Portable Blender are the three non-rising products with MEDIUM competition.
+
+## How to use this as a UK seller
+
+First, separate demand from competition. The wine opener and posture corrector combine a rising score with MEDIUM competition, which is the pairing worth looking at first. The phone stand shows demand, but HIGH competition changes what is realistic for a new listing.
+
+Second, check the evidence behind each score. A score driven mainly by video growth, as with the wine opener, is a weaker signal than one with search growth alongside it, as with the posture corrector. Look for confirmation over several days, because the score changes here are day-on-day and can reverse quickly.
+
+Third, price and margin aren't part of this data. Before sourcing anything, check landed cost, UK delivery times, returns and what sold listings actually fetch on eBay and Etsy. With gifting season approaching, it is worth asking whether a product suits gifting, but that is a judgement for you to test, not something this data shows.
+
+Finally, keep the scale in mind. A rising signal means interest is moving, not that orders will follow. Start small, test one or two listings, and let real sales data guide your next step.
+
+UK Viral Radar's free view shows three products, and the full ranking is available on the £9.99 per month Pro plan.`,
+    date: "2026-11-24",
+    category: "Trends",
+    status: "published",
+    publishDate: "2026-11-24",
+    imageUrl: "/blog-cover/fastest-rising-products-uk-2026-11-24",
+    chart: {"label":"Week of 24 Nov 2026","tracked":15,"items":[{"name":"Electric Wine Opener","score":55,"change":20,"search":null,"competition":"MEDIUM","price":null,"rising":true},{"name":"Posture Corrector","score":50,"change":10,"search":37,"competition":"MEDIUM","price":null,"rising":true},{"name":"Magnetic Phone Stand","score":22,"change":12,"search":42,"competition":"HIGH","price":null,"rising":true},{"name":"Portable Ice Maker","score":22,"change":-9,"search":-8,"competition":"HIGH","price":null,"rising":false},{"name":"Smart Water Bottle","score":18,"change":-2,"search":-26,"competition":"MEDIUM","price":null,"rising":false},{"name":"Mini Thermal Printer","score":16,"change":0,"search":null,"competition":"MEDIUM","price":null,"rising":false},{"name":"Resistance Bands","score":15,"change":3,"search":12,"competition":"HIGH","price":null,"rising":true},{"name":"Pet Hair Remover","score":13,"change":-3,"search":14,"competition":"HIGH","price":null,"rising":false},{"name":"LED Strip Lights","score":12,"change":0,"search":-20,"competition":"HIGH","price":null,"rising":false},{"name":"Reusable Water Bottle","score":10,"change":1,"search":6,"competition":"HIGH","price":null,"rising":true},{"name":"Neck Massager","score":9,"change":0,"search":-8,"competition":"HIGH","price":null,"rising":false},{"name":"Portable Blender","score":7,"change":-3,"search":8,"competition":"MEDIUM","price":null,"rising":false}]},
+  },
 ];
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
